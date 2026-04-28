@@ -11,14 +11,19 @@ class HomeViewModel extends ChangeNotifier {
   bool isLoading = false;
   String? error;
   HomeFeedModel? feed;
+  DateTime? lastSyncedAt;
 
-  Future<void> loadHome() async {
+  Future<void> loadHome({bool forceRefresh = false}) async {
+    if (isLoading) return;
     isLoading = true;
     error = null;
-    notifyListeners();
+    if (feed == null || forceRefresh) {
+      notifyListeners();
+    }
 
     try {
       feed = await _repository.fetchHomeFeed();
+      lastSyncedAt = DateTime.now();
     } catch (e) {
       error = e.toString();
     } finally {

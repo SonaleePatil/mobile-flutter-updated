@@ -1,5 +1,6 @@
 import 'package:adcc/core/services/token_storage_service.dart';
 import 'package:adcc/core/theme/app_colors.dart';
+import 'package:adcc/features/auth/view/login_screen.dart';
 import 'package:adcc/features/event_details/view/event_details_screen.dart';
 import 'package:adcc/features/home/view/horizontal_rideList.dart';
 import 'package:adcc/features/home/viewmodels/home_view_model.dart';
@@ -8,6 +9,7 @@ import 'package:adcc/features/home/view/near_by_track.dart';
 import 'package:adcc/features/home/view/quick_actions_section.dart';
 import 'package:adcc/features/home/view/community_updates_section.dart';
 import 'package:adcc/features/home/view/promo_carousel.dart';
+import 'package:adcc/features/home/view/promo_card.dart';
 import 'package:adcc/features/home/view/random_card.dart';
 import 'package:adcc/features/home/view/recently_posted_section.dart.dart';
 import 'package:adcc/features/home/view/ride_info_section.dart';
@@ -79,6 +81,14 @@ class _HomeTabState extends State<HomeTab> {
     );
   }
 
+  void _redirectGuestToLogin() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => const LoginScreen(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final feed = _viewModel.feed;
@@ -86,13 +96,20 @@ class _HomeTabState extends State<HomeTab> {
     final error = _viewModel.error;
 
     final featured = feed?.featuredEvent;
-    final featuredTitle = featured?.title ?? 'Bike4 Abu Dhabi Gran Fondo 2025';
-    final featuredDate = featured?.date ?? '21 Dec 2026';
-    final featuredDistance = featured?.distance ?? '150 Km';
-    final featuredImage = featured?.image ?? 'assets/images/cycling_1.png';
 
     final upcomingEvents = feed?.upcomingEvents ?? const [];
     final communities = feed?.popularCommunities ?? const [];
+    final promoItems = (feed?.promoBanners ?? const [])
+        .map(
+          (e) => PromoData(
+            image: e.image,
+            title: e.title,
+            subtitle: e.subtitle,
+            highlight: e.highlight,
+            buttonText: e.buttonText,
+          ),
+        )
+        .toList();
 
     return SafeArea(
       child: Column(
@@ -111,46 +128,58 @@ class _HomeTabState extends State<HomeTab> {
                   padding: const EdgeInsets.only(bottom: 24),
                   children: [
                     const SizedBox(height: 34),
-                    const PromoCarousel(),
+                    PromoCarousel(
+                      items: promoItems,
+                      showFallback: false,
+                    ),
                     const SizedBox(height: 30),
                     const WeatherScreen(),
                     const SizedBox(height: 30),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child:
-                          QuickActionsSection(onTabChange: widget.onTabChange),
-                    ),
-                    const SizedBox(height: 30),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16),
-                      child: Text(
-                        'Featured Events',
-                        style: TextStyle(
-                          fontFamily: 'Outfit',
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                          height: 1,
-                          letterSpacing: 0,
-                          color: AppColors.textDark,
-                        ),
+                      child: QuickActionsSection(
+                        onTabChange: widget.onTabChange,
+                        fromGuest: widget.fromGuest,
+                        onGuestRestrictedTap: _redirectGuestToLogin,
                       ),
                     ),
-                    const SizedBox(height: 24),
-                    FeaturedEventCard(
-                      image: featuredImage,
-                      title: featuredTitle,
-                      date: featuredDate,
-                      distance: featuredDistance,
-                      onTap: featured != null
-                          ? () => _goToEvent(featured.id)
-                          : null,
-                    ),
+                    const SizedBox(height: 30),
+                    if (featured != null) ...[
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16),
+                        child: Text(
+                          'Featured Events',
+                          style: TextStyle(
+                            fontFamily: 'Outfit',
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                            height: 1,
+                            letterSpacing: 0,
+                            color: AppColors.textDark,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      FeaturedEventCard(
+                        image: featured.image,
+                        title: featured.title,
+                        date: featured.date,
+                        distance: featured.distance,
+                        onTap: () => _goToEvent(featured.id),
+                      ),
+                    ],
                     Padding(
                       padding: const EdgeInsets.only(top: 50),
                       child: HorizontalRideList(
                         communities: communities,
-                        onCommunityTap: (id) =>
-                            debugPrint('Community tapped: $id'),
+                        showFallback: false,
+                        onCommunityTap: (id) {
+                          if (widget.fromGuest) {
+                            _redirectGuestToLogin();
+                            return;
+                          }
+                          debugPrint('Community tapped: $id');
+                        },
                       ),
                     ),
                     const SizedBox(height: 50),
@@ -162,17 +191,35 @@ class _HomeTabState extends State<HomeTab> {
                     UpcomingTracksList(
                       events: upcomingEvents,
                       onEventTap: _goToEvent,
+                      showFallback: false,
                     ),
                     const SizedBox(height: 50),
-                    const NearbyTracksSection(),
+                    NearbyTracksSection(
+                      tracks: feed?.nearbyTracks ?? const [],
+                      showFallback: false,
+                    ),
                     const SizedBox(height: 52),
-                    const RecentlyPost(),
-                    const SizedBox(height: 50),
-                    const CommunityUpdatesSection(),
+                    RecentlyPost(
+                      items: feed?.recentItems ?? const [],
+                      showFallback: false,
+                    ),
+                    // const SizedBox(height: 50),
+                    // const CommunityUpdatesSection(),
                     const SizedBox(height: 24),
-                    const RideInfoSection(),
+                    RideInfoSection(
+                      rideInfos: feed?.rideInfos ?? const [],
+                      sectionTitle:
+                          feed?.rideInfoSectionTitle ?? 'Ride in Abu Dhabi',
+                      showFallback: false,
+                    ),
                     const SizedBox(height: 24),
-                    JoinCommunityCard(onJoinTap: () {}),
+                    JoinCommunityCard(
+                      onJoinTap: () {
+                        if (widget.fromGuest) {
+                          _redirectGuestToLogin();
+                        }
+                      },
+                    ),
                   ],
                 ),
 

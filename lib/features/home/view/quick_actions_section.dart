@@ -9,8 +9,15 @@ import 'package:flutter/material.dart';
 
 class QuickActionsSection extends StatelessWidget {
   final ValueChanged<int>? onTabChange;
+  final bool fromGuest;
+  final VoidCallback? onGuestRestrictedTap;
 
-  const QuickActionsSection({super.key, this.onTabChange});
+  const QuickActionsSection({
+    super.key,
+    this.onTabChange,
+    this.fromGuest = false,
+    this.onGuestRestrictedTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +36,6 @@ class QuickActionsSection extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 21),
-
         GridView.count(
           crossAxisCount: 4,
           shrinkWrap: true,
@@ -43,6 +49,10 @@ class QuickActionsSection extends StatelessWidget {
               imagePath: 'assets/images/store.png',
               iconSize: 29.35,
               onTap: () {
+                if (fromGuest) {
+                  onGuestRestrictedTap?.call();
+                  return;
+                }
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -117,11 +127,21 @@ class QuickActionsSection extends StatelessWidget {
               title: 'Bike Experience',
               imagePath: 'assets/icons/bike_experience.gif',
               iconSize: 32.87,
+              onTap: () {
+                if (fromGuest) {
+                  onGuestRestrictedTap?.call();
+                }
+              },
             ),
             QuickActionItem(
               title: 'Ride Feed',
               imagePath: 'assets/images/quick_action_ride_feed.png',
               iconSize: 42,
+              onTap: () {
+                if (fromGuest) {
+                  onGuestRestrictedTap?.call();
+                }
+              },
             ),
             QuickActionItem(
               title: 'Merchandise',

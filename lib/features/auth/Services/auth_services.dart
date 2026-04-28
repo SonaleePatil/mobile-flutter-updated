@@ -27,6 +27,8 @@ class AuthService {
         if (refreshToken != null) {
           await TokenStorageService.saveRefreshToken(refreshToken);
         }
+
+        await TokenStorageService.saveGuestUser(true);
       }
 
       return apiResponse;
@@ -65,6 +67,7 @@ class AuthService {
         if (refreshToken != null) {
           await TokenStorageService.saveRefreshToken(refreshToken.toString());
         }
+        await TokenStorageService.saveGuestUser(false);
 
         // Persist name immediately for returning users
         final isNewUser = data['isNewUser'] == true;
@@ -122,6 +125,8 @@ class AuthService {
         if (refreshToken != null) {
           await TokenStorageService.saveRefreshToken(refreshToken.toString());
         }
+
+        await TokenStorageService.saveGuestUser(false);
 
         await TokenStorageService.saveUserName(fullName);
       }

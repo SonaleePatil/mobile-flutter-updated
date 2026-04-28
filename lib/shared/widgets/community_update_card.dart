@@ -1,4 +1,5 @@
 import 'package:adcc/core/theme/app_colors.dart';
+import 'package:adcc/shared/widgets/adaptive_image.dart';
 import 'package:flutter/material.dart';
 
 class CommunityUpdateCard extends StatelessWidget {
@@ -39,7 +40,15 @@ class CommunityUpdateCard extends StatelessWidget {
             children: [
               CircleAvatar(
                 radius: 18,
-                backgroundImage: AssetImage(profileImage),
+                backgroundColor: Colors.grey.shade200,
+                child: ClipOval(
+                  child: AdaptiveImage(
+                    imagePath: profileImage,
+                    width: 36,
+                    height: 36,
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
               const SizedBox(width: 10),
               Expanded(
@@ -81,8 +90,8 @@ class CommunityUpdateCard extends StatelessWidget {
           // Post Image
           ClipRRect(
             borderRadius: BorderRadius.circular(16),
-            child: Image.asset(
-              postImage,
+            child: AdaptiveImage(
+              imagePath: postImage,
               height: 255,
               width: double.infinity,
               fit: BoxFit.cover,

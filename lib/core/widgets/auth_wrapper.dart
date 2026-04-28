@@ -18,6 +18,7 @@ class _AuthWrapperState extends State<AuthWrapper> {
   bool _isLoading = true;
   bool _isAuthenticated = false;
   bool _hasSelectedLanguage = false;
+  bool _isGuestUser = false;
 
   @override
   void initState() {
@@ -31,6 +32,7 @@ class _AuthWrapperState extends State<AuthWrapper> {
 
     try {
       final hasSelectedLanguage = await LanguageStorageService.hasLocaleCode();
+      final isGuestUser = await TokenStorageService.isGuestUser();
 
       // Get token to check if it exists
       final token = await TokenStorageService.getAccessToken();
@@ -56,6 +58,7 @@ class _AuthWrapperState extends State<AuthWrapper> {
           setState(() {
             _isAuthenticated = isAuthenticated;
             _hasSelectedLanguage = hasSelectedLanguage;
+            _isGuestUser = isGuestUser;
             _isLoading = false;
           });
 
@@ -69,6 +72,7 @@ class _AuthWrapperState extends State<AuthWrapper> {
           setState(() {
             _isAuthenticated = false;
             _hasSelectedLanguage = hasSelectedLanguage;
+            _isGuestUser = false;
             _isLoading = false;
           });
           debugPrint(' [AuthWrapper] Routing to: OnboardingScreen');
@@ -81,6 +85,7 @@ class _AuthWrapperState extends State<AuthWrapper> {
         setState(() {
           _isAuthenticated = false;
           _hasSelectedLanguage = false;
+          _isGuestUser = false;
           _isLoading = false;
         });
       }
@@ -98,15 +103,14 @@ class _AuthWrapperState extends State<AuthWrapper> {
       );
     }
 
+    if (!_hasSelectedLanguage) {
+      debugPrint(' [AuthWrapper] Locale missing - showing LanguageSelectionScreen');
+      return const LanguageSelectionScreen();
+    }
+
     if (_isAuthenticated) {
-     
-      return const HomeScreen();
+      return HomeScreen(fromGuest: _isGuestUser);
     } else {
-      if (!_hasSelectedLanguage) {
-        debugPrint(
-            ' [AuthWrapper] User not authenticated - showing LanguageSelectionScreen');
-        return const LanguageSelectionScreen();
-      }
       debugPrint(
           ' [AuthWrapper] User not authenticated - showing OnboardingScreen');
       return const OnboardingScreen();

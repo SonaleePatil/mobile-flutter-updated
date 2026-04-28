@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:adcc/shared/widgets/adaptive_image.dart';
 
 class PromoData {
   final String image;
@@ -30,10 +31,7 @@ class PromoCard extends StatelessWidget {
         children: [
 
           Positioned.fill(
-            child: Image.asset(
-              data.image,
-              fit: BoxFit.cover,
-            ),
+            child: AdaptiveImage(imagePath: data.image, fit: BoxFit.cover),
           ),
 
           Positioned.fill(
@@ -128,19 +126,19 @@ class PromoCard extends StatelessWidget {
                         color: const Color(0xFFFFF9EF),
                         borderRadius: BorderRadius.circular(17),
                       ),
-                      child: const Center(
+                      child: Center(
                         child: Text(
-  "Find a ride",
-  textAlign: TextAlign.center,
-  style: const TextStyle(
-    fontFamily: 'Outfit',
-    fontSize: 12,
-    fontWeight: FontWeight.w600,
-    height: 1.25,
-    letterSpacing: 0,
-    color: Color(0xFFC12D32),
-  ),
-)
+                          data.buttonText,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontFamily: 'Outfit',
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            height: 1.25,
+                            letterSpacing: 0,
+                            color: Color(0xFFC12D32),
+                          ),
+                        ),
                       ),
                     ),
 

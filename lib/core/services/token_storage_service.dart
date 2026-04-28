@@ -7,6 +7,7 @@ class TokenStorageService {
   static const String _userIdKey = 'user_id';
   static const String _firebaseTokenKey = 'firebase_id_token';
   static const String _userNameKey = 'user_name';
+  static const String _guestUserKey = 'is_guest_user';
 
   static Future<void> saveAccessToken(String token) async {
     final prefs = await SharedPreferences.getInstance();
@@ -72,6 +73,7 @@ class TokenStorageService {
     await prefs.remove(_userIdKey);
     await prefs.remove(_firebaseTokenKey);
     await prefs.remove(_userNameKey);
+    await prefs.remove(_guestUserKey);
   }
 
   static Future<void> saveUserName(String name) async {
@@ -88,5 +90,15 @@ class TokenStorageService {
     final token = await getFirebaseToken();
     if (token == null || token.isEmpty) return false;
     return true;
+  }
+
+  static Future<void> saveGuestUser(bool isGuest) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_guestUserKey, isGuest);
+  }
+
+  static Future<bool> isGuestUser() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(_guestUserKey) ?? false;
   }
 }

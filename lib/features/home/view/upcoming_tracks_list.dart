@@ -5,11 +5,13 @@ import 'package:flutter/material.dart';
 class UpcomingTracksList extends StatelessWidget {
   final List<HomeEventModel> events;
   final void Function(String eventId)? onEventTap;
+  final bool showFallback;
 
   const UpcomingTracksList({
     super.key,
     this.events = const [],
     this.onEventTap,
+    this.showFallback = true,
   });
 
   @override
@@ -36,7 +38,7 @@ class UpcomingTracksList extends StatelessWidget {
     ];
 
     final uiEvents = events.isEmpty
-        ? fallbackEvents
+        ? (showFallback ? fallbackEvents : const <EventModel>[])
         : events
             .map(
               (e) => EventModel(
@@ -48,6 +50,7 @@ class UpcomingTracksList extends StatelessWidget {
               ),
             )
             .toList();
+    if (uiEvents.isEmpty) return const SizedBox.shrink();
 
     return SizedBox(
       height: 275,
@@ -80,7 +83,6 @@ class UpcomingEventCard extends StatelessWidget {
       width: 308,
       child: Stack(
         children: [
-
           /// BACKGROUND IMAGE
           ClipRRect(
             borderRadius: BorderRadius.circular(12),
@@ -124,93 +126,91 @@ class UpcomingEventCard extends StatelessWidget {
             ),
           ),
 
-         Positioned(
-  left: 15,
-  right: 15,
-  top: 160,
-  child: Container(
-    width: 328,
-    height: 100,
-    padding: const EdgeInsets.fromLTRB(
-      15, 
-      9, 
-      15, 
-      12, 
-    ),
-    decoration: BoxDecoration(
-      color: const Color(0xFFFFF9EF), // #FFF9EF
-      borderRadius: BorderRadius.circular(8),
-    ),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
+          Positioned(
+            left: 15,
+            right: 15,
+            top: 160,
+            child: Container(
+              width: 328,
+              height: 100,
+              padding: const EdgeInsets.fromLTRB(
+                15,
+                9,
+                15,
+                12,
+              ),
+              decoration: BoxDecoration(
+                color: const Color(0xFFFFF9EF), // #FFF9EF
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  /// SOCIAL BADGE
+                  Container(
+                      width: 62,
+                      height: 24,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: const Color(0xffC12D32),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: Text(
+                        event.type,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontFamily: 'Geist',
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                          height: 16 / 12, // ≈1.33
+                          letterSpacing: 0,
+                          color: Color(0xFFFFF4E3),
+                        ),
+                      )),
 
-        /// SOCIAL BADGE
-        Container(
-          width: 62,
-          height: 24,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: const Color(0xffC12D32),
-            borderRadius: BorderRadius.circular(6),
-          ),
-          child: Text(
-  event.type,
-  textAlign: TextAlign.center,
-  style: const TextStyle(
-    fontFamily: 'Geist',
-    fontSize: 12,
-    fontWeight: FontWeight.w400,
-    height: 16 / 12, // ≈1.33
-    letterSpacing: 0,
-    color: Color(0xFFFFF4E3),
-  ),
-)
-        ),
+                  const SizedBox(height: 8),
 
-        const SizedBox(height: 8),
+                  /// TITLE
+                  Text(
+                    event.title,
+                    style: const TextStyle(
+                      fontFamily: 'Outfit',
+                      fontSize: 17,
+                      fontWeight: FontWeight.w500,
+                      height: 1.15,
+                      letterSpacing: 0,
+                      color: AppColors.charcoal,
+                    ),
+                  ),
 
-      /// TITLE
-Text(
-  event.title,
-  style: const TextStyle(
-    fontFamily: 'Outfit',
-    fontSize: 17,
-    fontWeight: FontWeight.w500,
-    height: 1.15,
-    letterSpacing: 0,
-    color: AppColors.charcoal,
-  ),
-),
+                  const SizedBox(height: 2),
 
-        const SizedBox(height: 2),
-
-        /// DAY ROW
-        Row(
-          children: [
-            Image.asset(
-              "assets/icons/calender.png",
-              height: 16,
-              width: 16,
+                  /// DAY ROW
+                  Row(
+                    children: [
+                      Image.asset(
+                        "assets/icons/calender.png",
+                        height: 16,
+                        width: 16,
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        event.day,
+                        style: const TextStyle(
+                          fontFamily: 'Outfit',
+                          fontSize: 12.8226,
+                          fontWeight: FontWeight.w400,
+                          height: 17.0968 / 12.8226,
+                          letterSpacing: 0,
+                          color: Color(0xFF484A4D),
+                        ),
+                      )
+                    ],
+                  ),
+                ],
+              ),
             ),
-            const SizedBox(width: 4),
-            Text(
-  event.day,
-  style: const TextStyle(
-    fontFamily: 'Outfit',
-    fontSize: 12.8226,
-    fontWeight: FontWeight.w400,
-    height: 17.0968 / 12.8226, 
-    letterSpacing: 0,
-    color: Color(0xFF484A4D),
-  ),
-)
-          ],
-        ),
-      ],
-    ),
-  ),
-)
+          )
         ],
       ),
     );

@@ -2,20 +2,26 @@ import 'package:flutter/material.dart';
 import 'promo_card.dart';
 
 class PromoCarousel extends StatefulWidget {
-  const PromoCarousel({super.key});
+  final List<PromoData> items;
+  final bool showFallback;
+
+  const PromoCarousel({
+    super.key,
+    this.items = const [],
+    this.showFallback = true,
+  });
 
   @override
   State<PromoCarousel> createState() => _PromoCarouselState();
 }
 
 class _PromoCarouselState extends State<PromoCarousel> {
-
   final PageController _controller = PageController(
     viewportFraction: 0.92,
     initialPage: 1,
   );
 
-  final List<PromoData> _items = [
+  final List<PromoData> _fallbackItems = [
     PromoData(
       image: 'assets/images/cycling_1.png',
       title: 'New to Abu Dhabi\nCycling Club?',
@@ -41,16 +47,21 @@ class _PromoCarouselState extends State<PromoCarousel> {
 
   @override
   Widget build(BuildContext context) {
+    final items = widget.items.isEmpty
+        ? (widget.showFallback ? _fallbackItems : const <PromoData>[])
+        : widget.items;
+    if (items.isEmpty) return const SizedBox.shrink();
+
     return SizedBox(
       height: 170,
       child: PageView.builder(
         controller: _controller,
-        itemCount: _items.length,
+        itemCount: items.length,
         padEnds: false,
         itemBuilder: (context, index) {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 7.5),
-            child: PromoCard(data: _items[index]),
+            child: PromoCard(data: items[index]),
           );
         },
       ),

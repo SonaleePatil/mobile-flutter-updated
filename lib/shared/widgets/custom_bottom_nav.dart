@@ -28,7 +28,7 @@ class CustomBottomNav extends StatelessWidget {
            children: [
   _navItem("assets/icons/bottom_home.png", 0),
   _navItem("assets/icons/add_calendar.png", 1),
-  _navItem("assets/svg/bottom_comm.svg", 2, isSvg: true),
+  _navItem("assets/svg/trackicon.png", 2, iconSize: 28),
   _navItem("assets/svg/bottom_pro.svg", 3, isSvg: true),
 ],
           ),
@@ -36,7 +36,7 @@ class CustomBottomNav extends StatelessWidget {
       ),
     );
   }
-Widget _navItem(String iconPath, int index, {bool isSvg = false}) {
+Widget _navItem(String iconPath, int index, {bool isSvg = false, double iconSize = 25}) {
   final bool isSelected = currentIndex == index;
 
   return GestureDetector(
@@ -47,8 +47,8 @@ Widget _navItem(String iconPath, int index, {bool isSvg = false}) {
        isSvg
     ?SvgPicture.asset(
   iconPath,
-  height: 25,
-  width: 25,
+  height: iconSize,
+  width: iconSize,
   colorFilter: ColorFilter.mode(
     isSelected ? Colors.white : Colors.white.withOpacity(0.5),
     BlendMode.srcIn,
@@ -56,8 +56,8 @@ Widget _navItem(String iconPath, int index, {bool isSvg = false}) {
 )
     : Image.asset(
         iconPath,
-        height: 25,
-        width: 25,
+        height: iconSize,
+        width: iconSize,
         color: isSelected
             ? Colors.white
             : Colors.white.withOpacity(0.5),

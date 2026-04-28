@@ -68,17 +68,17 @@ class _RoutesTabState extends State<RoutesTab> {
             ),
           ),
 
-          const SizedBox(height: 30),
+          // const SizedBox(height: 30),
 
           /// WARNING MESSAGE (left + right padding)
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: WarningMessage(
-              message:
-                  'Strong winds expected of Al Dhafra today choose sheltered tracks',
-              type: MessageType.warning,
-            ),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(horizontal: 16),
+          //   child: WarningMessage(
+          //     message:
+          //         'Strong winds expected of Al Dhafra today choose sheltered tracks',
+          //     type: MessageType.warning,
+          //   ),
+          // ),
 
           const SizedBox(height: 30),
 

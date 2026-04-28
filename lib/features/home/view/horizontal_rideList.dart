@@ -6,11 +6,13 @@ import 'ride_card.dart';
 class HorizontalRideList extends StatelessWidget {
   final List<HomeCommunityModel> communities;
   final void Function(String communityId)? onCommunityTap;
+  final bool showFallback;
 
   const HorizontalRideList({
     super.key,
     this.communities = const [],
     this.onCommunityTap,
+    this.showFallback = true,
   });
 
   @override
@@ -18,25 +20,21 @@ class HorizontalRideList extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-
         const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          child:Text(
-  "Popular Communities",
-  style: const TextStyle(
-    fontFamily: 'Outfit',
-    fontSize: 20,
-    fontWeight: FontWeight.w600,
-    height: 1, // 100% line height
-    letterSpacing: 0,
-    color: AppColors.textDark,
-  ),
-)
-        ),
-
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            child: Text(
+              "Popular Communities",
+              style: const TextStyle(
+                fontFamily: 'Outfit',
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+                height: 1, // 100% line height
+                letterSpacing: 0,
+                color: AppColors.textDark,
+              ),
+            )),
         const SizedBox(height: 22),
-
-        if (communities.isEmpty)
+        if (communities.isEmpty && showFallback)
           SizedBox(
             height: 392,
             child: ListView(
@@ -61,7 +59,7 @@ class HorizontalRideList extends StatelessWidget {
               ],
             ),
           )
-        else
+        else if (communities.isNotEmpty)
           SizedBox(
             height: 392,
             child: ListView.builder(
@@ -80,7 +78,9 @@ class HorizontalRideList extends StatelessWidget {
                 );
               },
             ),
-          ),
+          )
+        else
+          const SizedBox.shrink(),
       ],
     );
   }
