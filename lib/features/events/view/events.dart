@@ -36,57 +36,45 @@ class _EventsTabState extends State<EventsTab> {
    
   ];
 
- String _derivedCategory(Event e) {
-  final title = e.title.toLowerCase();
-  final desc = (e.description ?? '').toLowerCase();
+  String _derivedCategory(Event e) {
+    final category = (e.category ?? '').toLowerCase();
+    final title = e.title.toLowerCase();
+    final desc = (e.description ?? '').toLowerCase();
+    final city = (e.city ?? '').toLowerCase();
+    final text = '$category $title $desc $city';
 
-  if (title.contains("race") ||
-      title.contains("series") ||
-      desc.contains("race")) {
-    return "Races";
+    bool hasAny(List<String> words) => words.any(text.contains);
+
+    if (hasAny(['race', 'racing', 'series', 'competition', 'championship'])) {
+      return 'Races';
+    }
+
+    if (hasAny(['training', 'clinic', 'coaching', 'workshop', 'session'])) {
+      return 'Training & Clinics';
+    }
+
+    if (hasAny(['community', 'ride', 'social', 'group ride', 'club ride'])) {
+      return 'Community Rides';
+    }
+
+    // Keep a stable default bucket so every event appears under a chip.
+    return 'Community Rides';
   }
+  List<Event> get _purposeBasedEventsDynamic {
+    final purposeKeywords = ['community', 'charity', 'cause', 'family', 'kids'];
 
-  if (title.contains("training") ||
-      title.contains("clinic") ||
-      desc.contains("training") ||
-      desc.contains("clinic")) {
-    return "Training & Clinics";
+    final filtered = _events.where((event) {
+      final title = event.title.toLowerCase();
+      final description = (event.description ?? '').toLowerCase();
+      return purposeKeywords.any(
+        (keyword) => title.contains(keyword) || description.contains(keyword),
+      );
+    }).toList();
+
+    // Fallback: if backend does not provide clear "purpose" metadata,
+    // still keep section dynamic by showing latest events.
+    return filtered.isNotEmpty ? filtered : _events;
   }
-
-  if (title.contains("community") ||
-      title.contains("ride") ||
-      desc.contains("community")) {
-    return "Community Rides";
-  }
-
-  return "Community Rides";
-}
-  static final List<Map<String, String>> _purposeBasedEvents = [
-    {
-      'imagePath': 'assets/images/ride_events.png',
-      'title': 'UAE National Day Community Ride',
-      'date': '2 Dec 2026',
-      'groupName': 'Abu Dhabi Road Racers',
-    },
-    {
-      'imagePath': 'assets/images/community_ride.png',
-      'title': 'Cycling for a Cause',
-      'date': '15 Dec 2026',
-      'groupName': 'Dubai Cycling Club',
-    },
-    {
-      'imagePath': 'assets/images/cycling_1.png',
-      'title': 'Charity Ride 2026',
-      'date': '20 Dec 2026',
-      'groupName': 'Yas Island Riders',
-    },
-    {
-      'imagePath': 'assets/images/family-rides.png',
-      'title': 'Family Fun Ride',
-      'date': '25 Dec 2026',
-      'groupName': 'Family Cycling Group',
-    },
-  ];
 
   @override
   void initState() {
@@ -189,17 +177,7 @@ class _EventsTabState extends State<EventsTab> {
   Widget build(BuildContext context) {
     final eventsToShow = _filteredEvents;
 
-    // Convert filtered events to the format expected by the UI
-    final List<Map<String, String>> rides = eventsToShow.map((event) {
-      return {
-        "image": _getImagePath(event),
-        "title": event.title,
-        "date": event.formattedDate ?? "TBD",
-        "distance": event.address ?? "N/A",
-        "riders": _formatParticipants(event),
-        "eventId": event.id,
-      };
-    }).toList();
+    final purposeEvents = _purposeBasedEventsDynamic;
 
     return SafeArea(
       child: Column(
@@ -209,7 +187,7 @@ class _EventsTabState extends State<EventsTab> {
                 ? const Center(
                     child: CircularProgressIndicator(),
                   )
-                : _errorMessage != null && rides.isEmpty
+                : _errorMessage != null && eventsToShow.isEmpty
                     ? Center(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -301,7 +279,7 @@ class _EventsTabState extends State<EventsTab> {
                               ),
                               const SizedBox(height: 24),
 
-                              rides.isEmpty
+                              eventsToShow.isEmpty
                                   ? Padding(
                                       padding: const EdgeInsets.only(
                                           left: 16,
@@ -325,7 +303,7 @@ class _EventsTabState extends State<EventsTab> {
                                         padding: const EdgeInsets.symmetric(
                                           horizontal: 9,
                                         ),
-                                        itemCount: rides.length,
+                                        itemCount: eventsToShow.length,
                                         separatorBuilder: (_, __) =>
                                             const SizedBox(width: 6),
                                         itemBuilder: (context, index) {
@@ -447,19 +425,32 @@ class _EventsTabState extends State<EventsTab> {
                                   padding: const EdgeInsets.only(
                                     left: 11,
                                   ),
-                                  itemCount: _purposeBasedEvents.length,
+                                  itemCount: purposeEvents.length,
                                   separatorBuilder: (_, __) =>
                                       const SizedBox(width: 6),
                                   itemBuilder: (context, index) {
-                                    final event = _purposeBasedEvents[index];
+                                    final event = purposeEvents[index];
                                     return PurposeBasedEventCard(
-                                      imagePath: event['imagePath']!,
-                                      title: event['title']!,
-                                      date: event['date']!,
-                                      groupName: event['groupName']!,
+                                      imagePath: _getImagePath(event),
+                                      title: event.title,
+                                      date: event.formattedDate ?? "TBD",
+                                      groupName: event.createdBy?['name']
+                                              ?.toString() ??
+                                          event.createdBy?['groupName']
+                                              ?.toString() ??
+                                          "ADCC Community",
                                       onTap: () {
-                                        debugPrint(
-                                            'Tapped on ${event['title']}');
+                                        if (event.id.isNotEmpty) {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (_) =>
+                                                  EventDetailsScreen(
+                                                eventId: event.id,
+                                              ),
+                                            ),
+                                          );
+                                        }
                                       },
                                     );
                                   },

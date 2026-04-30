@@ -1,4 +1,6 @@
 import 'package:adcc/features/routes/view/official_cycling_track_page.dart';
+import 'package:adcc/features/routes/Models/track_model.dart';
+import 'package:adcc/features/routes/services/tracks_services.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../shared/widgets/section_header.dart';
@@ -16,41 +18,14 @@ class OfficialCyclingTracksSection extends StatefulWidget {
 class _OfficialCyclingTracksSectionState
     extends State<OfficialCyclingTracksSection> {
   final ScrollController _scrollController = ScrollController();
+  final TracksService _tracksService = TracksService();
+  late Future<List<TrackModel>> _futureTracks;
 
-  final List<Map<String, dynamic>> tracks = [
-    {
-      'image': 'assets/images/cycling_1.png',
-      'tag': 'Road Bike',
-      'title': 'Mountain Warm-Up Ride',
-      'date': 'Friday',
-      'time': '6:15 AM',
-      'riders': '28 Riders',
-    },
-    {
-      'image': 'assets/images/cycling_1.png',
-      'tag': 'Open for all',
-      'title': 'Night Community Ride',
-      'date': 'Tomorrow',
-      'time': '8:45 PM',
-      'riders': '65 Riders',
-    },
-    {
-      'image': 'assets/images/cycling_1.png',
-      'tag': 'Road Bike',
-      'title': 'Mountain Warm-Up Ride',
-      'date': 'Friday',
-      'time': '6:15 AM',
-      'riders': '28 Riders',
-    },
-    {
-      'image': 'assets/images/cycling_1.png',
-      'tag': 'Open for all',
-      'title': 'Night Community Ride',
-      'date': 'Tomorrow',
-      'time': '8:45 PM',
-      'riders': '65 Riders',
-    },
-  ];
+  @override
+  void initState() {
+    super.initState();
+    _futureTracks = _tracksService.getAllTracks();
+  }
 
   @override
   void dispose() {
@@ -83,40 +58,49 @@ class _OfficialCyclingTracksSectionState
 
         SizedBox(
           height: 303,
-          child: ListView.separated(
-            controller: _scrollController,
-            scrollDirection: Axis.horizontal,
-            physics: const BouncingScrollPhysics(),
-            itemCount: (tracks.length / 2).ceil(),
-            separatorBuilder: (_, __) => const SizedBox(width: 16),
-            itemBuilder: (context, index) {
-              final firstIndex = index * 2;
-              final secondIndex = firstIndex + 1;
+          child: FutureBuilder<List<TrackModel>>(
+            future: _futureTracks,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
 
-              return Row(
-                children: [
-                  _buildTrackCard(
-                    context: context,
-                    imagePath: tracks[firstIndex]['image'],
-                    tag: tracks[firstIndex]['tag'],
-                    title: tracks[firstIndex]['title'],
-                    date: tracks[firstIndex]['date'],
-                    time: tracks[firstIndex]['time'],
-                    riders: tracks[firstIndex]['riders'],
-                  ),
-                  if (secondIndex < tracks.length) ...[
-                    const SizedBox(width: 12),
-                    _buildTrackCard(
-                      context: context,
-                      imagePath: tracks[secondIndex]['image'],
-                      tag: tracks[secondIndex]['tag'],
-                      title: tracks[secondIndex]['title'],
-                      date: tracks[secondIndex]['date'],
-                      time: tracks[secondIndex]['time'],
-                      riders: tracks[secondIndex]['riders'],
-                    ),
-                  ],
-                ],
+              if (snapshot.hasError) {
+                return const Center(child: Text('Failed to load tracks'));
+              }
+
+              final tracks = snapshot.data ?? [];
+
+              if (tracks.isEmpty) {
+                return const Center(child: Text('No tracks found'));
+              }
+
+              return ListView.separated(
+                controller: _scrollController,
+                scrollDirection: Axis.horizontal,
+                physics: const BouncingScrollPhysics(),
+                itemCount: (tracks.length / 2).ceil(),
+                separatorBuilder: (_, __) => const SizedBox(width: 16),
+                itemBuilder: (context, index) {
+                  final firstIndex = index * 2;
+                  final secondIndex = firstIndex + 1;
+
+                  return Row(
+                    children: [
+                      _buildTrackCard(
+                        context: context,
+                        track: tracks[firstIndex],
+                      ),
+                      if (secondIndex < tracks.length) ...[
+                        const SizedBox(width: 12),
+                        _buildTrackCard(
+                          context: context,
+                          track: tracks[secondIndex],
+                        ),
+                      ],
+                    ],
+                  );
+                },
               );
             },
           ),
@@ -127,13 +111,17 @@ class _OfficialCyclingTracksSectionState
 
   Widget _buildTrackCard({
     required BuildContext context,
-    required String imagePath,
-    required String tag,
-    required String title,
-    required String date,
-    required String time,
-    required String riders,
+    required TrackModel track,
   }) {
+    final imagePath = track.image.isNotEmpty
+        ? track.image
+        : 'assets/images/cycling_1.png';
+    final tag = track.trackType.isNotEmpty ? track.trackType : 'Track';
+    final title = track.title;
+    final date = track.city;
+    final time = '${track.distance ?? 0} km';
+    final riders = track.status;
+
     return GestureDetector(
       onTap: () {},
       child: Container(
@@ -152,16 +140,17 @@ class _OfficialCyclingTracksSectionState
               borderRadius: BorderRadius.circular(12),
               child: Stack(
                 children: [
-                  Image.asset(
+                  Image.network(
                     imagePath,
                     width:157,
                     height: 155,
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) {
-                      return Container(
-                        width: double.infinity,
-                        height: 180,
-                        color: AppColors.softCream,
+                      return Image.asset(
+                        'assets/images/cycling_1.png',
+                        width: 157,
+                        height: 155,
+                        fit: BoxFit.cover,
                       );
                     },
                   ),
@@ -291,12 +280,28 @@ Text(
                         MaterialPageRoute(
               builder: (context) => RouteDetailsScreen(
                 routeData: {
-                  'image': imagePath,
-                  'title': title,
-                  'date': date,
-                  'time': time,
-                  'riders': riders,
-                  'tag': tag,
+                  "id": track.id,
+                  "title": track.title,
+                  "description": track.description,
+                  "image": track.image,
+                  "city": track.city,
+                  "address": track.address,
+                  "zipcode": track.zipcode,
+                  "distance": track.distance,
+                  "elevation": track.elevation,
+                  "type": track.type,
+                  "avgtime": track.avgtime,
+                  "pace": track.pace,
+                  "facilities": track.facilities,
+                  "status": track.status,
+                  "difficulty": track.difficulty,
+                  "country": track.country,
+                  "helmetRequired": track.helmetRequired,
+                  "nightRidingAllowed": track.nightRidingAllowed,
+                  "slug": track.slug,
+                  "trackType": track.trackType,
+                  "visibility": track.visibility,
+                  "surfaceType": track.surfaceType,
                 },
               ),
                         ),
