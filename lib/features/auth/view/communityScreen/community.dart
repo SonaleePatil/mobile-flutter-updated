@@ -1,7 +1,7 @@
 import 'package:adcc/core/theme/app_colors.dart';
 import 'package:adcc/features/auth/view/communityScreen/auth_action_card.dart';
 import 'package:adcc/features/auth/view/communityScreen/social_button.dart';
-import 'package:adcc/features/auth/view/registrationScreen/create_account.dart';
+import 'package:adcc/features/auth/view/email_password_login_screen.dart';
 import 'package:adcc/l10n/app_localizations.dart';
 import 'package:adcc/shared/widgets/app_button.dart';
 import 'package:adcc/shared/widgets/app_header_login.dart';
@@ -21,7 +21,7 @@ class _CommunityScreenState extends State<CommunityScreen> {
     if (communityType == "phone") {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (_) => const CreateAccountScreen()),
+        MaterialPageRoute(builder: (_) => const EmailPasswordLoginScreen()),
       );
     } else if (communityType == "email") {
       debugPrint('Navigate to Email Create Account Screen');

@@ -5,6 +5,7 @@ import 'package:country_picker/country_picker.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:adcc/features/auth/view/login_screen.dart';
 
 class EmailPasswordLoginScreen extends StatefulWidget {
   const EmailPasswordLoginScreen({super.key});
@@ -362,11 +363,18 @@ class _EmailPasswordLoginScreenState extends State<EmailPasswordLoginScreen> {
                                       text: 'Already have an account? '),
                                   TextSpan(
                                     text: 'Login',
+                                    style: const TextStyle(
+                                      color: Colors.red,
+                                      fontWeight: FontWeight.w600,
+                                    ),
                                     recognizer: TapGestureRecognizer()
                                       ..onTap = () {
-                                        if (Navigator.canPop(context)) {
-                                          Navigator.pop(context);
-                                        }
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (_) => const LoginScreen(),
+                                          ),
+                                        );
                                       },
                                   ),
                                 ],
