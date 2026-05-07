@@ -1,9 +1,12 @@
 import 'package:adcc/core/theme/app_colors.dart';
+import 'package:adcc/shared/widgets/section_header.dart';
 import 'package:flutter/material.dart';
 
 
 class MyBadgesSection extends StatelessWidget {
-  const MyBadgesSection({super.key});
+  final VoidCallback? onViewAll;
+
+  const MyBadgesSection({super.key, this.onViewAll});
 
   @override
   Widget build(BuildContext context) {
@@ -20,43 +23,9 @@ class MyBadgesSection extends StatelessWidget {
     
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
-              Text(
-  "My Badges",
-  style: const TextStyle(
-    fontFamily: 'Outfit',
-    fontSize: 20,
-    fontWeight: FontWeight.w600,
-    height: 1, // 100% line height
-    letterSpacing: 0,
-    color: AppColors.charcoal,
-  ),
-),
-                Row(
-                  children: [
-                   Text(
-  "View All",
-  textAlign: TextAlign.center,
-  style: const TextStyle(
-    fontFamily: 'Geist',
-    fontSize: 14,
-    fontWeight: FontWeight.w400,
-    height: 20 / 14, // ≈1.43
-    letterSpacing: 0,
-    color: AppColors.charcoal,
-  ),
-),
-                    SizedBox(width: 4),
-                    Icon(
-                      Icons.chevron_right,
-                      size: 18,
-                      color: AppColors.charcoal,
-                    )
-                  ],
-                )
-              ],
+            child: SectionHeader(
+              title: "My Badges",
+              onViewAll: onViewAll,
             ),
           ),
 

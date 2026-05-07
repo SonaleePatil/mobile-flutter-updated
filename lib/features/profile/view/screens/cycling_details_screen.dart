@@ -13,10 +13,13 @@ class CyclingDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.sizeOf(context).width;
+    final horizontalPadding = (screenWidth * 0.05).clamp(12.0, 24.0);
+
     return Scaffold(
       backgroundColor: AppColors.softCream,
       body: Padding(
-        padding:            const EdgeInsets.fromLTRB(16, 16, 16, 20),
+        padding: EdgeInsets.fromLTRB(horizontalPadding, 16, horizontalPadding, 20),
         child: SafeArea(
           child: SingleChildScrollView(
             child: Column(
@@ -126,16 +129,17 @@ const RideTile(
         
                 communitiesHeader(),
         
-               Padding(
-  padding: const EdgeInsets.symmetric(horizontal: 8),
-  child: Row(
-    children: [
-      communityChip("Abu Dhabi Riders"),
-      const SizedBox(width: 20),
-      communityChip("Long Distance Crew"),
-    ],
-  ),
-),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Wrap(
+                    spacing: 12,
+                    runSpacing: 10,
+                    children: [
+                      communityChip("Abu Dhabi Riders"),
+                      communityChip("Long Distance Crew"),
+                    ],
+                  ),
+                ),
                 const SizedBox(height: 56),
         
             /// LISTED GEAR
@@ -258,10 +262,9 @@ Widget communitiesHeader() {
 
 Widget communityChip(String text) {
   return Container(
-    width: 140,
-    height: 38,
+    constraints: const BoxConstraints(minHeight: 38),
     alignment: Alignment.center,
-    padding: const EdgeInsets.fromLTRB(2, 9, 2, 9),
+    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
     decoration: BoxDecoration(
       color: AppColors.warmSand,
       borderRadius: BorderRadius.circular(8),

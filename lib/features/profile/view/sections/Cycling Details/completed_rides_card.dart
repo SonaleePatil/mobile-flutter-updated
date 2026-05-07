@@ -17,7 +17,7 @@ class CompletedRidesCard extends StatelessWidget {
       child: GestureDetector(
         onTap: onTap,
         child: Container(
-          width: 358,
+          width: double.infinity,
           height: 58,
           padding: const EdgeInsets.fromLTRB(
             16,

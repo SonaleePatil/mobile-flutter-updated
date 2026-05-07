@@ -1,6 +1,7 @@
 import 'package:adcc/features/auth/view/login_screen.dart';
 import 'package:adcc/features/onboarding/models/onboarding_slide_model.dart';
 import 'package:adcc/features/onboarding/viewmodels/onboarding_view_model.dart';
+import 'package:adcc/features/auth/view/register_screen.dart';
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
 
@@ -57,7 +58,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   void _navigateToLogin() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (_) => const LoginScreen()),
+      MaterialPageRoute(builder: (_) => const RegisterScreen()),
     );
   }
 

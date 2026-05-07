@@ -33,7 +33,7 @@ class AppPreferencesSection extends StatelessWidget {
 
         /// FIRST CARD
         Container(
-          width: 358,
+          width: double.infinity,
           decoration: BoxDecoration(
             color: const Color(0xFFFFEFD7),
             borderRadius: BorderRadius.circular(16),
@@ -95,7 +95,7 @@ class AppPreferencesSection extends StatelessWidget {
 
         /// SECOND CARD
         Container(
-          width: 358,
+          width: double.infinity,
           decoration: BoxDecoration(
             color: const Color(0xFFFFEFD7),
             borderRadius: BorderRadius.circular(16),
@@ -314,7 +314,7 @@ class _SimpleTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 358,
+      width: double.infinity,
       height: 52,
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Row(

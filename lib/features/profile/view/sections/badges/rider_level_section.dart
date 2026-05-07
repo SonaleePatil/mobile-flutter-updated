@@ -31,7 +31,7 @@ class RiderStatsSection extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 0),
           child: Container(
-            width: 359,
+            width: double.infinity,
             height: 40,
             padding: const EdgeInsets.only(
               top: 10,

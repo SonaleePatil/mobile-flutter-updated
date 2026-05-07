@@ -7,13 +7,13 @@ class LatestAchievementCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 358,
+      width: double.infinity,
       height: 218,
       child: Stack(
         clipBehavior: Clip.none,
         children: [
           Container(
-            width: 358,
+            width: double.infinity,
             height: 218,
             decoration: BoxDecoration(
               color: const Color(0xFFF0DDAF),

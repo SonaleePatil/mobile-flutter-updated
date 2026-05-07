@@ -8,7 +8,7 @@ class ShareAchievementsButton extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 2),
       child: SizedBox(
-        width: 358,
+        width: double.infinity,
         height: 51,
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(

@@ -52,7 +52,7 @@ class NotificationsSection extends StatelessWidget {
 
         /// CARD CONTAINER
         Container(
-          width: 358,
+          width: double.infinity,
           decoration: BoxDecoration(
             color: const Color(0xFFFFEFD7),
             borderRadius: BorderRadius.circular(16),

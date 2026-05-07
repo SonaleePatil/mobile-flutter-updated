@@ -28,7 +28,7 @@ class AccountSection extends StatelessWidget {
 
         /// CARD
         Container(
-          width: 358,
+          width: double.infinity,
           height: 242,
           decoration: BoxDecoration(
             color: const Color(0xFFFFF3E2),

@@ -71,7 +71,7 @@ class RewardItemCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(left: 2, right: 2, bottom: 12),
       child: Container(
-        width: 358,
+        width: double.infinity,
         height: 102,
         decoration: BoxDecoration(
           color: const Color(0xFFFFF3E2),

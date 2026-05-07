@@ -13,11 +13,13 @@ class BadgesAchievementsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.sizeOf(context).width;
+    final horizontalPadding = (screenWidth * 0.05).clamp(12.0, 24.0);
+
     return Scaffold(
       backgroundColor: AppColors.softCream,
       body: Padding(
-        padding:
-                  const EdgeInsets.fromLTRB(16, 16, 16, 20),
+        padding: EdgeInsets.fromLTRB(horizontalPadding, 16, horizontalPadding, 20),
         child: SafeArea(
           
           child: SingleChildScrollView(
@@ -73,4 +75,3 @@ class BadgesAchievementsScreen extends StatelessWidget {
     );
   }
 }
-

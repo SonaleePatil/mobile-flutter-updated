@@ -193,7 +193,8 @@ class _SetupProfileScreenState extends State<SetupProfileScreen> {
                       child: Padding(
                         padding: EdgeInsets.only(right: 12),
                         child: Text(
-                          '1/2',
+                          // '1/2',
+                          '',
                           style: TextStyle(
                             fontFamily: 'Outfit',
                             fontSize: 14,

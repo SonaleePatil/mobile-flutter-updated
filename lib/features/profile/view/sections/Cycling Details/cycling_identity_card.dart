@@ -9,7 +9,7 @@ class CyclingIdentityCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(left: 1, right: 1),
       child: Container(
-        width: 358,
+        width: double.infinity,
         height: 242,
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(

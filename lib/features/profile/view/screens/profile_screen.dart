@@ -18,6 +18,8 @@ import '../../../auth/view/email_password_login_screen.dart';
 import '../../../events/view/events_screen.dart';
 import '../../../communities/view/community_screen.dart';
 import '../../../routes/view/routes_screen_wrapper.dart';
+import '../../../events/view/my_event_screen.dart';
+import 'badges_achievement.screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -184,6 +186,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+  void _handleViewAllBadges() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => const BadgesAchievementsScreen(),
+      ),
+    );
+  }
+
+  void _handleViewAllCommunities() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => const CommunitiesScreen(),
+      ),
+    );
+  }
+
+  void _handleViewAllJoinedEvents() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => const MYEVENET(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
    
@@ -289,13 +318,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
               },
             ),
         
-const MyBadgesSection(),
+MyBadgesSection(
+  onViewAll: _handleViewAllBadges,
+),
 const SizedBox(height: 41),
 
-const MyCommunitiesSection(),
+MyCommunitiesSection(
+  onViewAll: _handleViewAllCommunities,
+),
 const SizedBox(height: 49),
 
-const MyJoinedEventsSection(),
+MyJoinedEventsSection(
+  onViewAll: _handleViewAllJoinedEvents,
+),
 
 const SizedBox(height: 50),
 

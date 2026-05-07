@@ -50,42 +50,42 @@ class _BadgesGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    const horizontalPadding = 16.0;
     const gap = 12.0;
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final cardWidth = (constraints.maxWidth - gap) / 2;
 
-    final cardWidth =
-        (screenWidth - (horizontalPadding * 2) - gap) / 2;
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 0),
-      child: Column(
-        children: [
-          _badgeRow(cardWidth,
-              "Century Rider",
-              "Complete 100 Km In A Single Ride",
-              "100 Pts",
-              "Early Bird",
-              "Complete 10 Morning Rides",
-              "50 Pts"),
-          const SizedBox(height: 16),
-          _badgeRow(cardWidth,
-              "Champion",
-              "Join 5 Community Group Rides",
-              "75 Pts",
-              "Speed Demon",
-              "Reach 40 Km/H Average Speed",
-              "80 Pts"),
-          const SizedBox(height: 16),
-          _badgeRow(cardWidth,
-              "Consistency King",
-              "Ride For 30 Consecutive Days",
-              "120 Pts",
-              "Hill Climber",
-              "Climb 1000m Elevation In One Ride",
-              "90 Pts"),
-        ],
-      ),
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 0),
+          child: Column(
+            children: [
+              _badgeRow(cardWidth,
+                  "Century Rider",
+                  "Complete 100 Km In A Single Ride",
+                  "100 Pts",
+                  "Early Bird",
+                  "Complete 10 Morning Rides",
+                  "50 Pts"),
+              const SizedBox(height: 16),
+              _badgeRow(cardWidth,
+                  "Champion",
+                  "Join 5 Community Group Rides",
+                  "75 Pts",
+                  "Speed Demon",
+                  "Reach 40 Km/H Average Speed",
+                  "80 Pts"),
+              const SizedBox(height: 16),
+              _badgeRow(cardWidth,
+                  "Consistency King",
+                  "Ride For 30 Consecutive Days",
+                  "120 Pts",
+                  "Hill Climber",
+                  "Climb 1000m Elevation In One Ride",
+                  "90 Pts"),
+            ],
+          ),
+        );
+      },
     );
   }
 

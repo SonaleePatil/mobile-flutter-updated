@@ -24,7 +24,7 @@ class RideTile extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 8),
       child: Container(
-        width: 358,
+        width: double.infinity,
         height: 124,
         decoration: BoxDecoration(
           color: Colors.white,

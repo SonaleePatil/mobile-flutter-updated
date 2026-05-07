@@ -72,7 +72,7 @@ class _LeaderboardCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 357,
+      width: double.infinity,
       height: 133,
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(

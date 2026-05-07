@@ -9,7 +9,7 @@ class AvailablePointsSection extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(left: 1, right: 2),
       child: Container(
-        width: 358,
+        width: double.infinity,
         height: 140,
         decoration: BoxDecoration(
           color: const Color(0xFFF0DDAF),

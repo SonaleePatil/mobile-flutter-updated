@@ -29,6 +29,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.sizeOf(context).width;
+    final horizontalPadding = (screenWidth * 0.05).clamp(12.0, 24.0);
+
     return Scaffold(
       backgroundColor: AppColors.softCream,
       appBar: AppBar(
@@ -68,7 +71,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   ),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 54),
+        padding: EdgeInsets.fromLTRB(horizontalPadding, 24, horizontalPadding, 32),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
