@@ -225,7 +225,7 @@ class _EventsTabState extends State<EventsTab> {
 
                         EventHeader(
   imagePath: 'assets/images/cycling_1.png',
-  title: 'Events & Community Rides',
+  title: 'Events',
   subtitle:
       'Official cycling events organized by ADCC communities across the UAE',
   wantSearchBar: true,
@@ -235,7 +235,7 @@ class _EventsTabState extends State<EventsTab> {
       _searchQuery = value;
     });
   },
-  placeholder: 'Search events, communities, cities, or tracks...',
+  placeholder: 'Search Events',
 ),
 
 

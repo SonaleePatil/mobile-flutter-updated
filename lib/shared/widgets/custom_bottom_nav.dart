@@ -25,58 +25,73 @@ class CustomBottomNav extends StatelessWidget {
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
-           children: [
-  _navItem("assets/icons/bottom_home.png", 0),
-  _navItem("assets/icons/add_calendar.png", 1),
-  _navItem("assets/svg/trackicon.png", 2, iconSize: 28),
-  _navItem("assets/svg/bottom_pro.svg", 3, isSvg: true),
-],
+            children: [
+              _navItem("assets/icons/bottom_home.png", 0),
+              _navItem("assets/icons/add_calendar.png", 1),
+              _navItem("", 2, iconData: Icons.groups_rounded, iconSize: 31),
+              _navItem("assets/svg/trackicon.png", 3, iconSize: 28),
+              _navItem("assets/svg/bottom_pro.svg", 4, isSvg: true),
+            ],
           ),
         ),
       ),
     );
   }
-Widget _navItem(String iconPath, int index, {bool isSvg = false, double iconSize = 25}) {
-  final bool isSelected = currentIndex == index;
+  Widget _navItem(
+    String iconPath,
+    int index, {
+    bool isSvg = false,
+    double iconSize = 25,
+    IconData? iconData,
+  }) {
+    final bool isSelected = currentIndex == index;
 
-  return GestureDetector(
-    onTap: () => onTap(index),
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-       isSvg
-    ?SvgPicture.asset(
-  iconPath,
-  height: iconSize,
-  width: iconSize,
-  colorFilter: ColorFilter.mode(
-    isSelected ? Colors.white : Colors.white.withOpacity(0.5),
-    BlendMode.srcIn,
-  ),
-)
-    : Image.asset(
-        iconPath,
-        height: iconSize,
-        width: iconSize,
-        color: isSelected
-            ? Colors.white
-            : Colors.white.withOpacity(0.5),
-        colorBlendMode: BlendMode.srcIn,
-      ),
+    return GestureDetector(
+      onTap: () => onTap(index),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          iconData != null
+              ? Icon(
+                  iconData,
+                  size: iconSize,
+                  color: isSelected
+                      ? Colors.white
+                      : Colors.white.withOpacity(0.5),
+                )
+              : isSvg
+                  ? SvgPicture.asset(
+                      iconPath,
+                      height: iconSize,
+                      width: iconSize,
+                      colorFilter: ColorFilter.mode(
+                        isSelected ? Colors.white : Colors.white.withOpacity(0.5),
+                        BlendMode.srcIn,
+                      ),
+                    )
+                  : Image.asset(
+                      iconPath,
+                      height: iconSize,
+                      width: iconSize,
+                      color: isSelected
+                          ? Colors.white
+                          : Colors.white.withOpacity(0.5),
+                      colorBlendMode: BlendMode.srcIn,
+                    ),
 
-        const SizedBox(height: 6),
+          const SizedBox(height: 6),
 
-        AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          width: isSelected ? 12 : 0,
-          height: 2,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(100),
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            width: isSelected ? 12 : 0,
+            height: 2,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(100),
+            ),
           ),
-        ),
-      ],
-    ),
-  );
-}
+        ],
+      ),
+    );
+  }
 }
