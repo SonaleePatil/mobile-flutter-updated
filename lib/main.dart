@@ -10,6 +10,7 @@ import 'features/splash/view/splash_screen.dart';
 import 'features/onboarding/view/onboarding_screen.dart';
 import 'features/challenges/view/my_challenges_screen.dart';
 import 'features/languageOption/view/languageSelectionScreen.dart';
+import 'package:adcc/features/auth/view/setupProfile/setup_profile_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -90,6 +91,7 @@ class _MyAppState extends State<MyApp> {
       supportedLocales: const [Locale('en'), Locale('ar')],
 
       home: const SplashScreen(),
+      // home: const SetupProfileScreen(),
       // home: const LanguageSelectionScreen(),
       // home: const OnboardingScreen(),
       // home: const MyChallengesScreen(),

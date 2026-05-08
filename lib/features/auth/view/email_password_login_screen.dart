@@ -1,4 +1,3 @@
-import 'package:adcc/core/theme/app_colors.dart';
 import 'package:adcc/features/auth/view/otpScreen/otp.dart';
 import 'package:adcc/l10n/app_localizations.dart';
 import 'package:country_picker/country_picker.dart';
@@ -131,25 +130,30 @@ class _EmailPasswordLoginScreenState extends State<EmailPasswordLoginScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    const screenBg = Color(0xFFFFF9EF);
     const double contentMaxWidth = 358;
-    const double topGapAfterBack = 46;
-    const double logoToTitleGap = 86;
-    const double titleToSubtitleGap = 12;
-    const double subtitleToInputGap = 41;
-    const double inputToButtonGap = 33;
-    const double buttonToLoginGap = 27;
-    const double loginToPolicyGap = 220;
+    final size = MediaQuery.sizeOf(context);
+    final bool isShortScreen = size.height < 760;
+    const double topGapAfterBack = 28;
+    const double logoToTitleGap = 64;
+    const double titleToSubtitleGap = 10;
+    const double subtitleToInputGap = 28;
+    const double inputToButtonGap = 20;
+    const double buttonToLoginGap = 16;
+    final double loginToPolicyGap = isShortScreen ? 120 : 170;
 
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
-        backgroundColor: AppColors.softCream,
-        body: SafeArea(
-          child: Column(
+        backgroundColor: screenBg,
+        body: ColoredBox(
+          color: screenBg,
+          child: SafeArea(
+            child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.only(left: 10, top: 8),
+                padding: const EdgeInsets.only(left: 12, top: 8),
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: GestureDetector(
@@ -162,16 +166,16 @@ class _EmailPasswordLoginScreenState extends State<EmailPasswordLoginScreen> {
                       width: 35,
                       height: 35,
                       decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.7),
+                        color: const Color(0xFFF0F0F0),
                         shape: BoxShape.circle,
                         border: Border.all(
-                          color: Colors.black.withValues(alpha: 0.08),
+                          color: const Color(0x1A000000),
                         ),
                       ),
                       child: const Icon(
-                        Icons.arrow_back_ios_new,
-                        size: 14,
-                        color: Color(0xFF333333),
+                        Icons.arrow_back,
+                        size: 22,
+                        color: Color(0xFF2B2B2B),
                       ),
                     ),
                   ),
@@ -203,8 +207,8 @@ class _EmailPasswordLoginScreenState extends State<EmailPasswordLoginScreen> {
                               style: TextStyle(
                                 fontFamily: 'Outfit',
                                 fontWeight: FontWeight.w600,
-                                fontSize: 32,
-                                height: 1,
+                                fontSize: 24,
+                                height: 1.25,
                                 color: Color(0xFF333333),
                               ),
                             ),
@@ -290,7 +294,7 @@ class _EmailPasswordLoginScreenState extends State<EmailPasswordLoginScreen> {
                                       decoration: InputDecoration(
                                         border: InputBorder.none,
                                         isCollapsed: true,
-                                        hintText: l10n.phone_number_placeholder,
+                                hintText: l10n.phone_number_placeholder,
                                         hintStyle: const TextStyle(
                                           fontFamily: 'Outfit',
                                           fontWeight: FontWeight.w400,
@@ -320,7 +324,7 @@ class _EmailPasswordLoginScreenState extends State<EmailPasswordLoginScreen> {
                               child: ElevatedButton(
                                 onPressed: _isSendingOtp ? null : _continue,
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppColors.deepRed,
+                                  backgroundColor: const Color(0xFF0359E8),
                                   foregroundColor: Colors.white,
                                   elevation: 0,
                                   shape: RoundedRectangleBorder(
@@ -364,8 +368,8 @@ class _EmailPasswordLoginScreenState extends State<EmailPasswordLoginScreen> {
                                   TextSpan(
                                     text: 'Login',
                                     style: const TextStyle(
-                                      color: Colors.red,
-                                      fontWeight: FontWeight.w600,
+                                      color: Color(0xFF333333),
+                                      fontWeight: FontWeight.w500,
                                     ),
                                     recognizer: TapGestureRecognizer()
                                       ..onTap = () {
@@ -380,7 +384,7 @@ class _EmailPasswordLoginScreenState extends State<EmailPasswordLoginScreen> {
                                 ],
                               ),
                             ),
-                            const SizedBox(height: loginToPolicyGap),
+                            SizedBox(height: loginToPolicyGap),
                           ],
                         ),
                       ),
@@ -403,6 +407,7 @@ class _EmailPasswordLoginScreenState extends State<EmailPasswordLoginScreen> {
                 ),
               ),
             ],
+          ),
           ),
         ),
       ),

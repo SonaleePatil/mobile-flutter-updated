@@ -16,7 +16,7 @@ class JoinCommunityCard extends StatelessWidget {
           height: 135,
           width: double.infinity,
           decoration: const BoxDecoration(
-            color: Color(0xFFCF9F0C),
+            color: Color(0xFF035AE9),
           ),
           child: Stack(
             children: [
@@ -37,9 +37,9 @@ class JoinCommunityCard extends StatelessWidget {
                       begin: Alignment.centerLeft,
                       end: Alignment.centerRight,
                       colors: [
-                        Color(0xFFF3BF10),
-                        Color(0xD8CF9F0C),
-                        Color(0x00CF9F0C),
+                        Color(0xFF035AE9),
+                        Color(0xE6035AE9),
+                        Color(0x00035AE9),
                       ],
                       stops: [0.0, 0.58, 1.0],
                     ),
@@ -67,12 +67,13 @@ class JoinCommunityCard extends StatelessWidget {
                       width: 162,
                       height: 44,
                       borderRadius: 50,
+                      backgroundColor: const Color(0xFFFFC825),
                       textStyle: const TextStyle(
                         fontFamily: 'Outfit',
                         fontSize: 33 / 2,
                         fontWeight: FontWeight.w500,
                         height: 1.1,
-                        color: Colors.white,
+                        color: Colors.black,
                       ),
                       onPressed: onJoinTap,
                     ),

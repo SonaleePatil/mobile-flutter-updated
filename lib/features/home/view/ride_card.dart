@@ -136,7 +136,7 @@ class RideCard extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(11, 8, 9, 8),
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: const Color(0xFFC12D32),
+                  color: const Color(0xFF0359E8),
                   borderRadius: BorderRadius.circular(9.1),
                 ),
                 child:Text(

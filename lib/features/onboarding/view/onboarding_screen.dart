@@ -3,7 +3,6 @@ import 'package:adcc/features/onboarding/models/onboarding_slide_model.dart';
 import 'package:adcc/features/onboarding/viewmodels/onboarding_view_model.dart';
 import 'package:adcc/features/auth/view/register_screen.dart';
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_colors.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -99,12 +98,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             child: Align(
               alignment: Alignment.topRight,
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 child: TextButton(
                   onPressed: _skipToLogin,
                   child: const Text(
                     'Skip',
                     style: TextStyle(
+                      fontFamily: 'Outfit',
                       color: Colors.white,
                       fontSize: 15,
                       fontWeight: FontWeight.w700,
@@ -117,7 +117,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
           // Static Pagination Dots
           Positioned(
-            bottom: 125,
+            bottom: 150,
             left: 0,
             right: 0,
             child: _slides.isEmpty ? const SizedBox.shrink() : _buildPaginationDots(),
@@ -125,18 +125,18 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
           // Static Button
           Positioned(
-              bottom: 0,
+              bottom: 30,
               left: 24,
               right: 24,
               child: SafeArea(
                 child: SizedBox(
                   width: double.infinity,
-                  height: 56,
+                  height: 53,
                   child: ElevatedButton(
                     onPressed: _onButtonPressed,
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                      backgroundColor: AppColors.deepRed,
+                      backgroundColor: const Color(0xFF0359E8),
                       foregroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
@@ -152,8 +152,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           child: Text(
                             _slides.isEmpty ? 'Next' : _slides[_currentPage].buttonText,
                             style: const TextStyle(
+                              fontFamily: 'Outfit',
                               fontSize: 18,
-                              fontWeight: FontWeight.w600,
+                              fontWeight: FontWeight.w700,
                             ),
                           ),
                         ),
@@ -168,8 +169,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           child: Center(
                             child: Image.asset(
                               'assets/icons/right_arrow_head.png',
-                              width: 16,
-                              height: 16,
+                              width: 18,
+                              height: 18,
                             ),
                           ),
                         ),
@@ -189,14 +190,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       children: List.generate(
         _slides.length,
         (index) => Container(
-          width: 8,
-          height: 8,
-          margin: const EdgeInsets.symmetric(horizontal: 4),
+          width: 7.78,
+          height: 7.78,
+          margin: const EdgeInsets.symmetric(horizontal: 5.5),
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: _currentPage == index
-                ? AppColors.deepRed
-                : Colors.white,
+                ? const Color(0xFFF09802)
+                : const Color(0xFFD9D9D9),
           ),
         ),
       ),
@@ -214,6 +215,7 @@ class OnboardingSlide extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final showArc1 = data.imagePath.contains('onboarding_bg_one.png');
     final showArc3 = data.imagePath.contains('onboarding3.png');
     final showArc4 = data.imagePath.contains('onboarding4.png');
 
@@ -256,6 +258,23 @@ class OnboardingSlide extends StatelessWidget {
                   },
                 ),
         ),
+
+        if (showArc1)
+          const Positioned(
+            top: 104,
+            left: -20,
+            child: IgnorePointer(
+              child: SizedBox.square(
+                dimension: 324,
+                child: _OnboardingArc(
+                  rotation: 0.35,
+                  startAngle: 2.58,
+                  sweepAngle: 3.45,
+                  strokeWidth: 36,
+                ),
+              ),
+            ),
+          ),
 
         if (showArc3)
           Positioned(
@@ -328,37 +347,41 @@ class OnboardingSlide extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: Column(
                   children: [
-Text(
-      data.title.toUpperCase(),
-      textAlign: TextAlign.center,
-      style: const TextStyle(
-        fontFamily: "Outfit",
-        color: Colors.white,
-        fontSize: 25,
-        fontWeight: FontWeight.w700,
-        height: 1.2,
-        letterSpacing: 0,
-      ),
-    ),
-
-                    const SizedBox(height: 12),
-                    Text(
-                      data.description,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white,
-                         fontFamily: "Outfit",
-                        fontSize: 13,
-                        height: 1.2,
-                        fontWeight: FontWeight.w400
+                    ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 300),
+                      child: Text(
+                        data.title.toUpperCase(),
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontFamily: "Outfit",
+                          color: Colors.white,
+                          fontSize: 25,
+                          fontWeight: FontWeight.w700,
+                          height: 1.28,
+                          letterSpacing: 0,
+                        ),
                       ),
                     ),
-                    
+                    const SizedBox(height: 10),
+                    ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 356),
+                      child: Text(
+                        data.description,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontFamily: "Outfit",
+                          fontSize: 15,
+                          height: 1.26,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
 
-              const SizedBox(height: 160),
+              const SizedBox(height: 190),
             ],
           ),
         ),

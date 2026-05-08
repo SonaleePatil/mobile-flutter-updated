@@ -83,7 +83,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
 
     if (isGuest) {
       return const CircleAvatar(
-        radius: 26,
+        radius: 22.5,
         backgroundColor: Color(0xFFE0E0E0),
         child: Icon(Icons.person, size: 26, color: Color(0xFF757575)),
       );
@@ -91,7 +91,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
 
     final initial = name[0].toUpperCase();
     return CircleAvatar(
-      radius: 26,
+      radius: 22.5,
       backgroundColor: AppColors.deepRed,
       child: Text(
         initial,
@@ -108,7 +108,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
       child: Row(
         children: [
           _buildAvatar(),
@@ -159,11 +159,24 @@ class _ProfileHeaderState extends State<ProfileHeader>
 
           GestureDetector(
             onTap: widget.onNotificationTap,
-            child: Image.asset(
-              'assets/icons/notification.gif',
-              height: 60,
-              width: 60,
-        
+            child: Row(
+              children: [
+                Image.asset(
+                  'assets/images/weather_cloud.png',
+                  height: 22,
+                  width: 22,
+                ),
+                const SizedBox(width: 4),
+                const Text(
+                  '20°C',
+                  style: TextStyle(
+                    fontFamily: 'Outfit',
+                    fontSize: 30 / 2,
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFF1A1C20),
+                  ),
+                ),
+              ],
             ),
           ),
         ],

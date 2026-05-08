@@ -7,7 +7,6 @@ import 'package:adcc/features/home/viewmodels/home_view_model.dart';
 import 'package:adcc/features/home/view/join_community_card.dart';
 import 'package:adcc/features/home/view/near_by_track.dart';
 import 'package:adcc/features/home/view/quick_actions_section.dart';
-import 'package:adcc/features/home/view/community_updates_section.dart';
 import 'package:adcc/features/home/view/promo_carousel.dart';
 import 'package:adcc/features/home/view/promo_card.dart';
 import 'package:adcc/features/home/view/random_card.dart';
@@ -127,12 +126,34 @@ class _HomeTabState extends State<HomeTab> {
                   physics: const BouncingScrollPhysics(),
                   padding: const EdgeInsets.only(bottom: 24),
                   children: [
-                    const SizedBox(height: 34),
+                    const SizedBox(height: 14),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Container(
+                        height: 47,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFD8E5FB),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: const Color(0xFFF0F0F0)),
+                        ),
+                        child: const Row(
+                          children: [
+                            SizedBox(width: 14),
+                            Icon(
+                              Icons.search,
+                              size: 20,
+                              color: Color(0xA6191A1C),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 22),
                     PromoCarousel(
                       items: promoItems,
                       showFallback: false,
                     ),
-                    const SizedBox(height: 30),
+                    const SizedBox(height: 28),
                     const WeatherScreen(),
                     const SizedBox(height: 30),
                     Padding(

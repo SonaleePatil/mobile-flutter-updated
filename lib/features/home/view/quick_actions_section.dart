@@ -29,7 +29,7 @@ class QuickActionsSection extends StatelessWidget {
           style: const TextStyle(
             fontFamily: 'Outfit',
             fontSize: 20,
-            fontWeight: FontWeight.w400,
+            fontWeight: FontWeight.w600,
             height: 1, // 100% line height
             letterSpacing: 0,
             color: AppColors.textDark,
@@ -40,23 +40,19 @@ class QuickActionsSection extends StatelessWidget {
           crossAxisCount: 4,
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          childAspectRatio: 88.04 / 80.49,
-          mainAxisSpacing: 14.51,
-          crossAxisSpacing: 2.04,
+          childAspectRatio: 0.78,
+          mainAxisSpacing: 10,
+          crossAxisSpacing: 6,
           children: [
             QuickActionItem(
-              title: 'Store',
-              imagePath: 'assets/images/store.png',
-              iconSize: 29.35,
+              title: 'Community',
+              imagePath: 'assets/images/community.png',
+              iconSize: 31.86,
               onTap: () {
-                if (fromGuest) {
-                  onGuestRestrictedTap?.call();
-                  return;
-                }
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => const StoreScreen(),
+                    builder: (_) => const CommunitiesScreen(),
                   ),
                 );
               },
@@ -111,14 +107,18 @@ class QuickActionsSection extends StatelessWidget {
               },
             ),
             QuickActionItem(
-              title: 'Community',
-              imagePath: 'assets/images/community.png',
-              iconSize: 31.86,
+              title: 'Marketplace',
+              imagePath: 'assets/images/store.png',
+              iconSize: 29.35,
               onTap: () {
+                if (fromGuest) {
+                  onGuestRestrictedTap?.call();
+                  return;
+                }
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => const CommunitiesScreen(),
+                    builder: (_) => const StoreScreen(),
                   ),
                 );
               },
@@ -144,7 +144,7 @@ class QuickActionsSection extends StatelessWidget {
               },
             ),
             QuickActionItem(
-              title: 'Merchandise',
+              title: 'Club Store',
               imagePath: 'assets/images/quick_action_merchandise.png',
               iconSize: 38,
               iconOffsetY: -3,

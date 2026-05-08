@@ -138,13 +138,16 @@ class _SetupProfileScreenState extends State<SetupProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    const screenBg = Color(0xFFFFF9EF);
     return Scaffold(
-      backgroundColor: AppColors.softCream,
-      body: SafeArea(
-        child: Column(
+      backgroundColor: screenBg,
+      body: ColoredBox(
+        color: screenBg,
+        child: SafeArea(
+          child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(8, 8, 8, 14),
+              padding: const EdgeInsets.fromLTRB(10, 8, 10, 14),
               child: SizedBox(
                 height: 35,
                 child: Stack(
@@ -162,16 +165,16 @@ class _SetupProfileScreenState extends State<SetupProfileScreen> {
                           width: 35,
                           height: 35,
                           decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.7),
+                            color: const Color(0xFFF0F0F0),
                             shape: BoxShape.circle,
                             border: Border.all(
-                              color: Colors.black.withValues(alpha: 0.08),
+                              color: const Color(0x1A000000),
                             ),
                           ),
                           child: const Icon(
-                            Icons.arrow_back_ios_new,
-                            size: 14,
-                            color: Color(0xFF333333),
+                            Icons.arrow_back,
+                            size: 22,
+                            color: Color(0xFF2B2B2B),
                           ),
                         ),
                       ),
@@ -193,8 +196,7 @@ class _SetupProfileScreenState extends State<SetupProfileScreen> {
                       child: Padding(
                         padding: EdgeInsets.only(right: 12),
                         child: Text(
-                          // '1/2',
-                          '',
+                          '1/2',
                           style: TextStyle(
                             fontFamily: 'Outfit',
                             fontSize: 14,
@@ -209,11 +211,11 @@ class _SetupProfileScreenState extends State<SetupProfileScreen> {
               ),
             ),
             Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Column(
                   children: [
-                    const SizedBox(height: 22),
+                    const SizedBox(height: 30),
                     _buildProfileField(
                       icon: Icons.person_outline,
                       label: 'Enter your full name',
@@ -316,7 +318,7 @@ class _SetupProfileScreenState extends State<SetupProfileScreen> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 32),
                     SizedBox(
                       width: double.infinity,
                       height: 51,
@@ -378,7 +380,7 @@ class _SetupProfileScreenState extends State<SetupProfileScreen> {
                           }
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.deepRed,
+                          backgroundColor: const Color(0xFF0359E8),
                           foregroundColor: Colors.white,
                           elevation: 0,
                           shape: RoundedRectangleBorder(
@@ -405,12 +407,13 @@ class _SetupProfileScreenState extends State<SetupProfileScreen> {
                               ),
                       ),
                     ),
-                    const SizedBox(height: 34),
+                    const SizedBox(height: 26),
                   ],
                 ),
               ),
             ),
           ],
+        ),
         ),
       ),
     );
@@ -422,7 +425,6 @@ class _SetupProfileScreenState extends State<SetupProfileScreen> {
     Widget? child,
     VoidCallback? onTap,
     bool showChevron = false,
-    bool highlight = false,
   }) {
     return InkWell(
       onTap: onTap,
@@ -432,11 +434,11 @@ class _SetupProfileScreenState extends State<SetupProfileScreen> {
         height: 56,
         padding: const EdgeInsets.symmetric(horizontal: 14),
         decoration: BoxDecoration(
+          color: const Color(0x3303A4D1),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color:
-                highlight ? const Color(0xFF2F8FFF) : const Color(0xFFCCC7BF),
-            width: highlight ? 1.6 : 1,
+            color: const Color(0x4D5D9CA7),
+            width: 1,
           ),
         ),
         child: Row(
@@ -445,10 +447,10 @@ class _SetupProfileScreenState extends State<SetupProfileScreen> {
               width: 39,
               height: 39,
               decoration: BoxDecoration(
-                color: const Color(0xFFF0DDAF),
+                color: const Color(0xFF05B484),
                 borderRadius: BorderRadius.circular(60),
               ),
-              child: Icon(icon, size: 18, color: const Color(0xFF000000)),
+              child: Icon(icon, size: 18, color: Colors.white),
             ),
             const SizedBox(width: 11),
             Expanded(

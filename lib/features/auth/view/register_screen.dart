@@ -81,7 +81,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final topSectionHeight = size.height * 0.52;
+    final topSectionHeight = size.height * 0.51;
+    final sheetHeight = size.height - (topSectionHeight - 22);
 
     return Scaffold(
       backgroundColor: const Color(0xFFF5F6EB),
@@ -113,28 +114,33 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 SafeArea(
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(14, 8, 14, 0),
+                    padding: const EdgeInsets.fromLTRB(8, 8, 14, 0),
                     child: Align(
                       alignment: Alignment.topLeft,
                       child: IconButton(
+                        padding: const EdgeInsets.all(4),
+                        constraints: const BoxConstraints(
+                          minWidth: 32,
+                          minHeight: 32,
+                        ),
                         onPressed: () {
                           if (Navigator.of(context).canPop()) {
                             Navigator.of(context).pop();
                           }
                         },
                         icon: const Icon(
-                          Icons.arrow_back_ios,
+                          Icons.arrow_back,
                           color: Colors.white,
-                          size: 18,
+                          size: 24,
                         ),
                       ),
                     ),
                   ),
                 ),
                 Align(
-                  alignment: Alignment(0, 0.75),
+                  alignment: const Alignment(0, 0.78),
                   child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 32),
+                    padding: const EdgeInsets.symmetric(horizontal: 28),
                     child: RichText(
                       textAlign: TextAlign.center,
                       text: TextSpan(
@@ -145,7 +151,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               fontFamily: 'Outfit',
                               fontSize: 20,
                               fontWeight: FontWeight.w600,
-                              height: 1.48,
+                              height: 1.3,
                               color: Colors.white,
                             ),
                           ),
@@ -171,9 +177,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
-              height: size.height * 0.47,
+              height: sheetHeight,
               width: double.infinity,
-              padding: const EdgeInsets.fromLTRB(22, 20, 22, 14),
+              padding: const EdgeInsets.fromLTRB(22, 20, 22, 10),
               decoration: const BoxDecoration(
                 color: AppColors.softCream,
                 borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
@@ -181,7 +187,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               child: Column(
                 children: [
                   _buildPrimaryMobileButton(),
-                  const SizedBox(height: 18),
+                  const SizedBox(height: 20),
                   Row(
                     children: [
                       const Expanded(
@@ -196,7 +202,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         child: const Text(
                           'Skip and continue as',
                           style: TextStyle(
-                            fontFamily: 'Outfit',
+                            fontFamily: 'Satoshi',
                             fontSize: 12,
                             fontWeight: FontWeight.w400,
                             color: Color(0xFF484A4D),
@@ -211,9 +217,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 18),
-                  _buildGuestButton(),
                   const SizedBox(height: 16),
+                  _buildGuestButton(),
+                  const SizedBox(height: 18),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -265,9 +271,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   const SafeArea(
                     top: false,
                     child: Padding(
-                      padding: EdgeInsets.only(bottom: 8),
+                      padding: EdgeInsets.only(bottom: 4),
                       child: Text(
-                        "By continuing, you agree to ADCycling's Terms of Service and Privacy Policy",
+                        "By continuing, you agree to ADCycling's Terms of Service\nand Privacy Policy",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontFamily: 'Outfit',
@@ -296,9 +302,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
         onPressed: _navigateToEmailPasswordLogin,
         style: ElevatedButton.styleFrom(
           elevation: 0,
-          backgroundColor: AppColors.buttonGuest,
-          foregroundColor: AppColors.textDark,
-          side: const BorderSide(color: AppColors.borderGray, width: 1.16),
+          backgroundColor: const Color(0xFF07B487),
+          foregroundColor: Colors.white,
+          side: BorderSide.none,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(40),
           ),
@@ -306,7 +312,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         child: const Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.phone, size: 18, color: AppColors.textDark),
+            Icon(Icons.phone, size: 18, color: Colors.white),
             SizedBox(width: 12),
             Text(
               'Continue With Mobile Number',
@@ -314,7 +320,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 fontFamily: 'Outfit',
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
-                color: AppColors.textDark,
+                color: Colors.white,
               ),
             ),
           ],
@@ -374,7 +380,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         width: 48,
         height: 48,
         decoration: BoxDecoration(
-          color: const Color(0x408C8C8C),
+          color: const Color(0x1A000000),
           borderRadius: BorderRadius.circular(74),
         ),
         alignment: Alignment.center,

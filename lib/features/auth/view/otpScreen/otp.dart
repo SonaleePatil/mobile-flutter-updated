@@ -1,5 +1,4 @@
 import 'package:adcc/core/services/token_storage_service.dart';
-import 'package:adcc/core/theme/app_colors.dart';
 import 'package:adcc/features/auth/Services/auth_services.dart';
 import 'package:adcc/features/auth/view/setupProfile/setup_profile_screen.dart';
 import 'package:adcc/features/home/view/home_screen.dart';
@@ -185,24 +184,27 @@ class _OtpScreenState extends State<OtpScreen> {
 
   @override
   Widget build(BuildContext context) {
+    const screenBg = Color(0xFFFFF9EF);
     const double contentMaxWidth = 358;
-    const double topGapAfterBack = 40;
-    const double logoToTitleGap = 86;
-    const double titleToSubtitleGap = 16;
-    const double subtitleToOtpGap = 27;
-    const double otpToResendGap = 26;
+    const double topGapAfterBack = 30;
+    const double logoToTitleGap = 76;
+    const double titleToSubtitleGap = 12;
+    const double subtitleToOtpGap = 24;
+    const double otpToResendGap = 18;
     const double resendToBottomGap = 244;
 
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
-        backgroundColor: AppColors.softCream,
-        body: SafeArea(
-          child: Column(
+        backgroundColor: screenBg,
+        body: ColoredBox(
+          color: screenBg,
+          child: SafeArea(
+            child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.only(left: 10, top: 8),
+                padding: const EdgeInsets.only(left: 12, top: 8),
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: GestureDetector(
@@ -215,16 +217,16 @@ class _OtpScreenState extends State<OtpScreen> {
                       width: 35,
                       height: 35,
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.7),
+                        color: const Color(0xFFF0F0F0),
                         shape: BoxShape.circle,
                         border: Border.all(
-                          color: Colors.black.withOpacity(0.08),
+                          color: const Color(0x1A000000),
                         ),
                       ),
                       child: const Icon(
-                        Icons.arrow_back_ios_new,
-                        size: 14,
-                        color: Color(0xFF333333),
+                        Icons.arrow_back,
+                        size: 22,
+                        color: Color(0xFF2B2B2B),
                       ),
                     ),
                   ),
@@ -264,6 +266,8 @@ class _OtpScreenState extends State<OtpScreen> {
                             style: TextStyle(
                               fontFamily: 'Outfit',
                               fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                              height: 1.25,
                               color: Color(0xFF333333),
                             ),
                           ),
@@ -274,9 +278,18 @@ class _OtpScreenState extends State<OtpScreen> {
                               return Padding(
                                 padding:
                                     EdgeInsets.only(right: index == 5 ? 0 : 8),
-                                child: SizedBox(
+                                child: Container(
                                   width: 44,
-                                  height: 52,
+                                  height: 44,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                      color: _focusNodes[index].hasFocus
+                                          ? const Color(0xFF0359E8)
+                                          : const Color(0xFFCACACA),
+                                    ),
+                                  ),
                                   child: TextField(
                                     controller: _otpControllers[index],
                                     focusNode: _focusNodes[index],
@@ -286,21 +299,22 @@ class _OtpScreenState extends State<OtpScreen> {
                                       FilteringTextInputFormatter.digitsOnly,
                                       LengthLimitingTextInputFormatter(1),
                                     ],
-                                    decoration: InputDecoration(
-                                      border: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(999),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(999),
-                                        borderSide: const BorderSide(
-                                          color: AppColors.deepRed,
-                                        ),
-                                      ),
+                                    style: const TextStyle(
+                                      fontFamily: 'Outfit',
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w500,
+                                      color: Color(0xFF333333),
                                     ),
-                                    onChanged: (value) =>
-                                        _onOtpChanged(index, value),
+                                    decoration: const InputDecoration(
+                                      border: InputBorder.none,
+                                      isDense: true,
+                                      contentPadding: EdgeInsets.zero,
+                                    ),
+                                    onTap: () => setState(() {}),
+                                    onChanged: (value) {
+                                      _onOtpChanged(index, value);
+                                      setState(() {});
+                                    },
                                   ),
                                 ),
                               );
@@ -313,19 +327,20 @@ class _OtpScreenState extends State<OtpScreen> {
                               style: const TextStyle(
                                 fontFamily: 'Outfit',
                                 fontSize: 14,
-                                color: Color(0x99333333),
+                                fontWeight: FontWeight.w400,
+                                color: Color(0xB3333333),
                               ),
                               children: [
                                 const TextSpan(text: "Didn't receive it? "),
                                 TextSpan(
                                   text: canResend
-                                      ? "Resend OTP"
-                                      : "Resend in $seconds s",
+                                      ? "Resend"
+                                      : "Resend in ${seconds}s",
                                   style: TextStyle(
-                                    fontWeight: FontWeight.w600,
+                                    fontWeight: FontWeight.w500,
                                     color: canResend
-                                        ? Colors.red
-                                        : const Color(0xFF333333),
+                                        ? const Color(0xFF333333)
+                                        : const Color(0xB3333333),
                                   ),
                                   recognizer: TapGestureRecognizer()
                                     ..onTap =
@@ -342,25 +357,34 @@ class _OtpScreenState extends State<OtpScreen> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 64),
                 child: SizedBox(
                   width: double.infinity,
                   height: 51,
                   child: ElevatedButton(
                     onPressed: _isLoading ? null : _verifyOtp,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.deepRed,
+                      backgroundColor: const Color(0xFF0359E8),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
                     child: _isLoading
                         ? const CircularProgressIndicator(color: Colors.white)
-                        : const Text('Verify'),
+                        : const Text(
+                            'Verify',
+                            style: TextStyle(
+                              fontFamily: 'Outfit',
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              height: 1.5,
+                            ),
+                          ),
                   ),
                 ),
               ),
             ],
+          ),
           ),
         ),
       ),

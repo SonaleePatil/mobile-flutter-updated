@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:adcc/core/theme/app_colors.dart';
 
 class QuickActionItem extends StatelessWidget {
   final String title;
@@ -21,42 +20,48 @@ class QuickActionItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: 50.31,
-            height: 50.31,
-            decoration: BoxDecoration(
-              color: AppColors.warmSand.withValues(alpha: 0.5),
-              shape: BoxShape.circle,
-            ),
-            child: Center(
-              child: Transform.translate(
-                offset: Offset(0, iconOffsetY),
-                child: Image.asset(
-                  imagePath,
-                  width: iconSize,
-                  height: iconSize,
-                  fit: BoxFit.contain,
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: const Color(0x330359E8)),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 50.31,
+              height: 50.31,
+              decoration: const BoxDecoration(
+                color: Color(0xFFD8E5FB),
+                shape: BoxShape.circle,
+              ),
+              child: Center(
+                child: Transform.translate(
+                  offset: Offset(0, iconOffsetY),
+                  child: Image.asset(
+                    imagePath,
+                    width: iconSize,
+                    height: iconSize,
+                    fit: BoxFit.contain,
+                  ),
                 ),
               ),
             ),
-          ),
-          const SizedBox(height: 7),
-          Text(
-            title,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontFamily: 'Outfit',
-              fontSize: 10.8997,
-              fontWeight: FontWeight.w400,
-              height: 1.15, // 115%
-              letterSpacing: 0.2746,
-              color: Color(0xFF000000),
+            const SizedBox(height: 10),
+            Text(
+              title,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontFamily: 'Outfit',
+                fontSize: 13,
+                fontWeight: FontWeight.w400,
+                height: 1.0,
+                color: Color(0xFF000000),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
