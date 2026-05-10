@@ -24,7 +24,7 @@ class HorizontalRideList extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 16),
             child: Text(
               "Popular Communities",
-              style: const TextStyle(
+              style: TextStyle(
                 fontFamily: 'Outfit',
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
@@ -36,7 +36,7 @@ class HorizontalRideList extends StatelessWidget {
         const SizedBox(height: 22),
         if (communities.isEmpty && showFallback)
           SizedBox(
-            height: 392,
+            height: 363,
             child: ListView(
               scrollDirection: Axis.horizontal,
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -61,7 +61,7 @@ class HorizontalRideList extends StatelessWidget {
           )
         else if (communities.isNotEmpty)
           SizedBox(
-            height: 392,
+            height: 363,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               padding: const EdgeInsets.symmetric(horizontal: 16),

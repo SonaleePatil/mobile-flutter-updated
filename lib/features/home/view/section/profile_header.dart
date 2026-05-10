@@ -112,24 +112,22 @@ class _ProfileHeaderState extends State<ProfileHeader>
       child: Row(
         children: [
           _buildAvatar(),
-
           const SizedBox(width: 12),
-
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-              Text(
-  widget.name.trim().isEmpty ? 'Welcome, Guest' : widget.name,
-  style: const TextStyle(
-    fontFamily: 'Outfit',
-    fontSize: 16,
-    fontWeight: FontWeight.w600,
-    height: 1,
-    letterSpacing: 0,
-    color: AppColors.textDark,
-  ),
-),
+                Text(
+                  widget.name.trim().isEmpty ? 'Welcome, Guest' : widget.name,
+                  style: const TextStyle(
+                    fontFamily: 'Outfit',
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    height: 1,
+                    letterSpacing: 0,
+                    color: AppColors.textDark,
+                  ),
+                ),
                 const SizedBox(height: 4),
                 Row(
                   children: [
@@ -140,43 +138,34 @@ class _ProfileHeaderState extends State<ProfileHeader>
                       color: Colors.grey,
                     ),
                     const SizedBox(width: 4),
-                   Text(
-  _city.isEmpty ? 'Fetching location...' : _city,
-  style: const TextStyle(
-    fontFamily: 'Outfit',
-    fontSize: 12,
-    fontWeight: FontWeight.w500,
-    height: 1, // 100% line height
-    letterSpacing: 0,
-    color: Color(0xFF767779),
-  ),
-)
+                    Text(
+                      _city.isEmpty ? 'Fetching location...' : _city,
+                      style: const TextStyle(
+                        fontFamily: 'Outfit',
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                        height: 1, // 100% line height
+                        letterSpacing: 0,
+                        color: Color(0xFF767779),
+                      ),
+                    )
                   ],
                 ),
               ],
             ),
           ),
-
           GestureDetector(
             onTap: widget.onNotificationTap,
-            child: Row(
-              children: [
-                Image.asset(
-                  'assets/images/weather_cloud.png',
-                  height: 22,
-                  width: 22,
-                ),
-                const SizedBox(width: 4),
-                const Text(
-                  '20°C',
-                  style: TextStyle(
-                    fontFamily: 'Outfit',
-                    fontSize: 30 / 2,
-                    fontWeight: FontWeight.w700,
-                    color: Color(0xFF1A1C20),
-                  ),
-                ),
-              ],
+            child: Container(
+              width: 40,
+              height: 40,
+              alignment: Alignment.center,
+              child: Image.asset(
+                'assets/icons/notification.gif',
+                width: 40,
+                height: 40,
+                fit: BoxFit.contain,
+              ),
             ),
           ),
         ],

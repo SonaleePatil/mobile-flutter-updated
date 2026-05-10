@@ -54,9 +54,10 @@ class QuickActionItem extends StatelessWidget {
               textAlign: TextAlign.center,
               style: const TextStyle(
                 fontFamily: 'Outfit',
-                fontSize: 13,
+                fontSize: 10.9,
                 fontWeight: FontWeight.w400,
-                height: 1.0,
+                height: 1.15,
+                letterSpacing: 0.27,
                 color: Color(0xFF000000),
               ),
             ),

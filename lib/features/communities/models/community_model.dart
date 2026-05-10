@@ -67,76 +67,69 @@ class CommunityModel {
       id: json['_id'] ?? '',
       title: json['title'] ?? '',
       description: json['description'] ?? '',
-
       type: json['type'] is List
           ? (json['type'] as List).join(', ')
           : json['type']?.toString() ?? '',
-
       category: _parseCategory(json['category']),
-
       location: json['location']?.toString(),
       city: json['city']?.toString(),
       area: json['area']?.toString(),
-
       trackName: json['trackName']?.toString(),
       trackId: json['trackId']?.toString(),
       terrain: json['terrain']?.toString(),
       distance: _parseDouble(json['distance']),
-
       imageUrl: json['image'] ?? json['imageUrl'],
       logo: json['logo'],
-
       isActive: json['isActive'] ?? false,
       isPublic: json['isPublic'] ?? false,
       isFeatured: json['isFeatured'] ?? false,
-
       manager: json['manager']?.toString(),
       slug: json['slug']?.toString(),
       foundedYear: json['foundedYear'] is int
           ? json['foundedYear']
           : int.tryParse(json['foundedYear']?.toString() ?? ''),
-
       membersCount: _parseCount(
           json['membersCount'] ?? json['memberCount'] ?? json['members']),
-
+      eventsCount: _parseCount(
+          json['eventsCount'] ?? json['eventCount'] ?? json['events']),
       createdAt: json['createdAt'] != null
           ? DateTime.tryParse(json['createdAt'])
           : null,
-
       updatedAt: json['updatedAt'] != null
           ? DateTime.tryParse(json['updatedAt'])
           : null,
     );
   }
 
-   Map<String, dynamic> toJson() {
-  return {
-    "id": id,
-    "title": title,
-    "description": description,
-    "type": type,
-    "category": category,
-    "location": location,
-    "city": city,
-    "area": area,
-    "trackName": trackName,
-    "trackId": trackId,
-    "terrain": terrain,
-    "distance": distance,
-    "imageUrl": imageUrl,
-    "logo": logo,
-    "isActive": isActive,
-    "isPublic": isPublic,
-    "isFeatured": isFeatured,
-    "manager": manager,
-    "slug": slug,
-    "foundedYear": foundedYear,
-    "membersCount": membersCount,
-    "eventsCount": eventsCount,
-    "createdAt": createdAt?.toIso8601String(),
-    "updatedAt": updatedAt?.toIso8601String(),
-  };
-}
+  Map<String, dynamic> toJson() {
+    return {
+      "id": id,
+      "title": title,
+      "description": description,
+      "type": type,
+      "category": category,
+      "location": location,
+      "city": city,
+      "area": area,
+      "trackName": trackName,
+      "trackId": trackId,
+      "terrain": terrain,
+      "distance": distance,
+      "imageUrl": imageUrl,
+      "logo": logo,
+      "isActive": isActive,
+      "isPublic": isPublic,
+      "isFeatured": isFeatured,
+      "manager": manager,
+      "slug": slug,
+      "foundedYear": foundedYear,
+      "membersCount": membersCount,
+      "eventsCount": eventsCount,
+      "createdAt": createdAt?.toIso8601String(),
+      "updatedAt": updatedAt?.toIso8601String(),
+    };
+  }
+
   static int? _parseCount(dynamic value) {
     if (value == null) return null;
     if (value is int) return value;
@@ -151,6 +144,7 @@ class CommunityModel {
     if (value is String) return double.tryParse(value);
     return null;
   }
+
   bool hasCategory(String categoryName) {
     final lowerCategoryName = categoryName.toLowerCase().trim();
     return category.any((cat) => cat.toLowerCase().trim() == lowerCategoryName);
@@ -173,16 +167,16 @@ class CommunityModel {
   }
 
   static List<String> _parseCategory(dynamic value) {
-  if (value == null) return [];
+    if (value == null) return [];
 
-  if (value is List) {
-    return value.map((e) => e.toString()).toList();
+    if (value is List) {
+      return value.map((e) => e.toString()).toList();
+    }
+
+    if (value is String) {
+      return [value];
+    }
+
+    return [];
   }
-
-  if (value is String) {
-    return [value];
-  }
-
-  return [];
-}
 }

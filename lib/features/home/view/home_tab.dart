@@ -4,6 +4,7 @@ import 'package:adcc/features/auth/view/login_screen.dart';
 import 'package:adcc/features/event_details/view/event_details_screen.dart';
 import 'package:adcc/features/home/view/horizontal_rideList.dart';
 import 'package:adcc/features/home/viewmodels/home_view_model.dart';
+import 'package:adcc/features/home/view/community_updates_section.dart';
 import 'package:adcc/features/home/view/join_community_card.dart';
 import 'package:adcc/features/home/view/near_by_track.dart';
 import 'package:adcc/features/home/view/quick_actions_section.dart';
@@ -124,38 +125,18 @@ class _HomeTabState extends State<HomeTab> {
               children: [
                 ListView(
                   physics: const BouncingScrollPhysics(),
-                  padding: const EdgeInsets.only(bottom: 24),
+                  padding: const EdgeInsets.only(bottom: 34),
                   children: [
-                    const SizedBox(height: 14),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Container(
-                        height: 47,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFD8E5FB),
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: const Color(0xFFF0F0F0)),
-                        ),
-                        child: const Row(
-                          children: [
-                            SizedBox(width: 14),
-                            Icon(
-                              Icons.search,
-                              size: 20,
-                              color: Color(0xA6191A1C),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 22),
+                    const SizedBox(height: 12),
+                    const _SearchWeatherBar(),
+                    const SizedBox(height: 24),
                     PromoCarousel(
                       items: promoItems,
-                      showFallback: false,
+                      showFallback: true,
                     ),
-                    const SizedBox(height: 28),
+                    const SizedBox(height: 26),
                     const WeatherScreen(),
-                    const SizedBox(height: 30),
+                    const SizedBox(height: 32),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: QuickActionsSection(
@@ -164,7 +145,19 @@ class _HomeTabState extends State<HomeTab> {
                         onGuestRestrictedTap: _redirectGuestToLogin,
                       ),
                     ),
-                    const SizedBox(height: 30),
+                    const SizedBox(height: 40),
+                    HorizontalRideList(
+                      communities: communities,
+                      showFallback: true,
+                      onCommunityTap: (id) {
+                        if (widget.fromGuest) {
+                          _redirectGuestToLogin();
+                          return;
+                        }
+                        debugPrint('Community tapped: $id');
+                      },
+                    ),
+                    const SizedBox(height: 40),
                     if (featured != null) ...[
                       const Padding(
                         padding: EdgeInsets.symmetric(horizontal: 16),
@@ -188,50 +181,62 @@ class _HomeTabState extends State<HomeTab> {
                         distance: featured.distance,
                         onTap: () => _goToEvent(featured.id),
                       ),
-                    ],
-                    Padding(
-                      padding: const EdgeInsets.only(top: 50),
-                      child: HorizontalRideList(
-                        communities: communities,
-                        showFallback: false,
-                        onCommunityTap: (id) {
-                          if (widget.fromGuest) {
-                            _redirectGuestToLogin();
-                            return;
-                          }
-                          debugPrint('Community tapped: $id');
-                        },
+                    ] else ...[
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16),
+                        child: Text(
+                          'Featured Events',
+                          style: TextStyle(
+                            fontFamily: 'Outfit',
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                            height: 1,
+                            letterSpacing: 0,
+                            color: AppColors.textDark,
+                          ),
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 50),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      const SizedBox(height: 24),
+                      FeaturedEventCard(
+                        image: 'assets/images/night-ride.png',
+                        title: 'Abu Dhabi Night Race Series',
+                        date: '18 July 2026',
+                        distance: '42 km',
+                        onTap: () {},
+                      ),
+                    ],
+                    const SizedBox(height: 40),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16),
                       child: SectionHeader(title: 'Upcoming Events'),
                     ),
                     const SizedBox(height: 22),
                     UpcomingTracksList(
                       events: upcomingEvents,
                       onEventTap: _goToEvent,
-                      showFallback: false,
+                      showFallback: true,
                     ),
-                    const SizedBox(height: 50),
+                    const SizedBox(height: 40),
                     NearbyTracksSection(
                       tracks: feed?.nearbyTracks ?? const [],
-                      showFallback: false,
+                      showFallback: true,
                     ),
-                    const SizedBox(height: 52),
+                    const SizedBox(height: 40),
                     RecentlyPost(
                       items: feed?.recentItems ?? const [],
-                      showFallback: false,
+                      showFallback: true,
                     ),
-                    // const SizedBox(height: 50),
-                    // const CommunityUpdatesSection(),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 40),
+                    CommunityUpdatesSection(
+                      updates: feed?.communityUpdates ?? const [],
+                      showFallback: true,
+                    ),
+                    const SizedBox(height: 40),
                     RideInfoSection(
                       rideInfos: feed?.rideInfos ?? const [],
                       sectionTitle:
                           feed?.rideInfoSectionTitle ?? 'Ride in Abu Dhabi',
-                      showFallback: false,
+                      showFallback: true,
                     ),
                     const SizedBox(height: 24),
                     JoinCommunityCard(
@@ -259,9 +264,9 @@ class _HomeTabState extends State<HomeTab> {
                           const Icon(Icons.wifi_off_rounded,
                               size: 48, color: Colors.grey),
                           const SizedBox(height: 12),
-                          Text(
+                          const Text(
                             'Could not load feed',
-                            style: const TextStyle(
+                            style: TextStyle(
                                 fontFamily: 'Outfit',
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600),
@@ -276,6 +281,82 @@ class _HomeTabState extends State<HomeTab> {
                     ),
                   ),
               ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _SearchWeatherBar extends StatelessWidget {
+  const _SearchWeatherBar();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Row(
+        children: [
+          Expanded(
+            child: InkWell(
+              borderRadius: BorderRadius.circular(12),
+              onTap: () => debugPrint('Search clicked'),
+              child: Container(
+                height: 47,
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFD8E5FB),
+                  border: Border.all(
+                    color: const Color(0xFFF0F0F0),
+                  ),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 24,
+                      height: 24,
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.search,
+                        size: 14,
+                        color: Color(0xFF333333),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    const Text(
+                      'Search',
+                      style: TextStyle(
+                        fontFamily: 'Outfit',
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        color: Color(0xFF666666),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(width: 14),
+          Image.asset(
+            'assets/images/weather_cloud.png',
+            width: 40,
+            height: 40,
+            fit: BoxFit.contain,
+          ),
+          const SizedBox(width: 2),
+          const Text(
+            '20℃',
+            style: TextStyle(
+              fontFamily: 'Outfit',
+              fontSize: 14,
+              fontWeight: FontWeight.w700,
+              color: Color(0xFF000000),
             ),
           ),
         ],

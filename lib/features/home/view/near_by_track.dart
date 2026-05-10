@@ -17,7 +17,7 @@ class NearbyTracksSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final fallbackTracks = [
+    const fallbackTracks = [
       HomeTrackModel(
         id: '',
         title: "Al Hudayriyat Island Cycle Track",
@@ -63,7 +63,7 @@ class NearbyTracksSection extends StatelessWidget {
 
         /// TRACK LIST
         SizedBox(
-          height: 228,
+          height: 303,
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -87,8 +87,8 @@ class NearbyTrackCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 300,
-      height: 228,
+      width: 286,
+      height: 303,
       decoration: BoxDecoration(
         color: const Color(0xffE5D2A3),
         borderRadius: BorderRadius.circular(10),
@@ -104,8 +104,8 @@ class NearbyTrackCard extends StatelessWidget {
                 ),
                 child: AdaptiveImage(
                   imagePath: track.image,
-                  width: 358,
-                  height: 150,
+                  width: 286,
+                  height: 229,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -134,10 +134,24 @@ class NearbyTrackCard extends StatelessWidget {
 
           /// INFO SECTION
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Text(
+                  track.title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontFamily: 'Outfit',
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                    height: 1.25,
+                    letterSpacing: 0,
+                    color: AppColors.textDark,
+                  ),
+                ),
+                const SizedBox(height: 8),
                 Row(
                   children: [
                     /// LOCATION ICON
@@ -157,7 +171,7 @@ class NearbyTrackCard extends StatelessWidget {
                         fontWeight: FontWeight.w400,
                         height: 1.0, // 100% line height
                         letterSpacing: 0,
-                        color: AppColors.textDark.withOpacity(0.8),
+                        color: AppColors.textDark.withValues(alpha: 0.8),
                       ),
                     ),
 
@@ -184,18 +198,6 @@ class NearbyTrackCard extends StatelessWidget {
                       ),
                     ),
                   ],
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  track.title,
-                  style: const TextStyle(
-                    fontFamily: 'Outfit',
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600,
-                    height: 1.0,
-                    letterSpacing: 0,
-                    color: AppColors.textDark,
-                  ),
                 ),
               ],
             ),

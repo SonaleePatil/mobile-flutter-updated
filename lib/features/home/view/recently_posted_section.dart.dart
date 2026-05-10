@@ -38,7 +38,7 @@ class RecentlyPost extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
+              const Text(
                 "Recently Posted",
                 style: TextStyle(
                   fontFamily: 'Outfit',
@@ -56,7 +56,7 @@ class RecentlyPost extends StatelessWidget {
                     Text(
                       "View All",
                       textAlign: TextAlign.center,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: 'Outfit',
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
@@ -81,7 +81,7 @@ class RecentlyPost extends StatelessWidget {
 
           /// CARD LIST
           SizedBox(
-            height: 253,
+            height: 456,
             child: ListView(
               scrollDirection: Axis.horizontal,
               children: data
@@ -111,11 +111,12 @@ class RecentlyPostCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 172,
-      height: 253,
+      width: 314,
+      height: 456,
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        color: Colors.transparent,
+        color: const Color(0xFFF1F1FB),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -129,8 +130,8 @@ class RecentlyPostCard extends StatelessWidget {
                 ),
                 child: AdaptiveImage(
                   imagePath: item.image,
-                  width: 172,
-                  height: 170,
+                  width: 290,
+                  height: 351,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -154,14 +155,14 @@ class RecentlyPostCard extends StatelessWidget {
             ],
           ),
 
-          const SizedBox(height: 10),
+          const SizedBox(height: 8),
 
           /// TITLE
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8),
+            padding: EdgeInsets.zero,
             child: Text(
               item.title,
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: 'Outfit',
                 fontWeight: FontWeight.w600,
                 fontSize: 14,
@@ -176,7 +177,7 @@ class RecentlyPostCard extends StatelessWidget {
 
           /// POSTED BY
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
+            padding: EdgeInsets.zero,
             child: RichText(
               text: TextSpan(
                 style: const TextStyle(
@@ -187,16 +188,16 @@ class RecentlyPostCard extends StatelessWidget {
                   letterSpacing: 0,
                 ),
                 children: [
-                  TextSpan(
+                  const TextSpan(
                     text: "Posted by ",
                     style: TextStyle(
-                      color: const Color(0xFF1A1C20).withOpacity(0.6), // light
+                      color: Color(0x991A1C20),
                     ),
                   ),
                   TextSpan(
                     text: item.postedBy,
-                    style: TextStyle(
-                      color: Color(0xFF1A1C20), // dark
+                    style: const TextStyle(
+                      color: Color(0xFF1A1C20),
                     ),
                   ),
                 ],
@@ -207,10 +208,10 @@ class RecentlyPostCard extends StatelessWidget {
           const SizedBox(height: 6),
 
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8),
+            padding: EdgeInsets.zero,
             child: Text(
               item.price,
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: 'Outfit',
                 fontSize: 14,
                 fontWeight: FontWeight.w700,

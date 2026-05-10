@@ -27,184 +27,181 @@ class WeatherCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Container(
-        height: 105,
-        decoration: BoxDecoration(
-          // Figma: background: #FFDA9B
-          color: const Color(0xFFFFDA9B),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        clipBehavior: Clip.hardEdge,
-        child: Stack(
-          children: [
-            // ── Decorative concentric circles (Figma: Group 3) ──
-            // Outermost: 172×172, left:82, top:26, #DA8A01 opacity 0.12
-            Positioned(
-              left: 82,
-              top: 26,
-              child: Container(
-                width: 172,
-                height: 172,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Color(0x1FDA8A01), // 0.12 opacity
-                ),
+    return Container(
+      height: 105,
+      decoration: BoxDecoration(
+        // Figma: background: #FFDA9B
+        color: const Color(0xFFFFDA9B),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      clipBehavior: Clip.hardEdge,
+      child: Stack(
+        children: [
+          // ── Decorative concentric circles (Figma: Group 3) ──
+          // Outermost: 172×172, left:82, top:26, #DA8A01 opacity 0.12
+          Positioned(
+            left: 82,
+            top: 26,
+            child: Container(
+              width: 172,
+              height: 172,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: Color(0x1FDA8A01), // 0.12 opacity
               ),
             ),
-            // Middle: 135×135, left:100, top:44, #C3861D opacity 0.12
-            Positioned(
-              left: 100,
-              top: 44,
-              child: Container(
-                width: 135,
-                height: 135,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Color(0x1FC3861D),
-                ),
+          ),
+          // Middle: 135×135, left:100, top:44, #C3861D opacity 0.12
+          Positioned(
+            left: 100,
+            top: 44,
+            child: Container(
+              width: 135,
+              height: 135,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: Color(0x1FC3861D),
               ),
             ),
-            // Inner: 92×92, left:122, top:66, #BA7807 opacity 0.12
-            Positioned(
-              left: 122,
-              top: 66,
-              child: Container(
-                width: 92,
-                height: 92,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Color(0x1FBA7807),
-                ),
+          ),
+          // Inner: 92×92, left:122, top:66, #BA7807 opacity 0.12
+          Positioned(
+            left: 122,
+            top: 66,
+            child: Container(
+              width: 92,
+              height: 92,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: Color(0x1FBA7807),
               ),
             ),
+          ),
 
-            // ── Main content ──
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  // LEFT: Current location / city / time
-                  // Figma: Group 1437256740, width:130, centered vertically
-                  SizedBox(
-                    width: 130,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        // "Current location" — font 18, w400
-                        Text(
-                          l10n.currentLocation,
-                          style: const TextStyle(
-                            fontFamily: 'Outfit',
-                            fontSize: 18,
-                            fontWeight: FontWeight.w400,
-                            height: 1.28,
-                            color: Color(0xFF000000),
-                          ),
+          // ── Main content ──
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // LEFT: Current location / city / time
+                // Figma: Group 1437256740, width:130, centered vertically
+                SizedBox(
+                  width: 130,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // "Current location" — font 18, w400
+                      Text(
+                        l10n.currentLocation,
+                        style: const TextStyle(
+                          fontFamily: 'Outfit',
+                          fontSize: 18,
+                          fontWeight: FontWeight.w400,
+                          height: 1.28,
+                          color: Color(0xFF000000),
                         ),
-                        const SizedBox(height: 2),
-                        // City — font 14, w400
-                        Text(
-                          city,
-                          style: const TextStyle(
-                            fontFamily: 'Outfit',
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                            height: 1.28,
-                            color: Color(0xFF000000),
-                          ),
+                      ),
+                      const SizedBox(height: 2),
+                      // City — font 14, w400
+                      Text(
+                        city,
+                        style: const TextStyle(
+                          fontFamily: 'Outfit',
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          height: 1.28,
+                          color: Color(0xFF000000),
                         ),
-                        const SizedBox(height: 6),
-                        // Time — font 11, w400
-                        Text(
-                          time,
-                          style: const TextStyle(
-                            fontFamily: 'Outfit',
-                            fontSize: 11,
-                            fontWeight: FontWeight.w400,
-                            height: 1.27,
-                            color: Color(0xFF000000),
-                          ),
+                      ),
+                      const SizedBox(height: 6),
+                      // Time — font 11, w400
+                      Text(
+                        time,
+                        style: const TextStyle(
+                          fontFamily: 'Outfit',
+                          fontSize: 11,
+                          fontWeight: FontWeight.w400,
+                          height: 1.27,
+                          color: Color(0xFF000000),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
+                ),
 
-                  const Spacer(),
+                const Spacer(),
 
-                  // RIGHT: weather icon + temp + H/L
-                  // Figma: Group 1437256739, width:114, height:80
-                  SizedBox(
-                    width: 114,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              weatherIcon,
-                              width: 48,
-                              height: 48,
-                              fit: BoxFit.contain,
+                // RIGHT: weather icon + temp + H/L
+                // Figma: Group 1437256739, width:114, height:80
+                SizedBox(
+                  width: 114,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            weatherIcon,
+                            width: 48,
+                            height: 48,
+                            fit: BoxFit.contain,
+                          ),
+                          const SizedBox(width: 6),
+                          // Temp — font 18, w700
+                          Text(
+                            '$temperature${l10n.temperatureUnit}',
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              fontFamily: 'Outfit',
+                              fontSize: 18,
+                              fontWeight: FontWeight.w700,
+                              height: 1.28,
+                              color: Color(0xFF000000),
                             ),
-                            const SizedBox(width: 6),
-                            // Temp — font 18, w700
-                            Text(
-                              '$temperature${l10n.temperatureUnit}',
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                fontFamily: 'Outfit',
-                                fontSize: 18,
-                                fontWeight: FontWeight.w700,
-                                height: 1.28,
-                                color: Color(0xFF000000),
-                              ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 6),
+                      // H: and L: on same row, font 11
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            '${l10n.highTemp}:$highTemp${l10n.temperatureUnit}',
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              fontFamily: 'Outfit',
+                              fontSize: 11,
+                              fontWeight: FontWeight.w400,
+                              height: 1.27,
+                              color: Color(0xFF000000),
                             ),
-                          ],
-                        ),
-                        const SizedBox(height: 6),
-                        // H: and L: on same row, font 11
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              '${l10n.highTemp}:$highTemp${l10n.temperatureUnit}',
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                fontFamily: 'Outfit',
-                                fontSize: 11,
-                                fontWeight: FontWeight.w400,
-                                height: 1.27,
-                                color: Color(0xFF000000),
-                              ),
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            '${l10n.lowTemp}:$lowTemp${l10n.temperatureUnit}',
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              fontFamily: 'Outfit',
+                              fontSize: 11,
+                              fontWeight: FontWeight.w400,
+                              height: 1.27,
+                              color: Color(0xFF000000),
                             ),
-                            const SizedBox(width: 8),
-                            Text(
-                              '${l10n.lowTemp}:$lowTemp${l10n.temperatureUnit}',
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                fontFamily: 'Outfit',
-                                fontSize: 11,
-                                fontWeight: FontWeight.w400,
-                                height: 1.27,
-                                color: Color(0xFF000000),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -232,92 +229,89 @@ class WeatherAlertCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Container(
-        height: 105,
-        decoration: BoxDecoration(
-          // Figma: background #FFEFD7
-          color: const Color(0xFFFFEFD7),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              // LEFT: title / city / time / icon
-              // Figma: width ~175, centered vertically
-              SizedBox(
-                width: 155,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // Alert title — font 18, w400
-                    Text(
-                      alertTitle,
-                      style: const TextStyle(
-                        fontFamily: 'Outfit',
-                        fontSize: 18,
-                        fontWeight: FontWeight.w400,
-                        height: 1.28,
-                        color: Color(0xFF1A1C20),
-                      ),
+    return Container(
+      height: 105,
+      decoration: BoxDecoration(
+        // Figma: background #FFEFD7
+        color: const Color(0xFFFFEFD7),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            // LEFT: title / city / time / icon
+            // Figma: width ~175, centered vertically
+            SizedBox(
+              width: 155,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Alert title — font 18, w400
+                  Text(
+                    alertTitle,
+                    style: const TextStyle(
+                      fontFamily: 'Outfit',
+                      fontSize: 18,
+                      fontWeight: FontWeight.w400,
+                      height: 1.28,
+                      color: Color(0xFF1A1C20),
                     ),
-                    const SizedBox(height: 2),
-                    // City — font 14, w400
-                    Text(
-                      city,
-                      style: const TextStyle(
-                        fontFamily: 'Outfit',
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        height: 1.28,
-                        color: Color(0xFF1A1C20),
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    // Time + red alert icon row
-                    Row(
-                      children: [
-                        Text(
-                          time,
-                          style: const TextStyle(
-                            fontFamily: 'Outfit',
-                            fontSize: 11,
-                            fontWeight: FontWeight.w400,
-                            height: 1.27,
-                            color: Color(0xFF1A1C20),
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        // Red alert icon ~20×20 (Figma: Vector lines in #C12D32)
-                        _AlertIcon(type: alertType),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-
-              const SizedBox(width: 8),
-
-              // RIGHT: alert description text
-              // Figma: width ~168, font 14, w400, color #1A1C20
-              Expanded(
-                child: Text(
-                  alertMessage,
-                  style: const TextStyle(
-                    fontFamily: 'Outfit',
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                    height: 1.28,
-                    color: Color(0xFF1A1C20),
                   ),
+                  const SizedBox(height: 2),
+                  // City — font 14, w400
+                  Text(
+                    city,
+                    style: const TextStyle(
+                      fontFamily: 'Outfit',
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                      height: 1.28,
+                      color: Color(0xFF1A1C20),
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  // Time + red alert icon row
+                  Row(
+                    children: [
+                      Text(
+                        time,
+                        style: const TextStyle(
+                          fontFamily: 'Outfit',
+                          fontSize: 11,
+                          fontWeight: FontWeight.w400,
+                          height: 1.27,
+                          color: Color(0xFF1A1C20),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      // Red alert icon ~20×20 (Figma: Vector lines in #C12D32)
+                      _AlertIcon(type: alertType),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(width: 8),
+
+            // RIGHT: alert description text
+            // Figma: width ~168, font 14, w400, color #1A1C20
+            Expanded(
+              child: Text(
+                alertMessage,
+                style: const TextStyle(
+                  fontFamily: 'Outfit',
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  height: 1.28,
+                  color: Color(0xFF1A1C20),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -338,9 +332,8 @@ class _AlertIcon extends StatelessWidget {
       width: 20,
       height: 20,
       child: CustomPaint(
-        painter: type == WeatherAlertType.uv
-            ? _UvIconPainter()
-            : _WindIconPainter(),
+        painter:
+            type == WeatherAlertType.uv ? _UvIconPainter() : _WindIconPainter(),
       ),
     );
   }

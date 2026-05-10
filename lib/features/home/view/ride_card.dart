@@ -1,4 +1,3 @@
-import 'package:adcc/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class RideCard extends StatelessWidget {
@@ -21,137 +20,114 @@ class RideCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 248,
-      height: 392,
+      height: 363,
       margin: const EdgeInsets.only(right: 16),
       decoration: BoxDecoration(
         color: const Color(0xFFF0DDAF),
         borderRadius: BorderRadius.circular(12),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      clipBehavior: Clip.hardEdge,
+      child: Stack(
         children: [
-
-          /// IMAGE
-          ClipRRect(
-            borderRadius: const BorderRadius.vertical(
-              top: Radius.circular(12),
-            ),
-            child: Stack(
-              children: [
-                image.startsWith('http')
-                    ? Image.network(
-                        image,
-                        height: 293,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                        errorBuilder: (_, __, ___) => Image.asset(
-                          'assets/images/family_ride.png',
-                          height: 293,
-                          width: double.infinity,
-                          fit: BoxFit.cover,
-                        ),
-                      )
-                    : Image.asset(
-                        image,
-                        height: 293,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                      ),
-
-                /// GRADIENT OVERLAY
-                Positioned.fill(
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.bottomCenter,
-                        end: Alignment.topCenter,
-                        colors: [
-                          Colors.black54,
-                          Colors.transparent,
-                        ],
-                      ),
+          Positioned.fill(
+            child: image.startsWith('http')
+                ? Image.network(
+                    image,
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, __, ___) => Image.asset(
+                      'assets/images/family_ride.png',
+                      fit: BoxFit.cover,
                     ),
+                  )
+                : Image.asset(
+                    image,
+                    fit: BoxFit.cover,
                   ),
+          ),
+          Positioned.fill(
+            child: Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Color(0x00000000),
+                    Color(0xCC000000),
+                  ],
+                  stops: [0.45, 1],
                 ),
-
-                /// TITLE
-                Positioned(
-                  left: 16,
-                  bottom: 14,
-                  right: 16,
-                  child: Text(
-  title,
-  style: const TextStyle(
-    fontFamily: 'Outfit',
-    fontSize: 18,
-    fontWeight: FontWeight.w600,
-    height: 1, // 100% line height
-    letterSpacing: 0,
-    color: Colors.white,
-  ),
-)
-                ),
-              ],
+              ),
             ),
           ),
-
-          const SizedBox(height: 10),
-
-          /// MEMBERS ROW
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+          Positioned(
+            left: 16,
+            right: 16,
+            bottom: 92,
+            child: Text(
+              title.replaceAll('\n', ' '),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                fontFamily: 'Outfit',
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                height: 1.25,
+                letterSpacing: 0,
+                color: Colors.white,
+              ),
+            ),
+          ),
+          Positioned(
+            left: 16,
+            bottom: 71,
             child: Row(
               children: [
                 Image.asset(
                   "assets/icons/person_sharp.png",
                   width: 18,
                   height: 18,
+                  color: Colors.white,
                 ),
                 const SizedBox(width: 6),
-               Text(
-  members,
-  style: const TextStyle(
-    fontFamily: 'Outfit',
-    fontSize: 13,
-    fontWeight: FontWeight.w400,
-    height: 1, // 100% line height
-    letterSpacing: 0,
-    color: AppColors.charcoal,
-  ),
-)
+                Text(
+                  members,
+                  style: const TextStyle(
+                    fontFamily: 'Outfit',
+                    fontSize: 13,
+                    fontWeight: FontWeight.w400,
+                    height: 1,
+                    letterSpacing: 0,
+                    color: Colors.white,
+                  ),
+                )
               ],
             ),
           ),
-
-          const Spacer(),
-
-          /// BUTTON
-          Padding(
-            padding: const EdgeInsets.only(left: 16, bottom: 14),
+          Positioned(
+            left: 16,
+            bottom: 22,
             child: GestureDetector(
               onTap: onTap,
               child: Container(
-                width: 143,
-                height: 34,
-                padding: const EdgeInsets.fromLTRB(11, 8, 9, 8),
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: const Color(0xFF0359E8),
-                  borderRadius: BorderRadius.circular(9.1),
-                ),
-                child:Text(
-  buttonText,
-  textAlign: TextAlign.center,
-  style: const TextStyle(
-    fontFamily: 'Outfit',
-    fontSize: 14,
-    fontWeight: FontWeight.w500,
-    height: 1, // 100% line height
-    letterSpacing: 0,
-    color: Colors.white,
-  ),
-)
-              ),
+                  width: 143,
+                  height: 34,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF0359E8),
+                    borderRadius: BorderRadius.circular(9.1),
+                  ),
+                  child: Text(
+                    buttonText,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontFamily: 'Outfit',
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      height: 1,
+                      letterSpacing: 0,
+                      color: Colors.white,
+                    ),
+                  )),
             ),
           ),
         ],

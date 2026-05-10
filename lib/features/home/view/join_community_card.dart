@@ -11,9 +11,9 @@ class JoinCommunityCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(12),
         child: Container(
-          height: 135,
+          height: 120,
           width: double.infinity,
           decoration: const BoxDecoration(
             color: Color(0xFF035AE9),
@@ -26,7 +26,7 @@ class JoinCommunityCard extends StatelessWidget {
                 bottom: 0,
                 child: Image.asset(
                   'assets/home1.png',
-                  width: 175,
+                  width: 194,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -47,7 +47,7 @@ class JoinCommunityCard extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(22, 18, 22, 16),
+                padding: const EdgeInsets.fromLTRB(19, 15, 19, 15),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -57,20 +57,20 @@ class JoinCommunityCard extends StatelessWidget {
                         fontFamily: 'Outfit',
                         color: Colors.white,
                         fontWeight: FontWeight.w600,
-                        fontSize: 37 / 2,
-                        height: 1.25,
+                        fontSize: 18,
+                        height: 1.2,
                       ),
                     ),
                     const Spacer(),
                     AppButton(
                       label: 'Join ADCC',
-                      width: 162,
-                      height: 44,
+                      width: 112,
+                      height: 32,
                       borderRadius: 50,
                       backgroundColor: const Color(0xFFFFC825),
                       textStyle: const TextStyle(
                         fontFamily: 'Outfit',
-                        fontSize: 33 / 2,
+                        fontSize: 16,
                         fontWeight: FontWeight.w500,
                         height: 1.1,
                         color: Colors.black,

@@ -59,7 +59,7 @@ class UpcomingTracksList extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         physics: const BouncingScrollPhysics(),
         itemCount: uiEvents.length,
-        separatorBuilder: (_, __) => const SizedBox(width: 6),
+        separatorBuilder: (_, __) => const SizedBox(width: 10),
         itemBuilder: (context, index) {
           final ev = uiEvents[index];
           return GestureDetector(
@@ -80,7 +80,7 @@ class UpcomingEventCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 308,
+      width: 358,
       child: Stack(
         children: [
           /// BACKGROUND IMAGE

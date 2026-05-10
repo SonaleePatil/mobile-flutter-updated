@@ -24,9 +24,9 @@ class QuickActionsSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
+        const Text(
           'Quick Actions',
-          style: const TextStyle(
+          style: TextStyle(
             fontFamily: 'Outfit',
             fontSize: 20,
             fontWeight: FontWeight.w600,
@@ -40,9 +40,9 @@ class QuickActionsSection extends StatelessWidget {
           crossAxisCount: 4,
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          childAspectRatio: 0.78,
-          mainAxisSpacing: 10,
-          crossAxisSpacing: 6,
+          childAspectRatio: 79 / 108,
+          mainAxisSpacing: 11,
+          crossAxisSpacing: 8,
           children: [
             QuickActionItem(
               title: 'Community',
