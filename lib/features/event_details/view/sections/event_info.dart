@@ -11,7 +11,14 @@ class EventInfo extends StatelessWidget {
   });
 
   List<String> _buildEligibilityPoints() {
-    if (event == null) return [];
+    if (event == null) {
+      return const [
+        "Age: 18+",
+        "Helmet required",
+        "Road bike mandatory",
+        "Advanced experience",
+      ];
+    }
 
     final points = <String>[];
 
@@ -23,9 +30,7 @@ class EventInfo extends StatelessWidget {
       final e = event!.eligibility!.first;
 
       points.add(
-        e["helmetRequired"] == true
-            ? "Helmet required"
-            : "Helmet not required",
+        e["helmetRequired"] == true ? "Helmet required" : "Helmet not required",
       );
 
       points.add(
@@ -56,7 +61,12 @@ class EventInfo extends StatelessWidget {
     final points = _buildEligibilityPoints();
 
     if (points.isEmpty) {
-      return const SizedBox();
+      points.addAll(const [
+        "Age: 18+",
+        "Helmet required",
+        "Road bike mandatory",
+        "Advanced experience",
+      ]);
     }
 
     final half = (points.length / 2).ceil();
@@ -72,18 +82,18 @@ class EventInfo extends StatelessWidget {
           const Text(
             "Who Can Join",
             style: TextStyle(
-              fontSize: 16,
+              fontSize: 20,
               fontWeight: FontWeight.w600,
               color: AppColors.textDark,
             ),
           ),
           const SizedBox(height: 12),
-
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Color(0xFFE9E4DB)),
             ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -93,8 +103,7 @@ class EventInfo extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: leftColumn
                         .map((e) => Padding(
-                              padding:
-                                  const EdgeInsets.only(bottom: 10),
+                              padding: const EdgeInsets.only(bottom: 10),
                               child: _JoinItem(text: e),
                             ))
                         .toList(),
@@ -106,8 +115,7 @@ class EventInfo extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: rightColumn
                         .map((e) => Padding(
-                              padding:
-                                  const EdgeInsets.only(bottom: 10),
+                              padding: const EdgeInsets.only(bottom: 10),
                               child: _JoinItem(text: e),
                             ))
                         .toList(),
@@ -134,24 +142,20 @@ class _JoinItem extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-     
         Image.asset(
-          "assets/icons/tick.jpg", 
+          "assets/icons/tick.jpg",
           width: 18,
           height: 18,
           fit: BoxFit.contain,
         ),
-
         const SizedBox(width: 10),
-
-    
         Expanded(
           child: Text(
             text,
             style: const TextStyle(
               fontSize: 13,
               fontWeight: FontWeight.w500, // Medium
-              height: 17 / 13, 
+              height: 17 / 13,
               letterSpacing: 0,
               color: AppColors.charcoal,
             ),

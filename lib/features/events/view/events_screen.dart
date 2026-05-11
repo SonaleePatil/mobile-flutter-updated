@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_colors.dart';
 import 'events.dart';
 
 class EventsScreen extends StatelessWidget {
@@ -8,9 +7,8 @@ class EventsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.softCream,
+      backgroundColor: Colors.white,
       body: const EventsTab(),
     );
   }
 }
-

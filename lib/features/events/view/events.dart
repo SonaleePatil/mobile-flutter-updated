@@ -38,7 +38,7 @@ class _EventsTabState extends State<EventsTab> {
     'races': 'assets/icons/ra.png',
     'community rides': 'assets/icons/cf.png',
     'training & clinics': 'assets/icons/tc.png',
-    'awareness rides': 'assets/icons/ra.png',
+    'awareness rides': 'assets/icons/awareness.png',
     'family & kids': 'assets/icons/cf.png',
     'corporate': 'assets/icons/tc.png',
     'all': 'assets/icons/add_calendar.png',
@@ -147,8 +147,7 @@ class _EventsTabState extends State<EventsTab> {
     return 'assets/images/ride_events.png';
   }
 
-  String _formatParticipants(Event event) =>
-      '${event.currentParticipants ?? 0}'
+  String _formatParticipants(Event event) => '${event.currentParticipants ?? 0}'
       '${event.maxParticipants != null ? '/${event.maxParticipants}' : ''}'
       ' riders';
 
@@ -207,12 +206,12 @@ class _EventsTabState extends State<EventsTab> {
           onSearchChanged: (v) => setState(() => _searchQuery = v),
           categories: categories,
           selectedIndex: selectedCategoryIndex,
-          onCategorySelected: (i) => setState(() =>
-              selectedCategoryIndex = selectedCategoryIndex == i ? 0 : i),
+          onCategorySelected: (i) => setState(
+              () => selectedCategoryIndex = selectedCategoryIndex == i ? 0 : i),
           categoryAssets: _categoryAssets,
         ),
 
-        const SizedBox(height: 24),
+        const SizedBox(height: 33),
 
         // ── Upcoming Events ─────────────────────────────────────────────
         Padding(
@@ -253,8 +252,10 @@ class _EventsTabState extends State<EventsTab> {
                       date: event.formattedDate ?? 'TBD',
                       time: event.eventTime,
                       distance: event.additionalData?['distance']?.toString() ??
-                          event.additionalData?['routeDistance']?.toString(),
+                          event.additionalData?['routeDistance']?.toString() ??
+                          event.distance?.toString(),
                       location: event.address,
+                      city: event.city,
                       venue: event.additionalData?['venue']?.toString() ??
                           event.additionalData?['circuit']?.toString(),
                       riders: _formatParticipants(event),
@@ -262,6 +263,7 @@ class _EventsTabState extends State<EventsTab> {
                       groupName: event.createdBy?['name']?.toString() ??
                           event.createdBy?['groupName']?.toString(),
                       eventId: event.id,
+                      width: 358,
                       onShare: () => debugPrint('Share tapped'),
                       onOpen: () {
                         if (event.id.isNotEmpty) {
@@ -279,7 +281,7 @@ class _EventsTabState extends State<EventsTab> {
                 ),
               ),
 
-        const SizedBox(height: 32),
+        const SizedBox(height: 34),
 
         // ── Purpose Based Events ────────────────────────────────────────
         Padding(
@@ -311,8 +313,7 @@ class _EventsTabState extends State<EventsTab> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) =>
-                            EventDetailsScreen(eventId: event.id),
+                        builder: (_) => EventDetailsScreen(eventId: event.id),
                       ),
                     );
                   }
@@ -381,187 +382,168 @@ class _EventsTopSectionState extends State<_EventsTopSection> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(16),
-        child: Container(
-          width: double.infinity,
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              stops: [0.0, 0.8362, 1.0],
-              colors: [
-                Color(0xFF5262EF),
-                Color(0xFF5262EF),
-                Colors.white,
-              ],
+    return SizedBox(
+      height: 357,
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Container(
+            height: 289,
+            width: double.infinity,
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                stops: [0.0, 0.8362, 1.0],
+                colors: [
+                  Color(0xFF5262EF),
+                  Color(0xFF5262EF),
+                  Colors.white,
+                ],
+              ),
             ),
           ),
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(0, 12, 0, 20),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Title row
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: SizedBox(
-                    height: 48,
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Material(
-                            color: Colors.transparent,
-                            child: InkWell(
-                              customBorder: const CircleBorder(),
-                              onTap: () {
-                                if (Navigator.canPop(context)) {
-                                  Navigator.pop(context);
-                                }
-                              },
-                              child: Container(
-                                width: 36,
-                                height: 36,
-                                decoration: BoxDecoration(
-                                  color: Colors.white.withOpacity(0.15),
-                                  shape: BoxShape.circle,
-                                ),
-                                child: const Icon(
-                                  Icons.arrow_back_ios_new_rounded,
-                                  color: Colors.white,
-                                  size: 18,
-                                ),
-                              ),
-                            ),
-                          ),
+          Positioned(
+            left: 16,
+            right: 16,
+            top: 36,
+            child: SizedBox(
+              height: 48,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: IconButton(
+                      visualDensity: VisualDensity.compact,
+                      padding: EdgeInsets.zero,
+                      onPressed: () {
+                        if (Navigator.canPop(context)) {
+                          Navigator.pop(context);
+                        }
+                      },
+                      icon: const Icon(
+                        Icons.arrow_back,
+                        color: Colors.white,
+                        size: 24,
+                      ),
+                    ),
+                  ),
+                  Text(
+                    widget.title,
+                    style: const TextStyle(
+                      fontFamily: 'Outfit',
+                      fontSize: 28,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                      height: 1.25,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Positioned(
+            left: 16,
+            right: 16,
+            top: 158,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                child: Container(
+                  height: 38,
+                  padding: const EdgeInsets.fromLTRB(11, 7, 12, 7),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.21),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 24,
+                        height: 24,
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.28),
+                          shape: BoxShape.circle,
                         ),
-                        Text(
-                          widget.title,
+                        child: const Icon(
+                          Icons.search_rounded,
+                          size: 15,
+                          color: Colors.white,
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: TextField(
+                          controller: _controller,
+                          onChanged: widget.onSearchChanged,
+                          cursorColor: Colors.white,
                           style: const TextStyle(
                             fontFamily: 'Outfit',
-                            fontSize: 28,
-                            fontWeight: FontWeight.w600,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
                             color: Colors.white,
-                            height: 1.25,
+                          ),
+                          decoration: const InputDecoration(
+                            hintText:
+                                'Search events, communities, cities, or tracks...',
+                            hintStyle: TextStyle(
+                              fontFamily: 'Outfit',
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.white,
+                            ),
+                            border: InputBorder.none,
+                            isCollapsed: true,
+                            contentPadding: EdgeInsets.zero,
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                ),
-
-                const SizedBox(height: 14),
-
-                // Search bar
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    child: BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
-                      child: Container(
-                        height: 40,
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.21),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Row(
-                          children: [
-                            Container(
-                              width: 24,
-                              height: 24,
-                              decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.18),
-                                shape: BoxShape.circle,
-                              ),
-                              child: const Icon(
-                                Icons.search_rounded,
-                                size: 14,
-                                color: Colors.white,
-                              ),
-                            ),
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: TextField(
-                                controller: _controller,
-                                onChanged: widget.onSearchChanged,
-                                cursorColor: Colors.white,
-                                style: const TextStyle(
-                                  fontFamily: 'Outfit',
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w400,
-                                  color: Colors.white,
-                                  letterSpacing: -0.1,
-                                ),
-                                decoration: const InputDecoration(
-                                  hintText:
-                                      'Search events, communities, cities, or tracks...',
-                                  hintStyle: TextStyle(
-                                    fontFamily: 'Outfit',
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w400,
-                                    color: Colors.white70,
-                                    letterSpacing: -0.1,
-                                  ),
-                                  border: InputBorder.none,
-                                  isCollapsed: true,
-                                  contentPadding: EdgeInsets.zero,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
                       ),
-                    ),
+                    ],
                   ),
                 ),
-
-                const SizedBox(height: 14),
-
-                // Category chips card — 2-row 3-column grid (all 6 visible)
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: const Color(0xFFE5E7EB),
-                        width: 1,
-                      ),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Color(0x14000000),
-                          offset: Offset(0, 2),
-                          blurRadius: 6,
-                        ),
-                      ],
-                    ),
-                    child: _CategoryGrid(
-                      categories: widget.categories,
-                      selectedIndex: widget.selectedIndex,
-                      onSelected: widget.onCategorySelected,
-                      categoryAssets: widget.categoryAssets,
-                    ),
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
-        ),
+          Positioned(
+            left: 16,
+            right: 16,
+            top: 216,
+            child: Container(
+              height: 136,
+              padding: const EdgeInsets.fromLTRB(12, 16, 0, 16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: const Color(0xFFE5E7EB),
+                  width: 1.16,
+                ),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Color(0x1A000000),
+                    offset: Offset(0, 1),
+                    blurRadius: 3,
+                  ),
+                ],
+              ),
+              child: _CategoryGrid(
+                categories: widget.categories,
+                selectedIndex: widget.selectedIndex,
+                onSelected: widget.onCategorySelected,
+                categoryAssets: widget.categoryAssets,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
 }
 
 // ────────────────────────────────────────────────────────────────────────────
-// Category Grid  — 2 rows × 3 columns, all 6 categories always visible
+// Category rail
 // ────────────────────────────────────────────────────────────────────────────
 
 class _CategoryGrid extends StatelessWidget {
@@ -590,23 +572,17 @@ class _CategoryGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Exclude 'All' — we want exactly the 6 named categories
     final visibleIndices = [
       for (int i = 0; i < categories.length; i++)
         if (categories[i].toLowerCase() != 'all') i,
     ];
 
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
+    return ListView.separated(
+      scrollDirection: Axis.horizontal,
       padding: EdgeInsets.zero,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-        crossAxisSpacing: 8,
-        mainAxisSpacing: 8,
-        childAspectRatio: 0.92, // slightly taller than wide → room for icon
-      ),
+      physics: const BouncingScrollPhysics(),
       itemCount: visibleIndices.length,
+      separatorBuilder: (_, __) => const SizedBox(width: 5),
       itemBuilder: (context, index) {
         final categoryIndex = visibleIndices[index];
         final isSelected = categoryIndex == selectedIndex;
@@ -615,22 +591,22 @@ class _CategoryGrid extends StatelessWidget {
         return GestureDetector(
           onTap: () => onSelected(categoryIndex),
           child: AnimatedContainer(
+            width: 74.4,
+            height: 101.5,
             duration: const Duration(milliseconds: 180),
             curve: Curves.easeInOut,
             decoration: BoxDecoration(
               color: isSelected
-                  ? const Color(0xFF5262EF).withOpacity(0.08)
-                  : const Color(0x0A3F6DB2),
-              borderRadius: BorderRadius.circular(8),
+                  ? const Color(0xFFF1F5F9)
+                  : const Color(0x123F6DB2),
+              borderRadius: BorderRadius.circular(7),
               border: isSelected
-                  ? Border.all(color: const Color(0xFF5262EF), width: 1.2)
-                  : Border.all(color: Colors.transparent, width: 1.2),
+                  ? Border.all(color: const Color(0xFF5262EF), width: 1)
+                  : Border.all(color: Colors.transparent, width: 1),
             ),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const SizedBox(height: 6),
-                // Label — fixed height so icon always aligns
+                const SizedBox(height: 8),
                 SizedBox(
                   height: 28,
                   child: Center(
@@ -639,22 +615,19 @@ class _CategoryGrid extends StatelessWidget {
                       textAlign: TextAlign.center,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Outfit',
-                        fontSize: 10.5,
+                        fontSize: 11.37,
                         fontWeight: FontWeight.w500,
                         height: 1.25,
-                        color: isSelected
-                            ? const Color(0xFF5262EF)
-                            : const Color(0xFF484A4D),
+                        color: Color(0xFF484A4D),
                       ),
                     ),
                   ),
                 ),
-                // Icon
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(8, 4, 8, 6),
+                    padding: const EdgeInsets.fromLTRB(8, 6, 8, 8),
                     child: Image.asset(
                       _assetFor(category),
                       fit: BoxFit.contain,

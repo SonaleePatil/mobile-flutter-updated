@@ -9,7 +9,6 @@ class EventFacilitiesSection extends StatelessWidget {
     required this.facilities,
   });
 
-  static const double _cardW = 79.5645;
   static const double _cardH = 74.6722;
 
   @override
@@ -26,31 +25,28 @@ class EventFacilitiesSection extends StatelessWidget {
           const Text(
             'Amenities',
             style: TextStyle(
-              fontSize: 16,
+              fontSize: 20,
               fontWeight: FontWeight.w600,
               color: AppColors.textDark,
             ),
           ),
           const SizedBox(height: 12),
+          SizedBox(
+            height: _cardH,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              physics: const BouncingScrollPhysics(),
+              itemCount: facilities.length,
+              separatorBuilder: (_, __) => const SizedBox(width: 10),
+              itemBuilder: (context, index) {
+                final facility = facilities[index];
 
-          GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 4,
-              crossAxisSpacing: 12,
-              mainAxisSpacing: 12,
-              childAspectRatio: _cardW / _cardH,
+                return _AmenityCard(
+                  iconPath: facility['icon']?.toString() ?? "",
+                  label: facility['label']?.toString() ?? "",
+                );
+              },
             ),
-            itemCount: facilities.length,
-            itemBuilder: (context, index) {
-              final facility = facilities[index];
-
-              return _AmenityCard(
-                iconPath: facility['icon']?.toString() ?? "",
-                label: facility['label']?.toString() ?? "",
-              );
-            },
           ),
         ],
       ),
@@ -83,7 +79,7 @@ class _AmenityCard extends StatelessWidget {
           left: 8.5,
         ),
         decoration: BoxDecoration(
-          color: const Color(0xFFFFEFD7),
+          color: const Color(0xFFD8DEF9),
           borderRadius: BorderRadius.circular(12),
         ),
         child: Column(

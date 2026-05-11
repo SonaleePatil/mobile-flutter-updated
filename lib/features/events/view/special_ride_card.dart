@@ -1,12 +1,11 @@
 import 'dart:convert';
 import 'dart:typed_data';
-import 'package:adcc/core/theme/app_colors.dart';
+
 import 'package:adcc/features/event_details/view/event_details_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class SpecialRideCard extends StatelessWidget {
-  static const double _cardHeight = 400;
+  static const double _cardHeight = 319;
 
   final String imagePath;
   final String title;
@@ -16,17 +15,18 @@ class SpecialRideCard extends StatelessWidget {
   final String? location;
   final String? venue;
   final String? riders;
-
-  /// UI values
-  final String? eventType; 
-  final String? groupName; 
-  final String? city; 
+  final String? eventType;
+  final String? groupName;
+  final String? city;
   final String? eventId;
-
   final VoidCallback? onShare;
   final VoidCallback? onTap;
   final VoidCallback? onOpen;
   final double width;
+  final Color badgeColor;
+  final Color badgeTextColor;
+  final Color shareBackgroundColor;
+  final Color shareIconColor;
 
   const SpecialRideCard({
     super.key,
@@ -45,7 +45,11 @@ class SpecialRideCard extends StatelessWidget {
     this.onShare,
     this.onTap,
     this.onOpen,
-    this.width =328,
+    this.width = 358,
+    this.badgeColor = const Color(0xFFE7E4DB),
+    this.badgeTextColor = Colors.black,
+    this.shareBackgroundColor = const Color(0xFFE7E4DB),
+    this.shareIconColor = Colors.black,
   });
 
   bool get _isNetworkImage =>
@@ -69,10 +73,7 @@ class SpecialRideCard extends StatelessWidget {
           height: double.infinity,
         );
       } catch (_) {
-        return Container(
-          color: Colors.grey[200],
-          child: const Icon(Icons.error_outline, size: 48, color: Colors.grey),
-        );
+        return _imageFallback();
       }
     }
 
@@ -82,10 +83,7 @@ class SpecialRideCard extends StatelessWidget {
         fit: BoxFit.cover,
         width: double.infinity,
         height: double.infinity,
-        errorBuilder: (_, __, ___) => Container(
-          color: Colors.grey[200],
-          child: const Icon(Icons.error_outline, size: 48, color: Colors.grey),
-        ),
+        errorBuilder: (_, __, ___) => _imageFallback(),
         loadingBuilder: (context, child, progress) {
           if (progress == null) return child;
           return Container(
@@ -101,37 +99,88 @@ class SpecialRideCard extends StatelessWidget {
       fit: BoxFit.cover,
       width: double.infinity,
       height: double.infinity,
-      errorBuilder: (_, __, ___) => Container(
-        color: Colors.grey[200],
-        child: const Icon(Icons.error_outline, size: 48, color: Colors.grey),
+      errorBuilder: (_, __, ___) => _imageFallback(),
+    );
+  }
+
+  Widget _imageFallback() {
+    return Container(
+      color: Colors.grey[200],
+      child: const Icon(Icons.error_outline, size: 48, color: Colors.grey),
+    );
+  }
+
+  void _openDetails(BuildContext context) {
+    if (onTap != null) {
+      onTap!();
+      return;
+    }
+
+    final id = eventId ?? '';
+    if (id.isEmpty) return;
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => EventDetailsScreen(eventId: id),
       ),
     );
   }
 
-  Widget _chip({
-    required String text,
-    required Color bg,
-    required Color fg,
-  }) {
-    return Container(
-      height: 20,
-      padding: const EdgeInsets.fromLTRB(9, 3, 9, 4),
-      decoration: BoxDecoration(
-        color: bg,
-        borderRadius: BorderRadius.circular(4.969),
-      ),
-      child: Center(
+  Widget _chip(String text, {double? maxWidth}) {
+    return ConstrainedBox(
+      constraints: BoxConstraints(maxWidth: maxWidth ?? 150),
+      child: Container(
+        height: 20,
+        padding: const EdgeInsets.symmetric(horizontal: 9),
+        decoration: BoxDecoration(
+          color: const Color(0xFFA6B6F4),
+          borderRadius: BorderRadius.circular(4.97),
+        ),
+        alignment: Alignment.center,
         child: Text(
           text,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: TextStyle(
-            fontSize: 9.98,
-            fontWeight: FontWeight.w700,
+          style: const TextStyle(
+            fontFamily: 'Outfit',
+            fontSize: 9.94,
+            fontWeight: FontWeight.w400,
             height: 1,
-            color: fg,
+            color: Colors.black,
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _metaItem({
+    required Widget icon,
+    required String text,
+    int flex = 1,
+  }) {
+    return Expanded(
+      flex: flex,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(width: 13, height: 13, child: FittedBox(child: icon)),
+          const SizedBox(width: 5),
+          Expanded(
+            child: Text(
+              text,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                fontFamily: 'Outfit',
+                fontSize: 12.82,
+                fontWeight: FontWeight.w400,
+                height: 1.3,
+                color: Colors.black,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -140,309 +189,147 @@ class SpecialRideCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final typeText = (eventType ?? 'Race').trim();
     final cityText = (city ?? location ?? 'Abu Dhabi').trim();
-final id = eventId ?? "";
+    final rawDistance = (distance ?? '42').trim();
+    final distanceText = rawDistance.toLowerCase().contains('km')
+        ? rawDistance
+        : '$rawDistance km';
+    final groupText = groupName?.trim();
 
-  return GestureDetector(
-  onTap: () {
-    debugPrint(" Card tapped: $title");
-    debugPrint(" Event ID: $id");
-
-    if (id.isEmpty) {
-      debugPrint(" Event ID empty — navigation blocked");
-      return;
-    }
-
- Navigator.push(
-  context,
-  MaterialPageRoute(
-    builder: (_) {
-      debugPrint(" Navigating to EventDetailsScreen with ID: $eventId");
-      return EventDetailsScreen(eventId: eventId!);
-    },
-  ),
-);
-  },
+    return GestureDetector(
+      onTap: () => _openDetails(context),
       child: SizedBox(
         width: width,
         height: _cardHeight,
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(12),
           child: Stack(
+            fit: StackFit.expand,
             children: [
-             
-              Positioned.fill(child: _buildImage()),
-
-            
+              _buildImage(),
               Positioned(
-                left: 12,
-                top: 12,
+                left: 15,
+                top: 18,
                 child: Container(
-                  height: 22,
+                  height: 24,
                   padding: const EdgeInsets.symmetric(horizontal: 12),
+                  alignment: Alignment.center,
                   decoration: BoxDecoration(
-                    color: const Color(0xFFD92C2C),
-                    borderRadius: BorderRadius.circular(8),
+                    color: badgeColor,
+                    borderRadius: BorderRadius.circular(6),
                   ),
-                  child: Center(
-                    child: Text(
-                      typeText.isEmpty ? "Race" : typeText,
-                      style: const TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w800,
-                        color: Colors.white,
-                      ),
+                  child: Text(
+                    typeText.isEmpty ? 'Race' : typeText,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontFamily: 'Outfit',
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                      height: 1,
+                      color: badgeTextColor,
                     ),
                   ),
                 ),
               ),
-
-              /// Top-right Share Button
               Positioned(
-                right: 12,
-                top: 12,
+                right: 15,
+                top: 17,
                 child: InkWell(
                   onTap: onShare,
                   borderRadius: BorderRadius.circular(50),
                   child: Container(
-                    height: 34,
-                    width: 34,
-                    decoration: const BoxDecoration(
-                      color: Color(0xFFD92C2C),
+                    height: 25,
+                    width: 25,
+                    decoration: BoxDecoration(
+                      color: shareBackgroundColor,
                       shape: BoxShape.circle,
                     ),
-                    child: const Icon(
+                    child: Icon(
                       Icons.share,
-                      size: 18,
-                      color: Colors.white,
+                      size: 15,
+                      color: shareIconColor,
                     ),
                   ),
                 ),
               ),
-                  
-              /// Bottom Info Card (Exact)
               Positioned(
-                left: 5,
-                right: 5,
-                bottom: 14,
-                child: SizedBox(
+                left: 15,
+                right: 15,
+                bottom: 17,
+                child: Container(
                   height: 128,
-                  child: Container(
-                    padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFFFF9EF),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        /// Row 1: Open + Abu Dhabi + Group
-                        Row(
-                          children: [
-                            /// Open chip
-                            InkWell(
-                              onTap: onOpen,
-                              child: _chip(
-                                text: "Open",
-                                bg: const Color(0xFF3EE606).withValues(alpha: 0.33),
-                                fg: const Color(0xFF328700),
-                              ),
-                            ),
-
-                            const SizedBox(width: 6),
-
-                         
-                            _chip(
-                              text: cityText.isEmpty ? "Abu Dhabi" : cityText,
-                              bg: const Color(0xFF3EE606).withValues(alpha: 0.33),
-                              fg: const Color(0xFF328700),
-                            ),
-                           const SizedBox(width: 6),
-Positioned(
-  left: 12,
-  top: 40, 
-  child: Container(
-    height: 20,
-    padding: const EdgeInsets.fromLTRB(11, 4, 11, 3),
-    decoration: BoxDecoration(
-      color: const Color(0x54C12D32), 
-      borderRadius: BorderRadius.circular(6),
-    ),
-    child: const Center(
-      child: Text(
-        "AED 200",
-        style: TextStyle(
-          fontSize: 9.9,
-          fontWeight: FontWeight.w600,
-          height: 1,
-          color: Color(0xFFC12D32),
-        ),
-      ),
-    ),
-  ),
-),
-                            if (groupName != null &&
-                                groupName!.trim().isNotEmpty)
-                              const SizedBox(width: 6),
-
-                            /// Group chip
-                            if (groupName != null &&
-                                groupName!.trim().isNotEmpty)
-                              Expanded(
-                                child: Container(
-                                  height: 20,
-                                  padding: const EdgeInsets.fromLTRB(9, 3, 9, 4),
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xFFBFF3A2),
-                                    borderRadius: BorderRadius.circular(4.969),
-                                  ),
-                                  child: Text(
-                                    groupName!,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(
-                                      fontSize: 9.98,
-                                      fontWeight: FontWeight.w700,
-                                      height: 1,
-                                      color: Color(0xFF328700),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                          ],
-                        ),
-
-                        const SizedBox(height: 6),
-
-                        /// Title
-                        Text(
-                          title,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.w500,
-                            color: AppColors.charcoal,
+                  padding: const EdgeInsets.fromLTRB(15, 13, 15, 10),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF1F1FB),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          InkWell(
+                            onTap: onOpen,
+                            child: _chip('Open', maxWidth: 46),
                           ),
-                        ),
-
-                        const SizedBox(height: 8),
-/// Row: Date + Time + KM
-Row(
-  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  children: [
-
-    /// DATE
-    Row(
-      children: [
-        Image.asset(
-          "assets/icons/lighting.png",
-          height: 14,
-          width: 14,
-          color: Color(0XFF595959),
-        ),
-        const SizedBox(width: 6),
-        Text(
-          date,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: const TextStyle(
-            fontSize: 11.5,
-            fontWeight: FontWeight.w400,
-          color: Color(0XFF484A4D),
-          ),
-        ),
-      ],
-    ),
-
-    /// TIME
-    Row(
-      children: [
-        const Icon(
-          Icons.access_time_filled_outlined,
-          size: 14,
-          color: Color(0XFF484A4D),
-        ),
-        const SizedBox(width: 6),
-        Text(
-          (time ?? "5:30 AM"),
-          style: const TextStyle(
-            fontSize: 11.5,
-            fontWeight: FontWeight.w400,
-             color: Color(0XFF484A4D),
-          ),
-        ),
-      ],
-    ),
-
-   
-Padding(
-  padding: const EdgeInsets.only(right: 16), 
-  child: Row(
-    children: [
-      Image.asset(
-        "assets/icons/km_fill.png",
-        height: 14,
-        width: 14,
-         color: Color(0XFF595959),
-      ),
-      const SizedBox(width: 6),
-     Text(
-  "${distance ?? "42"} km",
-  style: const TextStyle(
-    fontSize: 11.5,
-    fontWeight: FontWeight.w700,
-     color: Color(0XFF484A4D),
-  ),
-),
-    ],
-  ),
-),
-  ],
-),
-                        const SizedBox(height: 8),
-
-                        /// Row: Location + Venue
-                        Row(
-                          children: [
-                            const Icon(Icons.location_on,
-                                size: 14,  color: Color(0XFF595959),),
-                            const SizedBox(width: 6),
-                            Expanded(
-                              child: Text(
-                                location ?? "Abu Dhabi",
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  fontSize: 11.5,
-                                  fontWeight: FontWeight.w700,
-                                   color: Color(0XFF484A4D),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 10),
-                          Image.asset(
-  "assets/icons/routes_icons.png",
-  height: 14,
-  width: 14,
-    color: Color(0XFF484A4D),
-),
-                            const SizedBox(width: 6),
-                            Expanded(
-                              child: Text(
-                                venue ?? "Yas Marina Circuit",
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  fontSize: 11.5,
-                                  fontWeight: FontWeight.w700,
-                                   color: Color(0XFF484A4D),
-                                ),
-                              ),
-                            ),
+                          if (groupText != null && groupText.isNotEmpty) ...[
+                            const SizedBox(width: 8),
+                            _chip(groupText, maxWidth: 140),
                           ],
+                        ],
+                      ),
+                      const SizedBox(height: 11),
+                      Text(
+                        title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontFamily: 'Outfit',
+                          fontSize: 17,
+                          fontWeight: FontWeight.w500,
+                          height: 1.15,
+                          color: Colors.black,
                         ),
-                      ],
-                    ),
+                      ),
+                      const SizedBox(height: 9),
+                      Row(
+                        children: [
+                          _metaItem(
+                            icon: Image.asset('assets/icons/calender.png'),
+                            text: date,
+                            flex: 5,
+                          ),
+                          const SizedBox(width: 12),
+                          _metaItem(
+                            icon: const Icon(Icons.access_time_filled),
+                            text: time ?? '5:30 AM',
+                            flex: 4,
+                          ),
+                          const SizedBox(width: 12),
+                          _metaItem(
+                            icon: Image.asset('assets/icons/km_fill.png'),
+                            text: distanceText,
+                            flex: 3,
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 9),
+                      Row(
+                        children: [
+                          _metaItem(
+                            icon: const Icon(Icons.location_on),
+                            text: cityText.isEmpty ? 'Abu Dhabi' : cityText,
+                            flex: 5,
+                          ),
+                          const SizedBox(width: 12),
+                          _metaItem(
+                            icon: Image.asset('assets/icons/routes_icons.png'),
+                            text: venue ?? 'Yas Marina Circuit',
+                            flex: 8,
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ),

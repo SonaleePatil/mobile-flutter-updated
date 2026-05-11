@@ -17,7 +17,7 @@ class _BikeQuestionCardState extends State<BikeQuestionCard> {
         width: 358,
         height: 73,
         decoration: BoxDecoration(
-          color: const Color(0xFFFFEFD7), // #FFEFD7
+          color: const Color(0xFFA6B6F4),
           borderRadius: BorderRadius.circular(10),
         ),
         child: Padding(
@@ -25,21 +25,19 @@ class _BikeQuestionCardState extends State<BikeQuestionCard> {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-
-             
               Container(
                 width: 44,
                 height: 44,
                 decoration: BoxDecoration(
-                  color: const Color(0xFFCF9F0C), 
+                  color: const Color(0xFF5262EF),
                   borderRadius: BorderRadius.circular(8.1481),
                 ),
                 child: Center(
                   child: Image.asset(
-                    "assets/icons/have_bike.png", 
+                    "assets/icons/have_bike.png",
                     width: 22,
                     height: 22,
-                     color: Colors.white,
+                    color: Colors.white,
                   ),
                 ),
               ),
@@ -71,7 +69,7 @@ class _BikeQuestionCardState extends State<BikeQuestionCard> {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     border: Border.all(
-                      color: const Color(0xFFC12D32),
+                      color: const Color(0xFFE7E4DB),
                       width: 2,
                     ),
                   ),
@@ -81,7 +79,7 @@ class _BikeQuestionCardState extends State<BikeQuestionCard> {
                             width: 14,
                             height: 14,
                             decoration: const BoxDecoration(
-                              color: Color(0xFFC12D32),
+                              color: Color(0xFFE7E4DB),
                               shape: BoxShape.circle,
                             ),
                           ),

@@ -11,7 +11,7 @@ class JoinEventEventCard extends StatelessWidget {
         width: 357,
         height: 226,
         decoration: BoxDecoration(
-          color: const Color(0xFFEFCB95),
+          color: const Color(0xFFFFDDA8),
           borderRadius: BorderRadius.circular(20.6999),
           border: Border.all(
             color: const Color(0xFFFFDDA8),
@@ -20,11 +20,10 @@ class JoinEventEventCard extends StatelessWidget {
         ),
         child: Stack(
           children: [
-
             /// MAIN IMAGE
             Positioned(
-              left: 8,
-              top: 22,
+              left: 16,
+              top: 27,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(12),
                 child: Image.asset(
@@ -38,8 +37,8 @@ class JoinEventEventCard extends StatelessWidget {
 
             /// TITLE + SUBTITLE
             const Positioned(
-              left: 120,
-              top: 28,
+              left: 130,
+              top: 31,
               right: 16,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -59,7 +58,7 @@ class JoinEventEventCard extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w400,
-                       color: AppColors.charcoal,
+                      color: AppColors.charcoal,
                     ),
                   ),
                 ],
@@ -68,10 +67,10 @@ class JoinEventEventCard extends StatelessWidget {
 
             /// WHEN CARD
             Positioned(
-              left: 8,
+              left: 16,
               top: 138,
               child: _smallCard(
-                 iconPath: "assets/icons/clock.png", // image icon
+                iconPath: "assets/icons/clock.png", // image icon
                 title: "When",
                 value: "18 July 2026",
               ),
@@ -79,7 +78,7 @@ class JoinEventEventCard extends StatelessWidget {
 
             /// LOCATION CARD
             Positioned(
-              left: 168,
+              left: 184,
               top: 138,
               child: _smallCard(
                 iconPath: "assets/icons/distance.png", // image icon
@@ -99,7 +98,7 @@ class JoinEventEventCard extends StatelessWidget {
     required String value,
   }) {
     return Container(
-      width: 141,
+      width: 157,
       height: 61,
       padding: const EdgeInsets.only(
         top: 10.0234,
@@ -138,7 +137,7 @@ class JoinEventEventCard extends StatelessWidget {
                 style: const TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w500,
-                   color: AppColors.charcoal,
+                  color: AppColors.charcoal,
                 ),
               ),
             ],

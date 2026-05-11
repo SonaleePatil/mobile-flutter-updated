@@ -20,7 +20,7 @@ class EventRewardSection extends StatelessWidget {
           Text(
             "Rewards & Badges",
             style: TextStyle(
-              fontSize: 16,
+              fontSize: 20,
               fontWeight: FontWeight.w600,
               color: AppColors.textDark,
             ),
@@ -70,7 +70,7 @@ class _RewardItemCard extends StatelessWidget {
           height: 62,
           width: 62,
           decoration: const BoxDecoration(
-            color: Color(0xFFE6BE78), 
+            color: Color(0xFFD8DEF9),
             shape: BoxShape.circle,
           ),
           child: Center(

@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 import 'dart:ui';
-import 'package:adcc/core/theme/app_colors.dart';
+
 import 'package:flutter/material.dart';
 
 class PurposeBasedEventCard extends StatelessWidget {
@@ -19,108 +19,65 @@ class PurposeBasedEventCard extends StatelessWidget {
     required this.date,
     required this.groupName,
     this.onTap,
-    this.width = 320,
+    this.width = 358,
   });
 
-  bool get _isNetworkImage {
-    return imagePath.startsWith('http://') || imagePath.startsWith('https://');
-  }
+  bool get _isNetworkImage =>
+      imagePath.startsWith('http://') || imagePath.startsWith('https://');
 
-  bool get _isBase64Image {
-    return imagePath.startsWith('data:image/');
+  bool get _isBase64Image => imagePath.startsWith('data:image/');
+
+  Uint8List _base64Decode(String dataUri) {
+    final base64String =
+        dataUri.contains(',') ? dataUri.split(',')[1] : dataUri;
+    return base64Decode(base64String);
   }
 
   Widget _buildImage() {
     if (_isBase64Image) {
       try {
-        return SizedBox(
+        return Image.memory(
+          _base64Decode(imagePath),
+          fit: BoxFit.cover,
           width: double.infinity,
           height: double.infinity,
-          child: Image.memory(
-            _base64Decode(imagePath),
-            fit: BoxFit.cover,
-            errorBuilder: (context, error, stackTrace) {
-              return Container(
-                color: Colors.grey[200],
-                child: const Icon(
-                  Icons.error_outline,
-                  size: 48,
-                  color: Colors.grey,
-                ),
-              );
-            },
-          ),
         );
-      } catch (e) {
-        return Container(
-          color: Colors.grey[200],
-          child: const Icon(
-            Icons.error_outline,
-            size: 48,
-            color: Colors.grey,
-          ),
-        );
+      } catch (_) {
+        return _imageFallback();
       }
-    } else if (_isNetworkImage) {
-      return SizedBox(
+    }
+
+    if (_isNetworkImage) {
+      return Image.network(
+        imagePath,
+        fit: BoxFit.cover,
         width: double.infinity,
         height: double.infinity,
-        child: Image.network(
-          imagePath,
-          fit: BoxFit.cover,
-          loadingBuilder: (context, child, loadingProgress) {
-            if (loadingProgress == null) return child;
-            return Container(
-              color: Colors.grey[200],
-              child: Center(
-                child: CircularProgressIndicator(
-                  value: loadingProgress.expectedTotalBytes != null
-                      ? loadingProgress.cumulativeBytesLoaded /
-                          loadingProgress.expectedTotalBytes!
-                      : null,
-                ),
-              ),
-            );
-          },
-          errorBuilder: (context, error, stackTrace) {
-            return Container(
-              color: Colors.grey[200],
-              child: const Icon(
-                Icons.error_outline,
-                size: 48,
-                color: Colors.grey,
-              ),
-            );
-          },
-        ),
-      );
-    } else {
-      return SizedBox(
-        width: double.infinity,
-        height: double.infinity,
-        child: Image.asset(
-          imagePath,
-          fit: BoxFit.cover,
-          errorBuilder: (context, error, stackTrace) {
-            return Container(
-              color: Colors.grey[200],
-              child: const Icon(
-                Icons.error_outline,
-                size: 48,
-                color: Colors.grey,
-              ),
-            );
-          },
-        ),
+        loadingBuilder: (context, child, progress) {
+          if (progress == null) return child;
+          return Container(
+            color: Colors.grey[200],
+            child: const Center(child: CircularProgressIndicator()),
+          );
+        },
+        errorBuilder: (_, __, ___) => _imageFallback(),
       );
     }
+
+    return Image.asset(
+      imagePath,
+      fit: BoxFit.cover,
+      width: double.infinity,
+      height: double.infinity,
+      errorBuilder: (_, __, ___) => _imageFallback(),
+    );
   }
 
-  /// Decode base64 image data URI
-  Uint8List _base64Decode(String dataUri) {
-    final base64String =
-        dataUri.contains(',') ? dataUri.split(',')[1] : dataUri;
-    return base64Decode(base64String);
+  Widget _imageFallback() {
+    return Container(
+      color: const Color(0xFFFFC9C9),
+      child: const Icon(Icons.error_outline, size: 48, color: Colors.grey),
+    );
   }
 
   @override
@@ -129,95 +86,93 @@ class PurposeBasedEventCard extends StatelessWidget {
       onTap: onTap,
       child: SizedBox(
         width: width,
-        height: 320, // Fixed card height
+        height: 275,
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(8),
           child: Stack(
             fit: StackFit.expand,
             children: [
-          
               _buildImage(),
-
-             
-             Positioned(
-  top: 13,
-left: 12,
-  child: ClipRRect(
-    borderRadius: BorderRadius.circular(999),
-    child: BackdropFilter(
-      filter: ImageFilter.blur(
-        sigmaX: 10,
-        sigmaY: 10,
-      ),
-      child: Container(
-        width: 150,
-        height: 24,
-        alignment: Alignment.centerLeft,
-        padding: const EdgeInsets.fromLTRB(6, 4, 4, 4),
-        decoration: BoxDecoration(
-          color: const Color(0xFF1A1C20).withOpacity(0.33),
-          borderRadius: BorderRadius.circular(999),
-        ),
-        child: Center(
-          child: Text(
-            groupName,
-            overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
-              color: Color(0xFFFFEFD7),
-              fontSize: 12,
-              fontWeight: FontWeight.w400,
-            ),
-          ),
-        ),
-      ),
-    ),
-  ),
-),
-
               Positioned(
-                left: 0,
-                right: 0,
-                bottom: 15,
-                // padding: const EdgeInsets.only(bottom: 20),
-                child: Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 10),
-                  padding: const EdgeInsets.all(16),
-                  decoration: const BoxDecoration(
-                    color: AppColors.softCream,
-                    borderRadius: BorderRadius.all( 
-                      Radius.circular(16),
+                top: 13,
+                left: 12,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(999),
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                    child: Container(
+                      constraints: const BoxConstraints(maxWidth: 180),
+                      height: 24,
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF1A1C20).withValues(alpha: 0.33),
+                        borderRadius: BorderRadius.circular(999),
+                      ),
+                      alignment: Alignment.center,
+                      child: Text(
+                        groupName,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontFamily: 'Outfit',
+                          color: Color(0xFFFFEFD7),
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                          height: 1.33,
+                        ),
+                      ),
                     ),
+                  ),
+                ),
+              ),
+              Positioned(
+                left: 15,
+                right: 15,
+                bottom: 25,
+                child: Container(
+                  height: 70,
+                  padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF1F1FB),
+                    borderRadius: BorderRadius.circular(8),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      /// Event Title
                       Text(
                         title,
                         style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black87,
+                          fontFamily: 'Outfit',
+                          fontSize: 17,
+                          fontWeight: FontWeight.w500,
+                          height: 1.15,
+                          color: Colors.black,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      const SizedBox(height: 8),
-                      /// Date with Calendar Icon
+                      const SizedBox(height: 7),
                       Row(
                         children: [
                           Image.asset(
-      'assets/icons/calender.png',
-      height: 16,
-      width: 16,
-    ),
+                            'assets/icons/calender.png',
+                            height: 14,
+                            width: 14,
+                            color: Colors.black,
+                          ),
                           const SizedBox(width: 6),
-                          Text(
-                            date,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: Colors.black87,
+                          Expanded(
+                            child: Text(
+                              date,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontFamily: 'Outfit',
+                                fontSize: 12.91,
+                                fontWeight: FontWeight.w400,
+                                height: 1.42,
+                                color: Colors.black,
+                              ),
                             ),
                           ),
                         ],

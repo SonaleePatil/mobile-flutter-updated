@@ -11,31 +11,31 @@ class EventQuickInfoSection extends StatelessWidget {
   });
 
   String _formatDistance() {
-    if (event?.distance == null) return "-";
+    if (event?.distance == null) return "42 km";
     return "${event!.distance} km";
   }
 
-  String _formatMinAge() {
-    if (event?.minAge == null) return "-";
-    return "${event!.minAge}+";
+  String _formatMaxRiders() {
+    if (event?.maxParticipants == null) return "150";
+    return "${event!.maxParticipants}";
+  }
+
+  String _formatRegistered() {
+    if (event?.currentParticipants != null && event?.maxParticipants != null) {
+      return "${event!.currentParticipants}/${event!.maxParticipants}";
+    }
+    if (event?.currentParticipants != null) {
+      return "${event!.currentParticipants}";
+    }
+    return "96/120";
   }
 
   String _formatRegistration() {
-    if (event == null) return "-";
-
-    if (event!.status == "upcoming") return "Open";
-    if (event!.status == "ongoing") return "Live";
-    if (event!.status == "completed") return "Closed";
-
-    return event!.status?.capitalize() ?? "-";
+    return "Free";
   }
 
   @override
   Widget build(BuildContext context) {
-    if (event == null) {
-      return const SizedBox();
-    }
-
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 2),
       child: Column(
@@ -44,13 +44,12 @@ class EventQuickInfoSection extends StatelessWidget {
           const Text(
             "Quick Info",
             style: TextStyle(
-              fontSize:16 ,
+              fontSize: 20,
               fontWeight: FontWeight.w600,
               color: AppColors.textDark,
             ),
           ),
           const SizedBox(height: 10),
-
           Column(
             children: [
               Row(
@@ -58,14 +57,14 @@ class EventQuickInfoSection extends StatelessWidget {
                   Expanded(
                     child: _PillInfo(
                       title: "Date",
-                      value: event!.formattedDate ?? "-",
+                      value: event?.formattedDate ?? "18 July 2026",
                     ),
                   ),
                   const SizedBox(width: 10),
                   Expanded(
                     child: _PillInfo(
                       title: "Time",
-                      value: event!.eventTime ?? "-",
+                      value: event?.eventTime ?? "5:30 AM",
                     ),
                   ),
                   const SizedBox(width: 10),
@@ -82,22 +81,22 @@ class EventQuickInfoSection extends StatelessWidget {
                 children: [
                   Expanded(
                     child: _PillInfo(
-                      title: "Min Age",
-                      value: _formatMinAge(),
+                      title: "Max Riders",
+                      value: _formatMaxRiders(),
                     ),
                   ),
                   const SizedBox(width: 10),
                   Expanded(
                     child: _PillInfo(
-                      title: "Segment",
-                      value: event!.difficulty ?? "-",
+                      title: "Registered",
+                      value: _formatRegistered(),
                     ),
                   ),
                   const SizedBox(width: 10),
                   Expanded(
                     child: _PillInfo(
                       title: "Registration",
-                      value: _formatRegistration(),
+                      value: event == null ? "Free" : _formatRegistration(),
                     ),
                   ),
                 ],
@@ -157,7 +156,6 @@ class _PillInfo extends StatelessWidget {
     );
   }
 }
-
 
 extension StringExtension on String {
   String capitalize() {
