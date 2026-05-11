@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../../../core/theme/app_colors.dart';
 import '../../../../shared/widgets/app_button.dart';
 
 class RouteActionButtonsSection extends StatelessWidget {
@@ -19,27 +18,29 @@ class RouteActionButtonsSection extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Open in Link My Ride Button
-         AppButton(
-  label: 'Open in Link My Ride',
-  onPressed: onOpenLinkMyRide,
-  type: AppButtonType.primary,
-  backgroundColor: AppColors.deepRed,
-  suffixImage: "assets/icons/units.png",
-  suffixImageColor: Colors.white,
-),
+          AppButton(
+            label: 'Open in Link My Ride',
+            onPressed: onOpenLinkMyRide,
+            type: AppButtonType.primary,
+            backgroundColor: const Color(0xFFF09902),
+            suffixImage: "assets/icons/units.png",
+            suffixImageColor: Colors.white,
+            borderRadius: 12,
+            height: 51,
+          ),
           const SizedBox(height: 12),
-          // Open in Maps Button
-         AppButton(
-  label: 'Open in Maps',
-  onPressed: onOpenMaps,
-  type: AppButtonType.secondary,
-  borderColor: AppColors.deepRed,
-  textColor: AppColors.deepRed,
-  backgroundColor: Colors.transparent,
-  suffixImage: "assets/icons/units.png",
-  suffixImageColor: AppColors.deepRed,
-),
+          AppButton(
+            label: 'Open in Maps',
+            onPressed: onOpenMaps,
+            type: AppButtonType.secondary,
+            borderColor: const Color(0xFFF09902),
+            textColor: const Color(0xFFF09902),
+            backgroundColor: Colors.transparent,
+            suffixImage: "assets/icons/units.png",
+            suffixImageColor: const Color(0xFFF09902),
+            borderRadius: 12,
+            height: 51,
+          ),
         ],
       ),
     );

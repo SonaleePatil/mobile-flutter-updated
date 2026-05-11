@@ -29,6 +29,14 @@ class RoutePhotosSection extends StatelessWidget {
           fit: BoxFit.cover,
           errorBuilder: (_, __, ___) => _fallbackContainer(height),
         );
+      } else if (path.startsWith('http')) {
+        return Image.network(
+          path,
+          height: height,
+          width: double.infinity,
+          fit: BoxFit.cover,
+          errorBuilder: (_, __, ___) => _fallbackContainer(height),
+        );
       } else {
         return Image.asset(
           path,
@@ -99,8 +107,7 @@ class RoutePhotosSection extends StatelessWidget {
                         borderRadius: BorderRadius.circular(12),
                         child: _buildImage(photoPaths[1], 94),
                       ),
-                    if (photoPaths.length > 1)
-                      const SizedBox(height: 12),
+                    if (photoPaths.length > 1) const SizedBox(height: 12),
                     if (photoPaths.length > 2)
                       ClipRRect(
                         borderRadius: BorderRadius.circular(12),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../../../core/theme/app_colors.dart';
 
 class RouteTitleSection extends StatelessWidget {
   final String title;
@@ -20,7 +19,6 @@ class RouteTitleSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-     
           _StatusChip(text: status),
 
           const SizedBox(height: 10),
@@ -35,35 +33,35 @@ class RouteTitleSection extends StatelessWidget {
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w800,
-                    color: AppColors.deepRed,
+                    fontFamily: "Outfit",
+                    fontSize: 22,
+                    fontWeight: FontWeight.w600,
+                    height: 1.25,
+                    color: Colors.black,
                   ),
                 ),
               ),
               const SizedBox(width: 12),
-
-             InkWell(
-  onTap: onShare,
-  borderRadius: BorderRadius.circular(999),
-  child: Container(
-    height: 35,
-    width: 35,
-    decoration: BoxDecoration(
-      color: const Color(0x5C99D3B5),
-      borderRadius: BorderRadius.circular(
-34652788),
-    ),
-    child: Center(
-      child: Image.asset(
-        "assets/icons/share_2.png", // apna image path
-        width: 18,
-        height: 18,
-        fit: BoxFit.contain,
-      ),
-    ),
-  ),
-),
+              InkWell(
+                onTap: onShare,
+                borderRadius: BorderRadius.circular(999),
+                child: Container(
+                  height: 35,
+                  width: 35,
+                  decoration: BoxDecoration(
+                    color: const Color(0x5C99D3B5),
+                    borderRadius: BorderRadius.circular(34652788),
+                  ),
+                  child: Center(
+                    child: Image.asset(
+                      "assets/icons/share_2.png", // apna image path
+                      width: 18,
+                      height: 18,
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ],
@@ -71,7 +69,6 @@ class RouteTitleSection extends StatelessWidget {
     );
   }
 }
-
 
 class _StatusChip extends StatelessWidget {
   final String text;
@@ -85,7 +82,7 @@ class _StatusChip extends StatelessWidget {
       height: 24,
       child: DecoratedBox(
         decoration: BoxDecoration(
-          color: const Color(0xFFBFF3A2), 
+          color: const Color(0xFFCAEEEA),
           borderRadius: BorderRadius.circular(7.52),
         ),
         child: Padding(
@@ -96,10 +93,11 @@ class _StatusChip extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
+                fontFamily: "Outfit",
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
                 height: 1,
-                color: Color(0xFF328700), 
+                color: Color(0xFF05B0B4),
               ),
             ),
           ),

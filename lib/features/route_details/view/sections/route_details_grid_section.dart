@@ -19,8 +19,9 @@ class RouteDetailsGridSection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            "Route Details",
+            "Track Details",
             style: TextStyle(
+              fontFamily: "Outfit",
               fontSize: 20,
               fontWeight: FontWeight.w600,
               color: AppColors.textDark,
@@ -43,8 +44,7 @@ class RouteDetailsGridSection extends StatelessWidget {
               const double spacing = 12;
 
               /// Tall card height (2 small cards + spacing)
-              final double tallCardHeight =
-                  (smallCardHeight * 2) + spacing;
+              const double tallCardHeight = (smallCardHeight * 2) + spacing;
 
               Widget content = Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -120,9 +120,7 @@ class RouteDetailsGridSection extends StatelessWidget {
                     width: screenWidth * 0.30,
                     child: _RouteDetailTallCard(
                       height: tallCardHeight,
-                      label: entries.length > 4
-                          ? entries[4].key
-                          : "Pace",
+                      label: entries.length > 4 ? entries[4].key : "Pace",
                       value: entries.length > 4
                           ? entries[4].value
                           : "Beginner / Casual",
@@ -150,6 +148,7 @@ class RouteDetailsGridSection extends StatelessWidget {
     );
   }
 }
+
 class _RouteDetailSmallCard extends StatelessWidget {
   final String label;
   final String value;
@@ -167,29 +166,26 @@ class _RouteDetailSmallCard extends StatelessWidget {
       height: height,
       padding: const EdgeInsets.fromLTRB(18, 20, 4, 12),
       decoration: BoxDecoration(
-        color: AppColors.dustyRose,
+        color: const Color(0xFFF7E5CD),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
           /// STAR + LABEL
           Row(
-
             children: [
               Image.asset(
-                "assets/icons/red_star.png",
+                "assets/svg/trackicon.png",
                 width: 15.1146,
                 height: 14.412,
                 fit: BoxFit.contain,
               ),
-
               const SizedBox(width: 6),
-
               Text(
                 label,
                 style: const TextStyle(
+                  fontFamily: "Outfit",
                   fontSize: 10,
                   fontWeight: FontWeight.w400,
                   color: AppColors.textDark,
@@ -200,15 +196,14 @@ class _RouteDetailSmallCard extends StatelessWidget {
 
           const SizedBox(height: 6),
 
-
           Padding(
             padding: const EdgeInsets.only(left: 20),
             child: Text(
               value,
-           
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(
-                fontSize: 11,
+                fontFamily: "Outfit",
+                fontSize: 12.7012,
                 fontWeight: FontWeight.w500,
                 color: Color(0XFF1A1C20),
               ),
@@ -219,7 +214,6 @@ class _RouteDetailSmallCard extends StatelessWidget {
     );
   }
 }
-
 
 class _RouteDetailTallCard extends StatelessWidget {
   final String label;
@@ -238,25 +232,26 @@ class _RouteDetailTallCard extends StatelessWidget {
       height: height,
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: AppColors.dustyRose,
+        color: const Color(0xFFF7E5CD),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Image.asset(
-                "assets/icons/red_star.png",
-                width: 15.1146,
-                height: 14.412,
-                fit: BoxFit.contain,
-              ),
+            "assets/svg/trackicon.png",
+            width: 15.1146,
+            height: 14.412,
+            fit: BoxFit.contain,
+          ),
           const Spacer(),
           Text(
             label,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: const TextStyle(
-              fontSize: 11,
+              fontFamily: "Outfit",
+              fontSize: 10,
               fontWeight: FontWeight.w400,
               color: AppColors.charcoal,
             ),
@@ -267,7 +262,8 @@ class _RouteDetailTallCard extends StatelessWidget {
             maxLines: 3,
             overflow: TextOverflow.ellipsis,
             style: const TextStyle(
-              fontSize: 11,
+              fontFamily: "Outfit",
+              fontSize: 12.7012,
               fontWeight: FontWeight.w600,
               color: AppColors.textDark,
             ),

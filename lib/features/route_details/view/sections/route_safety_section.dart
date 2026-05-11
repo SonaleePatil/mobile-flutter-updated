@@ -21,7 +21,7 @@ class RouteSafetySection extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
         decoration: BoxDecoration(
-          color: const Color(0xFFC12D32),
+          color: const Color(0xFFF09902),
           borderRadius: BorderRadius.circular(11.59),
         ),
         child: Column(
@@ -36,7 +36,6 @@ class RouteSafetySection extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 10),
-
             ...points.map((point) => Padding(
                   padding: const EdgeInsets.only(bottom: 6),
                   child: Row(

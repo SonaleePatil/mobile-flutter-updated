@@ -23,31 +23,29 @@ class RouteFacilitiesSection extends StatelessWidget {
           const Text(
             'Facilities',
             style: TextStyle(
+              fontFamily: "Outfit",
               fontSize: 20,
               fontWeight: FontWeight.w600,
               color: AppColors.textDark,
             ),
           ),
           const SizedBox(height: 12),
-
-          GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 4,
-              crossAxisSpacing: 12,
-              mainAxisSpacing: 12,
-              childAspectRatio: 0.9,
+          SizedBox(
+            height: 75,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              physics: const BouncingScrollPhysics(),
+              itemCount: facilities.length,
+              separatorBuilder: (_, __) => const SizedBox(width: 10),
+              itemBuilder: (context, index) {
+                final facility = facilities[index];
+                return _FacilityCard(
+                  iconPath:
+                      facility['icon'] as String? ?? 'assets/icons/default.png',
+                  label: facility['label'] as String? ?? '',
+                );
+              },
             ),
-            itemCount: facilities.length,
-            itemBuilder: (context, index) {
-              final facility = facilities[index];
-
-              return _FacilityCard(
-                iconPath: facility['icon'] as String? ?? 'assets/icons/default.png',
-                label: facility['label'] as String? ?? '',
-              );
-            },
           ),
         ],
       ),
@@ -67,15 +65,16 @@ class _FacilityCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(12),
+      width: 79.56,
+      height: 74.67,
+      padding: const EdgeInsets.fromLTRB(8, 11, 8, 8),
       decoration: BoxDecoration(
-        color: AppColors.dustyRose,
+        color: const Color(0xFFF7E5CD),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-
           Image.asset(
             iconPath,
             width: 22,
@@ -83,20 +82,19 @@ class _FacilityCard extends StatelessWidget {
             fit: BoxFit.contain,
             errorBuilder: (_, __, ___) {
               return const Icon(
-                Icons.image,
+                Icons.circle,
                 size: 22,
-                color: AppColors.charcoal,
+                color: Color(0xFFF09902),
               );
             },
           ),
-
           const SizedBox(height: 8),
-
           Text(
             label,
             style: const TextStyle(
-              fontSize: 14,
-              color: AppColors.charcoal,
+              fontFamily: "Outfit",
+              fontSize: 15.4727,
+              color: Colors.black,
             ),
             textAlign: TextAlign.center,
             maxLines: 1,

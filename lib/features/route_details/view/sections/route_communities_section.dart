@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
 
 import 'dart:convert';
+
 class RouteCommunitiesSection extends StatefulWidget {
-  final String trackId; 
+  final String trackId;
 
   const RouteCommunitiesSection({
     super.key,
@@ -13,7 +14,8 @@ class RouteCommunitiesSection extends StatefulWidget {
   });
 
   @override
-  State<RouteCommunitiesSection> createState() => _RouteCommunitiesSectionState();
+  State<RouteCommunitiesSection> createState() =>
+      _RouteCommunitiesSectionState();
 }
 
 class _RouteCommunitiesSectionState extends State<RouteCommunitiesSection> {
@@ -23,7 +25,8 @@ class _RouteCommunitiesSectionState extends State<RouteCommunitiesSection> {
   @override
   void initState() {
     super.initState();
-    _communitiesFuture = _tracksService.getTrackRelatedCommunities(widget.trackId);
+    _communitiesFuture =
+        _tracksService.getTrackRelatedCommunities(widget.trackId);
   }
 
   @override
@@ -42,7 +45,6 @@ class _RouteCommunitiesSectionState extends State<RouteCommunitiesSection> {
             ),
           ),
           const SizedBox(height: 12),
-
           SizedBox(
             height: 273,
             child: FutureBuilder<List<CommunityModel>>(
@@ -53,7 +55,7 @@ class _RouteCommunitiesSectionState extends State<RouteCommunitiesSection> {
                 }
 
                 if (snapshot.hasError) {
-                  return Center(
+                  return const Center(
                     child: Text(
                       "Error loading communities",
                       style: TextStyle(color: AppColors.textSecondary),
@@ -79,12 +81,13 @@ class _RouteCommunitiesSectionState extends State<RouteCommunitiesSection> {
                   scrollDirection: Axis.horizontal,
                   physics: const BouncingScrollPhysics(),
                   itemCount: communities.length,
-                  separatorBuilder: (_, __) => const SizedBox(width: 6),
+                  separatorBuilder: (_, __) => const SizedBox(width: 10),
                   itemBuilder: (context, index) {
                     final community = communities[index];
 
                     return CommunityCard(
-                      imagePath: community.imageUrl ?? 'assets/images/cycling_1.png',
+                      imagePath:
+                          community.imageUrl ?? 'assets/images/cycling_1.png',
                       title: community.title,
                       subtitle: community.description.isNotEmpty
                           ? community.description
@@ -93,9 +96,7 @@ class _RouteCommunitiesSectionState extends State<RouteCommunitiesSection> {
                           ? "${community.membersCount!.toStringAsFixed(0)} members"
                           : "Unknown members",
                       joined: community.isJoined,
-                      onTap: () {
-                        
-                      },
+                      onTap: () {},
                     );
                   },
                 );
@@ -129,33 +130,31 @@ class CommunityCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 328, 
-      height: 273, 
+      width: 358,
+      height: 273,
       child: Material(
         color: Colors.transparent,
         child: InkWell(
           onTap: onTap,
           borderRadius: BorderRadius.circular(11.59),
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(11.59), 
+            borderRadius: BorderRadius.circular(11.59),
             child: Container(
-              color: const Color(0xFFFFF3E2),
+              color: const Color(0xFFFFEFD7),
               child: Column(
                 children: [
-                  
                   SizedBox(
-                    width: 328,
+                    width: 358,
                     height: 178.66,
                     child: Stack(
                       children: [
                         Positioned.fill(
                           child: ClipRRect(
-                           
                             borderRadius: const BorderRadius.only(
                               topLeft: Radius.circular(10.46),
                               topRight: Radius.circular(10.46),
                             ),
-                          child: _buildImage(),
+                            child: _buildImage(),
                           ),
                         ),
 
@@ -176,7 +175,6 @@ class CommunityCard extends StatelessWidget {
                       ],
                     ),
                   ),
-
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
@@ -188,30 +186,32 @@ class CommunityCard extends StatelessWidget {
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
-                              fontSize: 14,
+                              fontFamily: "Outfit",
+                              fontSize: 15.6872,
                               fontWeight: FontWeight.w700,
                               color: AppColors.textDark,
                             ),
                           ),
                           const SizedBox(height: 6),
-                         Text(
-  subtitle,
-  maxLines: 2,
-  overflow: TextOverflow.ellipsis,
-  style: const TextStyle(
-    fontSize: 10,
-    fontWeight: FontWeight.w400,
-    color: Color(0xB21A1C20),
-    height: 1.25,
-  ),
-),
+                          Text(
+                            subtitle,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontFamily: "Outfit",
+                              fontSize: 10.4581,
+                              fontWeight: FontWeight.w400,
+                              color: Color(0xB21A1C20),
+                              height: 1.25,
+                            ),
+                          ),
                           const Spacer(),
 
                           // Members row
                           Row(
                             children: [
                               Image.asset(
-                                "assets/icons/per.jpg", 
+                                "assets/icons/per.jpg",
                                 width: 16,
                                 height: 16,
                                 fit: BoxFit.contain,
@@ -227,6 +227,7 @@ class CommunityCard extends StatelessWidget {
                               Text(
                                 members,
                                 style: const TextStyle(
+                                  fontFamily: "Outfit",
                                   fontSize: 12,
                                   fontWeight: FontWeight.w600,
                                   color: AppColors.textSecondary,
@@ -246,57 +247,58 @@ class CommunityCard extends StatelessWidget {
       ),
     );
   }
+
   Widget _buildImage() {
-  if (imagePath.isEmpty) {
-    return _placeholder();
-  }
-
-  // If base64 image
-  if (imagePath.startsWith("data:image")) {
-    try {
-      final base64String = imagePath.split(',').last;
-
-      return Image.memory(
-        base64Decode(base64String),
-        fit: BoxFit.cover,
-        gaplessPlayback: true,
-      );
-    } catch (e) {
-      debugPrint("Base64 decode failed: $e");
+    if (imagePath.isEmpty) {
       return _placeholder();
     }
-  }
 
-  // If network image
-  if (imagePath.startsWith("http")) {
-    return Image.network(
+    // If base64 image
+    if (imagePath.startsWith("data:image")) {
+      try {
+        final base64String = imagePath.split(',').last;
+
+        return Image.memory(
+          base64Decode(base64String),
+          fit: BoxFit.cover,
+          gaplessPlayback: true,
+        );
+      } catch (e) {
+        debugPrint("Base64 decode failed: $e");
+        return _placeholder();
+      }
+    }
+
+    // If network image
+    if (imagePath.startsWith("http")) {
+      return Image.network(
+        imagePath,
+        fit: BoxFit.cover,
+        errorBuilder: (_, __, ___) => _placeholder(),
+      );
+    }
+
+    // If local asset
+    return Image.asset(
       imagePath,
       fit: BoxFit.cover,
       errorBuilder: (_, __, ___) => _placeholder(),
     );
   }
 
-  // If local asset
-  return Image.asset(
-    imagePath,
-    fit: BoxFit.cover,
-    errorBuilder: (_, __, ___) => _placeholder(),
-  );
-}
-Widget _placeholder() {
-  return Container(
-    color: AppColors.softCream,
-    child: const Center(
-      child: Icon(
-        Icons.image,
-        size: 40,
-        color: Colors.grey,
+  Widget _placeholder() {
+    return Container(
+      color: AppColors.softCream,
+      child: const Center(
+        child: Icon(
+          Icons.image,
+          size: 40,
+          color: Colors.grey,
+        ),
       ),
-    ),
-  );
+    );
+  }
 }
-}
-
 
 class _JoinChip extends StatelessWidget {
   const _JoinChip();

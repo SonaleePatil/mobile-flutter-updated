@@ -21,6 +21,7 @@ class RouteDescriptionSection extends StatelessWidget {
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w600,
+              fontFamily: "Outfit",
               color: AppColors.charcoal,
             ),
           ),
@@ -30,8 +31,9 @@ class RouteDescriptionSection extends StatelessWidget {
             style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w400,
+              fontFamily: "Outfit",
               color: AppColors.textDark,
-              height: 1.5,
+              height: 1.25,
             ),
           ),
         ],
@@ -39,4 +41,3 @@ class RouteDescriptionSection extends StatelessWidget {
     );
   }
 }
-

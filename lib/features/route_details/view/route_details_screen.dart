@@ -4,7 +4,6 @@ import 'package:adcc/features/routes/Models/event_model.dart';
 import 'package:adcc/features/routes/Models/track_model.dart';
 import 'package:adcc/features/routes/services/tracks_services.dart';
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_colors.dart';
 import 'sections/route_header_section.dart';
 import 'sections/route_title_section.dart';
 import 'sections/route_description_section.dart';
@@ -43,8 +42,7 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
   }
 
   Future<void> _loadTrackDetails() async {
-    final trackId =
-        widget.routeData['id']?.toString() ??
+    final trackId = widget.routeData['id']?.toString() ??
         widget.routeData['_id']?.toString();
 
     if (trackId == null || trackId.isEmpty) return;
@@ -67,8 +65,7 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
   }
 
   Future<void> _loadTrackEvents() async {
-    final trackId =
-        widget.routeData['id']?.toString() ??
+    final trackId = widget.routeData['id']?.toString() ??
         widget.routeData['_id']?.toString();
 
     if (trackId == null || trackId.isEmpty) return;
@@ -76,8 +73,7 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
     setState(() => _isLoadingEvents = true);
 
     try {
-      final events =
-          await _tracksService.getTrackRelatedEvents(trackId);
+      final events = await _tracksService.getTrackRelatedEvents(trackId);
 
       if (mounted) {
         setState(() {
@@ -111,13 +107,12 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-  
     if (_isLoadingTrack || _track == null) {
       return const Scaffold(
-        backgroundColor: AppColors.softCream,
+        backgroundColor: Colors.white,
         body: Center(
           child: CircularProgressIndicator(
-            color: Color(0xFFC12D32),
+            color: Color(0xFFF09902),
           ),
         ),
       );
@@ -147,7 +142,7 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
     }
 
     return Scaffold(
-      backgroundColor: AppColors.softCream,
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: ListView(
           physics: const BouncingScrollPhysics(),
@@ -160,57 +155,38 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
                 }
               },
             ),
-
             const SizedBox(height: 16),
-
             RouteTitleSection(
               title: _track!.title,
               status: _track!.status,
               onShare: () {},
             ),
-
             const SizedBox(height: 9),
-
             RouteDescriptionSection(
               description: _track!.description,
             ),
-
             const SizedBox(height: 24),
-
             RouteDetailsGridSection(routeDetails: routeDetails),
-
-            const SizedBox(height: 50),
-
+            const SizedBox(height: 40),
             RouteFacilitiesSection(facilities: facilities),
-
-            const SizedBox(height: 30),
-
+            const SizedBox(height: 24),
             RouteActionButtonsSection(
               onOpenLinkMyRide: () {},
               onOpenMaps: () {},
             ),
-
-            const SizedBox(height: 50),
-
+            const SizedBox(height: 42),
             RoutePhotosSection(photoPaths: photos),
-
-            const SizedBox(height: 24),
-
+            const SizedBox(height: 36),
             _buildEventsSection(),
-
             const SizedBox(height: 24),
-
             RouteCommunitiesSection(
               trackId: _track!.id,
             ),
-
             const SizedBox(height: 24),
-
             RouteSafetySection(
               safetyMessage: _track!.safetyNotes,
               helmetRequired: _track!.helmetRequired,
             ),
-
             const SizedBox(height: 24),
           ],
         ),

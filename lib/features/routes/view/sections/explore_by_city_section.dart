@@ -10,36 +10,28 @@ class ExploreByCitySection extends StatefulWidget {
   const ExploreByCitySection({super.key});
 
   @override
-  State<ExploreByCitySection> createState() =>
-      _ExploreByCitySectionState();
+  State<ExploreByCitySection> createState() => _ExploreByCitySectionState();
 }
 
-class _ExploreByCitySectionState
-    extends State<ExploreByCitySection> {
-  final TracksService _tracksService =
-      TracksService();
+class _ExploreByCitySectionState extends State<ExploreByCitySection> {
+  final TracksService _tracksService = TracksService();
 
   late Future<List<TrackModel>> _futureTracks;
 
   @override
   void initState() {
     super.initState();
-    _futureTracks =
-        _tracksService.getAllTracks();
+    _futureTracks = _tracksService.getAllTracks();
   }
 
-
-  Map<String, int> _groupTracksByCity(
-      List<TrackModel> tracks) {
-    final Map<String, int> cityCount =
-        {};
+  Map<String, int> _groupTracksByCity(List<TrackModel> tracks) {
+    final Map<String, int> cityCount = {};
 
     for (var track in tracks) {
       final city = track.city.trim();
 
       if (cityCount.containsKey(city)) {
-        cityCount[city] =
-            cityCount[city]! + 1;
+        cityCount[city] = cityCount[city]! + 1;
       } else {
         cityCount[city] = 1;
       }
@@ -47,7 +39,6 @@ class _ExploreByCitySectionState
 
     return cityCount;
   }
-
 
   String _getCityImage(String city) {
     switch (city.toLowerCase()) {
@@ -73,14 +64,10 @@ class _ExploreByCitySectionState
     return FutureBuilder<List<TrackModel>>(
       future: _futureTracks,
       builder: (context, snapshot) {
-        if (snapshot.connectionState ==
-            ConnectionState.waiting) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
           return const Padding(
-            padding:
-                EdgeInsets.only(top: 40),
-            child: Center(
-                child:
-                    CircularProgressIndicator()),
+            padding: EdgeInsets.only(top: 40),
+            child: Center(child: CircularProgressIndicator()),
           );
         }
 
@@ -88,58 +75,46 @@ class _ExploreByCitySectionState
           return const SizedBox();
         }
 
-        final tracks =
-            snapshot.data ?? [];
+        final tracks = snapshot.data ?? [];
 
-        final cityMap =
-            _groupTracksByCity(tracks);
+        final cityMap = _groupTracksByCity(tracks);
 
-        final cities =
-            cityMap.entries.toList();
+        final cities = cityMap.entries.toList();
 
         if (cities.isEmpty) {
           return const SizedBox();
         }
 
         return Column(
-          crossAxisAlignment:
-              CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SectionHeader(
               title: 'Explore by City',
               onViewAll: () {},
               showViewAll: false,
             ),
-            const SizedBox(height: 16),
-
+            // const SizedBox(height: 2),
             GridView.builder(
               shrinkWrap: true,
-              physics:
-                  const NeverScrollableScrollPhysics(),
-              gridDelegate:
-                  const SliverGridDelegateWithFixedCrossAxisCount(
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
                 crossAxisSpacing: 12,
                 mainAxisSpacing: 12,
                 childAspectRatio: 1.3,
               ),
               itemCount: cities.length,
-              itemBuilder:
-                  (context, index) {
-                final cityName =
-                    cities[index].key;
-                final count =
-                    cities[index].value;
+              itemBuilder: (context, index) {
+                final cityName = cities[index].key;
+                final count = cities[index].value;
 
                 return GestureDetector(
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) =>
-                            CityTracksPage(
-                          cityName:
-                              cityName,
+                        builder: (_) => CityTracksPage(
+                          cityName: cityName,
                         ),
                       ),
                     );
@@ -148,68 +123,46 @@ class _ExploreByCitySectionState
                     width: 111,
                     height: 75,
                     child: Container(
-                      padding:
-                          const EdgeInsets
-                              .all(12),
-                      decoration:
-                          BoxDecoration(
-                        color: AppColors
-                            .dustyRose,
-                        borderRadius:
-                            BorderRadius
-                                .circular(
-                                    12),
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            Color(0xFFF5CD91),
+                            Colors.white,
+                          ],
+                        ),
+                        borderRadius: BorderRadius.circular(12),
                       ),
                       child: Column(
-                        crossAxisAlignment:
-                            CrossAxisAlignment
-                                .start,
-                        mainAxisAlignment:
-                            MainAxisAlignment
-                                .spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
                             cityName,
-                            style:
-                                const TextStyle(
-                              fontSize:
-                                  15.473,
-                              fontWeight:
-                                  FontWeight
-                                      .w500,
-                              color:
-                                  AppColors
-                                      .textDark,
+                            style: const TextStyle(
+                              fontSize: 15.473,
+                              fontWeight: FontWeight.w500,
+                              color: AppColors.textDark,
                             ),
                           ),
                           Row(
-                            mainAxisAlignment:
-                                MainAxisAlignment
-                                    .spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                count
-                                    .toString(),
-                                style:
-                                    const TextStyle(
-                                  fontSize:
-                                      16,
-                                  fontWeight:
-                                      FontWeight
-                                          .w500,
-                                  color:
-                                      AppColors
-                                          .textDark,
+                                count.toString(),
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                  color: AppColors.textDark,
                                 ),
                               ),
                               SvgPicture.asset(
-                                _getCityImage(
-                                    cityName),
+                                _getCityImage(cityName),
                                 width: 19,
-                                height:
-                                    24.945,
-                                fit: BoxFit
-                                    .contain,
+                                height: 24.945,
+                                fit: BoxFit.contain,
                               ),
                             ],
                           ),

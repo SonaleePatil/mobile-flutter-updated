@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'dart:convert';
 
-
 class RouteEventsSection extends StatelessWidget {
   final List<EventModel> events;
 
@@ -22,21 +21,31 @@ class RouteEventsSection extends StatelessWidget {
 
   String _getStatusText(String status) {
     switch (status.toLowerCase()) {
-      case 'upcoming': return 'Open';
-      case 'ongoing': return 'Live';
-      case 'completed': return 'Completed';
-      case 'cancelled': return 'Cancelled';
-      default: return status;
+      case 'upcoming':
+        return 'Open';
+      case 'ongoing':
+        return 'Live';
+      case 'completed':
+        return 'Completed';
+      case 'cancelled':
+        return 'Cancelled';
+      default:
+        return status;
     }
   }
 
   Color _getStatusColor(String status) {
     switch (status.toLowerCase()) {
-      case 'upcoming': return const Color(0xFF328700);
-      case 'ongoing': return AppColors.deepRed;
-      case 'completed': return Colors.grey;
-      case 'cancelled': return Colors.red;
-      default: return const Color(0xFF328700);
+      case 'upcoming':
+        return const Color(0xFF328700);
+      case 'ongoing':
+        return AppColors.deepRed;
+      case 'completed':
+        return Colors.grey;
+      case 'cancelled':
+        return Colors.red;
+      default:
+        return const Color(0xFF328700);
     }
   }
 
@@ -49,10 +58,18 @@ class RouteEventsSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text("Events on this track", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: AppColors.textDark)),
+          const Text(
+            "Upcoming Events on this Track",
+            style: TextStyle(
+              fontFamily: "Outfit",
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+              color: AppColors.textDark,
+            ),
+          ),
           const SizedBox(height: 12),
           SizedBox(
-            height: 210,
+            height: 275,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
               physics: const BouncingScrollPhysics(),
@@ -60,9 +77,13 @@ class RouteEventsSection extends StatelessWidget {
               separatorBuilder: (_, __) => const SizedBox(width: 6),
               itemBuilder: (context, index) {
                 final event = events[index];
-                final isFeatured = event.category.toLowerCase().contains('featured') || event.rank <= 3;
+                final isFeatured =
+                    event.category.toLowerCase().contains('featured') ||
+                        event.rank <= 3;
                 return _EventCard(
-                  imageUrl: event.mainImage.isNotEmpty ? event.mainImage : event.eventImage,
+                  imageUrl: event.mainImage.isNotEmpty
+                      ? event.mainImage
+                      : event.eventImage,
                   title: event.title,
                   status: _getStatusText(event.status),
                   statusColor: _getStatusColor(event.status),
@@ -110,21 +131,26 @@ class _EventCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 310,
-      height: 210,
+      width: 358,
+      height: 275,
       child: Material(
         color: Colors.transparent,
         child: InkWell(
           onTap: onTap,
           borderRadius: BorderRadius.circular(16),
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(8),
             child: Stack(
               children: [
                 Positioned.fill(child: _buildImage()),
-                Positioned.fill(child: Container(color: Colors.black.withValues(alpha: 0.12))),
+                Positioned.fill(
+                    child:
+                        Container(color: Colors.black.withValues(alpha: 0.12))),
                 if (featured)
-                  const Positioned(top: 12, left: 12, child: _MiniChip(text: "Featured", isFeatured: true)),
+                  const Positioned(
+                      top: 12,
+                      left: 12,
+                      child: _MiniChip(text: "Featured", isFeatured: true)),
                 Positioned(
                   top: 12,
                   right: 12,
@@ -139,7 +165,8 @@ class _EventCard extends StatelessWidget {
                           "assets/icons/share.png",
                           width: 25,
                           height: 25,
-                          errorBuilder: (_, __, ___) => const Icon(Icons.share, color: Colors.white, size: 18),
+                          errorBuilder: (_, __, ___) => const Icon(Icons.share,
+                              color: Colors.white, size: 18),
                         ),
                       ),
                     ),
@@ -151,22 +178,37 @@ class _EventCard extends StatelessWidget {
                   bottom: 10,
                   child: Container(
                     padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
-                    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(14)),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF7E5CD),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _MiniChip(text: status, statusColor: statusColor, isRegistered: status.toLowerCase() == 'open'),
-                        const SizedBox(height: 6),
-                        Text(title, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: AppColors.textDark)),
+                        _MiniChip(
+                            text: status,
+                            statusColor: statusColor,
+                            isRegistered: status.toLowerCase() == 'open'),
+                        const SizedBox(height: 8),
+                        Text(title,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w700,
+                                color: AppColors.textDark)),
                         const SizedBox(height: 8),
                         Row(
                           children: [
-                            _buildMetaItem("assets/icons/lighting.png", frequency),
+                            _buildMetaItem(
+                                "assets/icons/lighting.png", frequency),
                             const SizedBox(width: 12),
-                            _buildMetaItem("assets/icons/water_statoins.png", location),
+                            _buildMetaItem(
+                                "assets/icons/water_statoins.png", location),
                             const SizedBox(width: 12),
-                            _buildMetaItem("assets/icons/restrooms.png", distance),
+                            _buildMetaItem(
+                                "assets/icons/restrooms.png", distance),
                           ],
                         ),
                       ],
@@ -185,9 +227,20 @@ class _EventCard extends StatelessWidget {
     return Expanded(
       child: Row(
         children: [
-          Image.asset(iconPath, width: 14, height: 14, errorBuilder: (_, __, ___) => const SizedBox(width: 14, height: 14)),
+          Image.asset(iconPath,
+              width: 14,
+              height: 14,
+              errorBuilder: (_, __, ___) =>
+                  const SizedBox(width: 14, height: 14)),
           const SizedBox(width: 6),
-          Expanded(child: Text(text, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: AppColors.textSecondary))),
+          Expanded(
+              child: Text(text,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.textSecondary))),
         ],
       ),
     );
@@ -198,25 +251,32 @@ class _EventCard extends StatelessWidget {
 
     if (imageUrl.startsWith('data:image')) {
       try {
-        final base64Data = imageUrl.contains('base64,') ? imageUrl.split('base64,').last : imageUrl;
+        final base64Data = imageUrl.contains('base64,')
+            ? imageUrl.split('base64,').last
+            : imageUrl;
         final bytes = base64Decode(base64Data);
-        return Image.memory(bytes, fit: BoxFit.cover, errorBuilder: (_, __, ___) => _buildPlaceholder());
+        return Image.memory(bytes,
+            fit: BoxFit.cover,
+            errorBuilder: (_, __, ___) => _buildPlaceholder());
       } catch (e) {
         return _buildPlaceholder();
       }
     }
 
     if (imageUrl.startsWith('http')) {
-      return Image.network(imageUrl, fit: BoxFit.cover, errorBuilder: (_, __, ___) => _buildPlaceholder());
+      return Image.network(imageUrl,
+          fit: BoxFit.cover, errorBuilder: (_, __, ___) => _buildPlaceholder());
     }
 
-    return Image.asset(imageUrl, fit: BoxFit.cover, errorBuilder: (_, __, ___) => _buildPlaceholder());
+    return Image.asset(imageUrl,
+        fit: BoxFit.cover, errorBuilder: (_, __, ___) => _buildPlaceholder());
   }
 
   Widget _buildPlaceholder() {
     return Container(
       color: AppColors.softCream,
-      child: const Center(child: Icon(Icons.event, size: 40, color: Colors.grey)),
+      child:
+          const Center(child: Icon(Icons.event, size: 40, color: Colors.grey)),
     );
   }
 }
@@ -227,29 +287,45 @@ class _MiniChip extends StatelessWidget {
   final bool isRegistered;
   final bool isFeatured;
 
-  const _MiniChip({required this.text, this.statusColor, this.isRegistered = false, this.isFeatured = false});
+  const _MiniChip(
+      {required this.text,
+      this.statusColor,
+      this.isRegistered = false,
+      this.isFeatured = false});
 
   @override
   Widget build(BuildContext context) {
     final Color bg = isFeatured
-        ? AppColors.deepRed
+        ? const Color(0xFFF4B44D)
         : isRegistered
             ? const Color(0xFF3EE606).withValues(alpha: 0.33)
-            : (statusColor?.withValues(alpha: 0.33) ?? const Color(0xFF328700).withValues(alpha: 0.33));
+            : (statusColor?.withValues(alpha: 0.33) ??
+                const Color(0xFF328700).withValues(alpha: 0.33));
 
-    final Color fg = isFeatured ? Colors.white : (isRegistered ? const Color(0xFF328700) : (statusColor ?? const Color(0xFF328700)));
+    final Color fg = isFeatured
+        ? Colors.black
+        : (isRegistered
+            ? const Color(0xFF328700)
+            : (statusColor ?? const Color(0xFF328700)));
 
     return Container(
       height: isRegistered ? 20 : 24,
-      width: isRegistered ? 74 :74,
-      padding: EdgeInsets.fromLTRB(9, isRegistered ? 3 : 5, 9, isRegistered ? 4 : 5),
-      decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(isRegistered ? 4.969 : 7.52)),
+      width: isRegistered ? 74 : 74,
+      padding:
+          EdgeInsets.fromLTRB(9, isRegistered ? 3 : 5, 9, isRegistered ? 4 : 5),
+      decoration: BoxDecoration(
+          color: bg,
+          borderRadius: BorderRadius.circular(isRegistered ? 4.969 : 7.52)),
       child: Center(
         child: Text(
           text,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: TextStyle(fontSize: isRegistered ? 9.983 : 11, fontWeight: FontWeight.w600, height: 1, color: fg),
+          style: TextStyle(
+              fontSize: isRegistered ? 9.983 : 11,
+              fontWeight: FontWeight.w600,
+              height: 1,
+              color: fg),
         ),
       ),
     );
