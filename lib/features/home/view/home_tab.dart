@@ -4,7 +4,7 @@ import 'package:adcc/features/auth/view/login_screen.dart';
 import 'package:adcc/features/event_details/view/event_details_screen.dart';
 import 'package:adcc/features/home/view/horizontal_rideList.dart';
 import 'package:adcc/features/home/viewmodels/home_view_model.dart';
-import 'package:adcc/features/home/view/community_updates_section.dart';
+// import 'package:adcc/features/home/view/community_updates_section.dart';
 import 'package:adcc/features/home/view/join_community_card.dart';
 import 'package:adcc/features/home/view/near_by_track.dart';
 import 'package:adcc/features/home/view/quick_actions_section.dart';
@@ -227,11 +227,12 @@ class _HomeTabState extends State<HomeTab> {
                       showFallback: true,
                     ),
                     const SizedBox(height: 40),
-                    CommunityUpdatesSection(
-                      updates: feed?.communityUpdates ?? const [],
-                      showFallback: true,
-                    ),
-                    const SizedBox(height: 40),
+                    // Community updates hidden as per latest home design.
+                    // CommunityUpdatesSection(
+                    //   updates: feed?.communityUpdates ?? const [],
+                    //   showFallback: true,
+                    // ),
+                    // const SizedBox(height: 40),
                     RideInfoSection(
                       rideInfos: feed?.rideInfos ?? const [],
                       sectionTitle:

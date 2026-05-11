@@ -329,7 +329,7 @@ class _CommunitiesScreenState extends State<CommunitiesScreen> {
 
   Future<void> _openTypeCommunities(String type) async {
     final localMatches = _applySearch(_allCommunities)
-        .where((c) => c.type.toLowerCase().contains(type.toLowerCase()))
+        .where((c) => _typeMatchesCommunity(type, c))
         .toList();
 
     if (localMatches.isNotEmpty) {
@@ -347,7 +347,20 @@ class _CommunitiesScreenState extends State<CommunitiesScreen> {
     }
 
     final res = await _communitiesService.getCommunitiesByType(type);
-    if (!res.success || res.data == null || !mounted) return;
+    if (!mounted) return;
+
+    if (!res.success || res.data == null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => CommunityTypeScreen(
+            title: type,
+            communities: _applySearch(_allCommunities),
+          ),
+        ),
+      );
+      return;
+    }
 
     List<CommunityModel> list = [];
     final raw = res.data;
@@ -371,6 +384,54 @@ class _CommunitiesScreenState extends State<CommunitiesScreen> {
         ),
       ),
     );
+  }
+
+  bool _typeMatchesCommunity(String type, CommunityModel community) {
+    final selected = type.toLowerCase();
+    final keys = <String>{
+      selected,
+      if (selected.contains('elite')) ...[
+        'elite',
+        'awareness',
+        'charity',
+        'national',
+        'performance',
+      ],
+      if (selected.contains('family')) ...['family', 'leisure'],
+      if (selected.contains('women') || selected.contains('she')) ...[
+        'women',
+        'ladies',
+        'she',
+      ],
+      if (selected.contains('youth')) ...['youth', 'kids'],
+      if (selected.contains('racing') || selected.contains('performance')) ...[
+        'racing',
+        'performance',
+      ],
+      if (selected.contains('weekend') || selected.contains('social')) ...[
+        'weekend',
+        'social',
+      ],
+      if (selected.contains('night')) 'night',
+      if (selected.contains('mtb') || selected.contains('trail')) ...[
+        'mtb',
+        'trail',
+      ],
+      if (selected.contains('training') || selected.contains('clinic')) ...[
+        'training',
+        'clinic',
+      ],
+    };
+
+    bool containsKey(String value) {
+      final lower = value.toLowerCase();
+      return keys.any((key) => lower.contains(key));
+    }
+
+    return containsKey(community.type) ||
+        containsKey(community.title) ||
+        containsKey(community.description) ||
+        community.category.any(containsKey);
   }
 }
 
@@ -541,9 +602,9 @@ class _GlassSearchFieldState extends State<_GlassSearchField> {
             Container(
               width: 23.5,
               height: 23.5,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Color(0xFF333333),
+                color: Colors.white.withValues(alpha: 0.24),
               ),
               child: const Icon(Icons.search, size: 14, color: Colors.white),
             ),
@@ -823,93 +884,97 @@ class _CityCommunityCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 248,
-      height: 363,
-      clipBehavior: Clip.antiAlias,
-      decoration: BoxDecoration(
-        color: const Color(0xFFA9907E),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          AdaptiveImage(
-            imagePath: community.imageUrl ?? 'assets/images/cycling_1.png',
-            fit: BoxFit.cover,
-            placeholderColor: const Color(0xFFA9907E),
-          ),
-          const DecoratedBox(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Color(0x00000000),
-                  Color(0x00000000),
-                  Color(0xCC000000),
-                ],
-                stops: [0, 0.45, 1],
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: onExplore,
+      child: Container(
+        width: 248,
+        height: 363,
+        clipBehavior: Clip.antiAlias,
+        decoration: BoxDecoration(
+          color: const Color(0xFFA9907E),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            AdaptiveImage(
+              imagePath: community.imageUrl ?? 'assets/images/cycling_1.png',
+              fit: BoxFit.cover,
+              placeholderColor: const Color(0xFFA9907E),
+            ),
+            const DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Color(0x00000000),
+                    Color(0x00000000),
+                    Color(0xCC000000),
+                  ],
+                  stops: [0, 0.45, 1],
+                ),
               ),
             ),
-          ),
-          Positioned(
-            left: 16,
-            right: 16,
-            bottom: 103,
-            child: Text(
-              community.title,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                fontFamily: 'Outfit',
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-                height: 1.25,
+            Positioned(
+              left: 16,
+              right: 16,
+              bottom: 103,
+              child: Text(
+                community.title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontFamily: 'Outfit',
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  height: 1.25,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            Positioned(
+              left: 16,
+              bottom: 73,
+              child: _MetaText(
+                icon: Icons.people_alt_rounded,
+                text: '${_formatMembers(community.membersCount ?? 0)} Members',
                 color: Colors.white,
               ),
             ),
-          ),
-          Positioned(
-            left: 16,
-            bottom: 73,
-            child: _MetaText(
-              icon: Icons.people_alt_rounded,
-              text: '${_formatMembers(community.membersCount ?? 0)} Members',
-              color: Colors.white,
-            ),
-          ),
-          Positioned(
-            left: 16,
-            bottom: 22,
-            child: SizedBox(
-              width: 143,
-              height: 34,
-              child: ElevatedButton(
-                onPressed: onExplore,
-                style: ElevatedButton.styleFrom(
-                  elevation: 0,
-                  backgroundColor: Colors.white,
-                  foregroundColor: Colors.black,
-                  padding: EdgeInsets.zero,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(9.1),
-                    side: const BorderSide(color: Colors.white),
+            Positioned(
+              left: 16,
+              bottom: 22,
+              child: SizedBox(
+                width: 143,
+                height: 34,
+                child: ElevatedButton(
+                  onPressed: onExplore,
+                  style: ElevatedButton.styleFrom(
+                    elevation: 0,
+                    backgroundColor: Colors.white,
+                    foregroundColor: Colors.black,
+                    padding: EdgeInsets.zero,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(9.1),
+                      side: const BorderSide(color: Colors.white),
+                    ),
                   ),
-                ),
-                child: const Text(
-                  'Explore Community',
-                  style: TextStyle(
-                    fontFamily: 'Outfit',
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    height: 1.28,
+                  child: const Text(
+                    'Explore Community',
+                    style: TextStyle(
+                      fontFamily: 'Outfit',
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      height: 1.28,
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -934,98 +999,103 @@ class _PurposeCommunityCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 358,
-      height: 218,
-      decoration: BoxDecoration(
-        color: accentColor,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Stack(
-        children: [
-          Positioned(
-            left: 14,
-            top: 18,
-            width: 170,
-            child: Text(
-              community.title,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontFamily: 'Outfit',
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-                height: 1.27,
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: onExplore,
+      child: Container(
+        width: 358,
+        height: 218,
+        decoration: BoxDecoration(
+          color: accentColor,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Stack(
+          children: [
+            Positioned(
+              left: 14,
+              top: 18,
+              width: 170,
+              child: Text(
+                community.title,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontFamily: 'Outfit',
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  height: 1.27,
+                  color: foregroundColor,
+                ),
+              ),
+            ),
+            Positioned(
+              left: 14,
+              top: 116,
+              child: _MetaText(
+                icon: Icons.people_alt_rounded,
+                text: '${_formatMembers(community.membersCount ?? 0)} members',
                 color: foregroundColor,
               ),
             ),
-          ),
-          Positioned(
-            left: 14,
-            top: 116,
-            child: _MetaText(
-              icon: Icons.people_alt_rounded,
-              text: '${_formatMembers(community.membersCount ?? 0)} members',
-              color: foregroundColor,
+            Positioned(
+              left: 14,
+              top: 141,
+              child: _MetaText(
+                icon: Icons.calendar_month_rounded,
+                text: '${community.eventsCount ?? 0} events',
+                color: foregroundColor,
+              ),
             ),
-          ),
-          Positioned(
-            left: 14,
-            top: 141,
-            child: _MetaText(
-              icon: Icons.calendar_month_rounded,
-              text: '${community.eventsCount ?? 0} events',
-              color: foregroundColor,
-            ),
-          ),
-          Positioned(
-            left: 14,
-            bottom: 15,
-            child: SizedBox(
-              width: 142,
-              height: 29,
-              child: ElevatedButton(
-                onPressed: onExplore,
-                style: ElevatedButton.styleFrom(
-                  elevation: 0,
-                  padding: EdgeInsets.zero,
-                  backgroundColor: buttonColor,
-                  foregroundColor: buttonTextColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(17.3),
+            Positioned(
+              left: 14,
+              bottom: 15,
+              child: SizedBox(
+                width: 142,
+                height: 29,
+                child: ElevatedButton(
+                  onPressed: onExplore,
+                  style: ElevatedButton.styleFrom(
+                    elevation: 0,
+                    padding: EdgeInsets.zero,
+                    backgroundColor: buttonColor,
+                    foregroundColor: buttonTextColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(17.3),
+                    ),
                   ),
-                ),
-                child: Text(
-                  'Explore Community +',
-                  style: TextStyle(
-                    fontFamily: 'Outfit',
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                    height: 1.25,
-                    color: buttonTextColor,
+                  child: Text(
+                    'Explore Community +',
+                    style: TextStyle(
+                      fontFamily: 'Outfit',
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                      height: 1.25,
+                      color: buttonTextColor,
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-          Positioned(
-            right: 12,
-            top: 12,
-            child: Container(
-              width: 141,
-              height: 194,
-              clipBehavior: Clip.antiAlias,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: AdaptiveImage(
-                imagePath: community.imageUrl ?? 'assets/images/cycling_1.png',
-                fit: BoxFit.cover,
+            Positioned(
+              right: 12,
+              top: 12,
+              child: Container(
+                width: 141,
+                height: 194,
+                clipBehavior: Clip.antiAlias,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: AdaptiveImage(
+                  imagePath:
+                      community.imageUrl ?? 'assets/images/cycling_1.png',
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -1124,7 +1194,7 @@ final List<CommunityModel> _fallbackPurposeCommunities = [
     description: 'Cause-led rides supporting city-wide awareness programs.',
     type: 'Awareness',
     category: const ['Purpose-Based Communities'],
-    imageUrl: 'assets/images/community_ride.png',
+    imageUrl: 'assets/images/community_ride1.png',
     membersCount: 860,
     eventsCount: 3,
   ),

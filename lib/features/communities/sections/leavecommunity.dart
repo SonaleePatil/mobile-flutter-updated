@@ -22,7 +22,7 @@ class _LeaveCommunityState extends State<LeaveCommunity> {
   final CommunitiesService _communitiesService = CommunitiesService();
 
   bool isLoading = false;
-  int selectedReasonIndex = -1;
+  int selectedReasonIndex = 3;
   final TextEditingController feedbackController = TextEditingController();
 
   late CommunityModel _community;
@@ -101,7 +101,7 @@ class _LeaveCommunityState extends State<LeaveCommunity> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.softCream,
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
@@ -109,8 +109,6 @@ class _LeaveCommunityState extends State<LeaveCommunity> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-
-              /// BACK BUTTON
               Align(
                 alignment: Alignment.centerLeft,
                 child: GestureDetector(
@@ -120,76 +118,72 @@ class _LeaveCommunityState extends State<LeaveCommunity> {
                     width: 35,
                     padding: const EdgeInsets.fromLTRB(10, 10, 7.54, 9.46),
                     decoration: BoxDecoration(
-                      color: const Color(0x5CC12D32),
+                      color: const Color(0x5C02A1CE),
                       borderRadius: BorderRadius.circular(53.8462),
                     ),
                     child: const Icon(
                       Icons.arrow_back,
                       size: 15,
-                      color: Color(0xFFC12D32),
+                      color: Color(0xFF02A1CE),
                     ),
                   ),
                 ),
               ),
 
-              const SizedBox(height: 18),
+              const SizedBox(height: 14),
 
-              /// GIF
               Center(
                 child: Image.asset(
                   "assets/icons/checkmark.gif",
-                  height: 130,
-                  width: 130,
+                  height: 181,
+                  width: 181,
                   fit: BoxFit.contain,
                 ),
               ),
 
-              const SizedBox(height: 16),
-
-            /// TITLE
-const Text(
-  "Leave Community",
-  textAlign: TextAlign.center,
-  style: TextStyle(
-    fontFamily: "Outfit",
-    fontSize: 30,
-    fontWeight: FontWeight.w600,
-    height: 1, // 100% line height
-    letterSpacing: 0,
-    color: AppColors.charcoal,
-  ),
-),
-
-              const SizedBox(height: 10),
-
-             /// SUBTITLE
-const Text(
-  "We're sorry to see you go.\nYour feedback helps us improve.",
-  textAlign: TextAlign.center,
-  style: TextStyle(
-    fontFamily: "Outfit",
-    fontSize: 14,
-    fontWeight: FontWeight.w400,
-    height: 1, // 100% line height
-    letterSpacing: 0,
-    color: AppColors.charcoal,
-  ),
-),
-
               const SizedBox(height: 18),
 
-            /// REASON TITLE
-const Text(
-  "Reason:",
-  style: TextStyle(
-    fontFamily: "Outfit",
-    fontSize: 20,
-    fontWeight: FontWeight.w600,
-    height: 1, // 100% line height
-    letterSpacing: 0,
-    color: AppColors.charcoal,
-  ),
-),
+              const Text(
+                "Leave Community",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontFamily: "Outfit",
+                  fontSize: 24,
+                  fontWeight: FontWeight.w600,
+                  height: 1.25,
+                  letterSpacing: 0,
+                  color: AppColors.charcoal,
+                ),
+              ),
+
+              const SizedBox(height: 4),
+
+              const Text(
+                "We're sorry to see you go.\nYour feedback helps us improve.",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontFamily: "Outfit",
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  height: 1.28,
+                  letterSpacing: 0,
+                  color: AppColors.charcoal,
+                ),
+              ),
+
+              const SizedBox(height: 32),
+
+              const Text(
+                "Reason:",
+                style: TextStyle(
+                  fontFamily: "Outfit",
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                  height: 1.25,
+                  letterSpacing: 0,
+                  color: AppColors.charcoal,
+                ),
+              ),
 
               const SizedBox(height: 12),
 
@@ -211,21 +205,20 @@ const Text(
                 );
               }),
 
-              const SizedBox(height: 30),
+              const SizedBox(height: 28),
 
-           /// FEEDBACK TITLE
-const Text(
-  "Additional Feedback",
-  style: TextStyle(
-    fontFamily: "Outfit",
-    fontSize: 20,
-    fontWeight: FontWeight.w600,
-    height: 1, // 100% line height
-    letterSpacing: 0,
-    color: AppColors.charcoal,
-  ),
-),
-              const SizedBox(height: 20),
+              const Text(
+                "Additional feedback",
+                style: TextStyle(
+                  fontFamily: "Outfit",
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                  height: 1.25,
+                  letterSpacing: 0,
+                  color: AppColors.charcoal,
+                ),
+              ),
+              const SizedBox(height: 14),
 
               /// FEEDBACK BOX
               Container(
@@ -235,8 +228,8 @@ const Text(
                   vertical: 12,
                 ),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF5EDE0),
-                  borderRadius: BorderRadius.circular(16),
+                  color: const Color(0xFFC4E7F5),
+                  borderRadius: BorderRadius.circular(9.94958),
                 ),
                 child: TextField(
                   controller: feedbackController,
@@ -247,41 +240,39 @@ const Text(
                     fontWeight: FontWeight.w600,
                     color: Colors.black,
                   ),
-                 decoration: const InputDecoration(
-  hintText: "Tell Us More...",
-  border: InputBorder.none,
-  hintStyle: TextStyle(
-    fontFamily: "Outfit",
-    fontSize: 13,
-    fontWeight: FontWeight.w500,
-    height: 1, // 100% line height
-    letterSpacing: 0,
-    color: AppColors.charcoal,
-  ),
-),
+                  decoration: const InputDecoration(
+                    hintText: "Tell Us More....",
+                    border: InputBorder.none,
+                    hintStyle: TextStyle(
+                      fontFamily: "Outfit",
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                      height: 1,
+                      letterSpacing: 0,
+                      color: AppColors.charcoal,
+                    ),
+                  ),
                 ),
               ),
 
               const SizedBox(height: 40),
 
-              /// LEAVE BUTTON
-AppButton(
-  label: isLoading ? "Leaving..." : "Leave Community",
-  onPressed: isLoading ? null : _leaveCommunity,
-  type: AppButtonType.primary,
-  backgroundColor: const Color(0xFFB11212),
-  textColor: Colors.white,
-  borderRadius: 16,
-  height: 52,
-  textStyle: const TextStyle(
-    fontFamily: "Outfit",
-    fontSize: 16,
-    fontWeight: FontWeight.w500,
-    height: 1.5, // 24 / 16
-    letterSpacing: 0,
-  ),
- 
-),
+              AppButton(
+                label: isLoading ? "Leaving..." : "Back to Home",
+                onPressed: isLoading ? null : _leaveCommunity,
+                type: AppButtonType.primary,
+                backgroundColor: const Color(0xFF02A1CE),
+                textColor: Colors.white,
+                borderRadius: 12,
+                height: 51,
+                textStyle: const TextStyle(
+                  fontFamily: "Outfit",
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  height: 1.5,
+                  letterSpacing: 0,
+                ),
+              ),
 
               const SizedBox(height: 10),
             ],
@@ -311,38 +302,39 @@ class _ReasonTile extends StatelessWidget {
         height: 40,
         padding: const EdgeInsets.symmetric(horizontal: 14),
         decoration: BoxDecoration(
-          color: const Color(0xFFFFF3E2),
+          color: isSelected ? const Color(0xFF68CEEA) : const Color(0xFFC4E7F5),
           borderRadius: BorderRadius.circular(9.9),
           border: Border.all(
-            color: isSelected ? const Color(0xFFB11212) : const Color(0xFFFFF3E2),
-            width: isSelected ? 1.6 : 1,
+            color:
+                isSelected ? const Color(0xFF0359E8) : const Color(0xFFC4E7F5),
+            width: isSelected ? 1 : 0,
           ),
         ),
         child: Row(
           children: [
             Expanded(
-            child: Text(
-  title,
-  style: const TextStyle(
-    fontFamily: "Outfit",
-    fontSize: 13,
-    fontWeight: FontWeight.w500,
-    height: 1, // 100% line height
-    letterSpacing: 0,
-    color: AppColors.charcoal,
-  ),
-),
+              child: Text(
+                title,
+                style: const TextStyle(
+                  fontFamily: "Outfit",
+                  fontSize: 13,
+                  fontWeight: FontWeight.w500,
+                  height: 1.2,
+                  letterSpacing: 0,
+                  color: AppColors.charcoal,
+                ),
+              ),
             ),
             Container(
-              height: 18,
-              width: 18,
+              height: 16,
+              width: 16,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
                   color: isSelected
-                      ? const Color(0xFFB11212)
-                      : const Color(0xFFBDBDBD),
-                  width: 2,
+                      ? const Color(0xFFD9D9D9)
+                      : const Color(0xFFD9D9D9),
+                  width: 1,
                 ),
               ),
               child: isSelected
@@ -352,7 +344,7 @@ class _ReasonTile extends StatelessWidget {
                         width: 8,
                         decoration: const BoxDecoration(
                           shape: BoxShape.circle,
-                          color: Color(0xFFB11212),
+                          color: Color(0xFF0359E8),
                         ),
                       ),
                     )

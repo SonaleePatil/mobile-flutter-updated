@@ -73,6 +73,10 @@ class UpcomingTracksList extends StatelessWidget {
 }
 
 class UpcomingEventCard extends StatelessWidget {
+  static const Color _shareBlue = Color(0xFF02A1CE);
+  static const Color _chipBlue = Color(0xFF435974);
+  static const Color _panelBlueTint = Color(0xFFF1F1FB);
+
   final EventModel event;
 
   const UpcomingEventCard({super.key, required this.event});
@@ -109,18 +113,18 @@ class UpcomingEventCard extends StatelessWidget {
 
           /// SHARE BUTTON
           Positioned(
-            top: 12,
-            right: 12,
+            top: 17,
+            right: 15,
             child: Container(
-              height: 36,
-              width: 36,
+              height: 25,
+              width: 25,
               decoration: const BoxDecoration(
-                color: Color(0xffC12D32),
+                color: _shareBlue,
                 shape: BoxShape.circle,
               ),
               child: const Icon(
                 Icons.share,
-                size: 18,
+                size: 15,
                 color: Colors.white,
               ),
             ),
@@ -140,7 +144,7 @@ class UpcomingEventCard extends StatelessWidget {
                 12,
               ),
               decoration: BoxDecoration(
-                color: const Color(0xFFFFF9EF), // #FFF9EF
+                color: _panelBlueTint,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Column(
@@ -152,7 +156,7 @@ class UpcomingEventCard extends StatelessWidget {
                       height: 24,
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
-                        color: const Color(0xffC12D32),
+                        color: _chipBlue,
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: Text(
@@ -164,7 +168,7 @@ class UpcomingEventCard extends StatelessWidget {
                           fontWeight: FontWeight.w400,
                           height: 16 / 12, // ≈1.33
                           letterSpacing: 0,
-                          color: Color(0xFFFFF4E3),
+                          color: Colors.white,
                         ),
                       )),
 
@@ -173,6 +177,8 @@ class UpcomingEventCard extends StatelessWidget {
                   /// TITLE
                   Text(
                     event.title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
                       fontFamily: 'Outfit',
                       fontSize: 17,

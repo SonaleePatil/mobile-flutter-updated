@@ -1,7 +1,5 @@
 import 'dart:convert';
-import 'package:adcc/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
-
 
 class CommunityDetailsHeader extends StatelessWidget {
   final String? base64Image;
@@ -50,14 +48,11 @@ class CommunityDetailsHeader extends StatelessWidget {
   }
 
   Widget _fallback() {
-    return Container(
-      color: AppColors.softCream,
-      alignment: Alignment.center,
-      child: const Icon(
-        Icons.image,
-        size: 40,
-        color: Colors.black45,
-      ),
+    return Image.asset(
+      'assets/images/community_ride.png',
+      fit: BoxFit.cover,
+      width: double.infinity,
+      height: double.infinity,
     );
   }
 
@@ -66,13 +61,12 @@ class CommunityDetailsHeader extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(22),
+        borderRadius: BorderRadius.circular(10),
         child: SizedBox(
           height: 414,
           width: double.infinity,
           child: Stack(
             children: [
-
               /// IMAGE
               Positioned.fill(
                 child: _buildImage(),
@@ -81,7 +75,7 @@ class CommunityDetailsHeader extends StatelessWidget {
               /// DARK OVERLAY
               Positioned.fill(
                 child: Container(
-                  color: Colors.black.withOpacity(0.03),
+                  color: Colors.black.withValues(alpha: 0.03),
                 ),
               ),
 
@@ -107,35 +101,18 @@ class CommunityDetailsHeader extends StatelessWidget {
                     onTap: onBackTap,
                     borderRadius: BorderRadius.circular(999),
                     child: Container(
-                      width: 42,
-                      height: 42,
+                      width: 35,
+                      height: 35,
                       decoration: const BoxDecoration(
                         color: Colors.white,
                         shape: BoxShape.circle,
                       ),
                       child: const Icon(
                         Icons.arrow_back_rounded,
-                        color: Color(0xFFB93A3A),
-                        size: 22,
+                        color: Color(0xFFC12D32),
+                        size: 18,
                       ),
                     ),
-                  ),
-                ),
-              ),
-
-              /// TITLE
-              Positioned(
-                left: 20,
-                right: 20,
-                bottom: 20,
-                child: Text(
-                  title,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.white,
-                    height: 1.2,
                   ),
                 ),
               ),

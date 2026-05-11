@@ -1,7 +1,9 @@
 import 'package:adcc/core/theme/app_colors.dart';
 import 'package:adcc/features/communities/models/community_model.dart';
+import 'package:adcc/shared/widgets/adaptive_image.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
+
 class CommunityListCard extends StatelessWidget {
   final CommunityModel community;
   final VoidCallback? onTap;
@@ -24,13 +26,12 @@ class CommunityListCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(11.5872),
           child: Container(
             decoration: BoxDecoration(
-              color: AppColors.dustyRose,
+              color: const Color(0xFFD6F6FF),
               borderRadius: BorderRadius.circular(11.5872),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-
                 SizedBox(
                   width: 358,
                   height: 178.6592,
@@ -38,157 +39,131 @@ class CommunityListCard extends StatelessWidget {
                     children: [
                       ClipRRect(
                         borderRadius: BorderRadius.circular(10.4581),
-                        child: Image.network(
-                          community.imageUrl ?? '',
+                        child: AdaptiveImage(
+                          imagePath: community.imageUrl ??
+                              "assets/images/cycling_1.png",
                           width: 358,
                           height: 178.6592,
                           fit: BoxFit.cover,
-                          errorBuilder: (_, __, ___) {
-                            return Image.asset(
-                              "assets/images/cycling_1.png",
-                              width: 358,
-                              height: 178.6592,
-                              fit: BoxFit.cover,
-                            );
-                          },
                         ),
                       ),
-
-                    
-
-Positioned(
-  left: 12,
-  top: 13,
-  child: ClipRRect(
-    borderRadius: BorderRadius.circular(100),
-    child: BackdropFilter(
-      filter: ImageFilter.blur(
-        sigmaX: 10,
-        sigmaY: 10,
-      ),
-      child: Container(
-        height: 24,
-        constraints: const BoxConstraints(minWidth: 60),
-        padding: const EdgeInsets.only(
-          top: 4,
-          right: 8,
-          bottom: 4,
-          left: 8,
-        ),
-        decoration: BoxDecoration(
-          color: const Color(0xFF1A1C20).withOpacity(0.33),
-          borderRadius: BorderRadius.circular(100),
-        ),
-        alignment: Alignment.center,
-        child: Text(
-  community.category.isNotEmpty
-      ? community.category.first
-      : "Racing",
-  textAlign: TextAlign.center,
-  style: const TextStyle(
-    fontFamily: "Outfit",
-    fontSize: 12,
-    fontWeight: FontWeight.w400,
-    height: 1.33, // 16px / 12px = 1.33 line height
-    letterSpacing: 0,
-    color: Color(0xFFFFEFD7),
-  ),
-),
-      ),
-    ),
-  ),
-)
+                      Positioned(
+                        left: 12,
+                        top: 13,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(100),
+                          child: BackdropFilter(
+                            filter: ImageFilter.blur(
+                              sigmaX: 10,
+                              sigmaY: 10,
+                            ),
+                            child: Container(
+                              height: 24,
+                              constraints: const BoxConstraints(minWidth: 60),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFF1A1C20)
+                                    .withValues(alpha: 0.33),
+                                borderRadius: BorderRadius.circular(100),
+                              ),
+                              alignment: Alignment.center,
+                              child: Text(
+                                _categoryLabel(community),
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  fontFamily: "Outfit",
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w400,
+                                  height: 1.33,
+                                  letterSpacing: 0,
+                                  color: Color(0xFFC9EFEA),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
                     ],
                   ),
                 ),
-
-
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(14, 13, 14, 10),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                       Text(
-  community.title,
-  maxLines: 1,
-  overflow: TextOverflow.ellipsis,
-  style: const TextStyle(
-    fontFamily: "Outfit",
-    fontSize: 16,
-    fontWeight: FontWeight.w600,
-    height: 1, // 100% line height
-    letterSpacing: 0,
-    color: AppColors.textDark,
-  ),
-),
-
-                        const SizedBox(height: 5),
-
-               
                         Text(
-  community.description,
-  maxLines: 2,
-  overflow: TextOverflow.ellipsis,
-  style: TextStyle(
-    fontFamily: "Outfit",
-    fontSize: 12,
-    fontWeight: FontWeight.w400,
-    height: 1.16, // 13.9441 / 12 ≈ 1.16
-    letterSpacing: 0,
-    color: AppColors.textDark.withValues(alpha: 0.7), // textDark 70%
-  ),
-),
-
+                          community.title,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontFamily: "Outfit",
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            height: 1.25,
+                            letterSpacing: 0,
+                            color: AppColors.textDark,
+                          ),
+                        ),
+                        const SizedBox(height: 5),
+                        Text(
+                          community.description,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontFamily: "Outfit",
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                            height: 1.16,
+                            letterSpacing: 0,
+                            color: AppColors.textDark.withValues(alpha: 0.7),
+                          ),
+                        ),
                         const Spacer(),
-
-
-                      Row(
-  children: [
-    Image.asset(
-      "assets/icons/person_sharp.png",
-      width: 15,
-      height: 15,
-      color: AppColors.charcoal.withValues(alpha: 0.70),
-    ),
-    const SizedBox(width: 6),
-   Text(
-  '${community.membersCount ?? 0} members',
-  style: const TextStyle(
-    fontFamily: "Outfit",
-    fontSize: 12,
-    fontWeight: FontWeight.w400,
-    height: 1.42, // 17.0968 / 12 ≈ 1.42
-    letterSpacing: 0,
-    color: Color(0xFF484A4D),
-  ),
-),
-    const SizedBox(width: 14),
-
-    Image.asset(
-      "assets/icons/calender.png",
-      width: 15,
-      height: 15,
-      color: AppColors.charcoal.withValues(alpha: 0.70),
-    ),
-    const SizedBox(width: 6),
-Text(
-  '${community.eventsCount ?? 0} events',
-  style: const TextStyle(
-    fontFamily: "Outfit",
-    fontSize: 12,
-    fontWeight: FontWeight.w400,
-    height: 1.42, // 17.0968 / 12 ≈ 1.42
-    letterSpacing: 0,
-    color: Color(0xFF484A4D),
-  ),
-),
-
-    const Spacer(),
-
-    const _AvatarStack(countText: "+456"),
-  ],
-)
+                        Row(
+                          children: [
+                            Image.asset(
+                              "assets/icons/person_sharp.png",
+                              width: 13,
+                              height: 13,
+                              color: AppColors.charcoal.withValues(alpha: 0.70),
+                            ),
+                            const SizedBox(width: 5),
+                            Text(
+                              '${_formatCount(community.membersCount ?? 0)} members',
+                              style: const TextStyle(
+                                fontFamily: "Outfit",
+                                fontSize: 12,
+                                fontWeight: FontWeight.w400,
+                                height: 1.42,
+                                letterSpacing: 0,
+                                color: Color(0xFF484A4D),
+                              ),
+                            ),
+                            const SizedBox(width: 13),
+                            Image.asset(
+                              "assets/icons/calender.png",
+                              width: 13,
+                              height: 13,
+                              color: AppColors.charcoal.withValues(alpha: 0.70),
+                            ),
+                            const SizedBox(width: 5),
+                            Text(
+                              '${community.eventsCount ?? 0} events',
+                              style: const TextStyle(
+                                fontFamily: "Outfit",
+                                fontSize: 12,
+                                fontWeight: FontWeight.w400,
+                                height: 1.42,
+                                letterSpacing: 0,
+                                color: Color(0xFF484A4D),
+                              ),
+                            ),
+                            const Spacer(),
+                            const _AvatarStack(countText: "+456"),
+                          ],
+                        )
                       ],
                     ),
                   ),
@@ -202,6 +177,44 @@ Text(
   }
 }
 
+String _formatCount(int value) {
+  final text = value.toString();
+  final buffer = StringBuffer();
+  for (var i = 0; i < text.length; i++) {
+    final position = text.length - i;
+    buffer.write(text[i]);
+    if (position > 1 && position % 3 == 1) buffer.write(',');
+  }
+  return buffer.toString();
+}
+
+String _categoryLabel(CommunityModel community) {
+  final text = [
+    community.type,
+    community.title,
+    ...community.category,
+  ].join(' ').toLowerCase();
+
+  if (text.contains('women') || text.contains('she')) return 'Women';
+  if (text.contains('youth')) return 'Youth';
+  if (text.contains('endurance') || text.contains('desert')) {
+    return 'Endurance';
+  }
+  if (text.contains('social') || text.contains('family')) {
+    return 'Family / Social';
+  }
+  if (text.contains('weekend')) return 'Social';
+  if (text.contains('racing') ||
+      text.contains('race') ||
+      text.contains('performance')) {
+    return 'Racing';
+  }
+
+  if (community.category.isNotEmpty) return community.category.first;
+  if (community.type.isNotEmpty) return community.type;
+  return 'Racing';
+}
+
 class _AvatarStack extends StatelessWidget {
   final String countText;
 
@@ -213,11 +226,11 @@ class _AvatarStack extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        SizedBox(
+        const SizedBox(
           width: 55,
           height: 25,
           child: Stack(
-            children: const [
+            children: [
               _AvatarCircle(left: 0, imagePath: "assets/images/cycling_1.png"),
               _AvatarCircle(left: 14, imagePath: "assets/images/cycling_1.png"),
               _AvatarCircle(left: 28, imagePath: "assets/images/cycling_1.png"),
@@ -225,17 +238,17 @@ class _AvatarStack extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 6),
-      Text(
-  countText,
-  style: const TextStyle(
-    fontFamily: "Outfit",
-    fontSize: 12,
-    fontWeight: FontWeight.w400,
-    height: 1.42, // 17.0968 / 12 ≈ 1.42
-    letterSpacing: 0,
-    color: Color(0XFF484A4D),
-  ),
-),
+        Text(
+          countText,
+          style: const TextStyle(
+            fontFamily: "Outfit",
+            fontSize: 12,
+            fontWeight: FontWeight.w400,
+            height: 1.42, // 17.0968 / 12 ≈ 1.42
+            letterSpacing: 0,
+            color: Color(0XFF484A4D),
+          ),
+        ),
       ],
     );
   }
@@ -254,10 +267,9 @@ class _AvatarCircle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Positioned(
       left: left,
-      child: Container(
+      child: SizedBox(
         height: 25,
         width: 25,
-       
         child: ClipOval(
           child: Image.asset(
             imagePath,

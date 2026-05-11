@@ -27,21 +27,21 @@ class _PromoCarouselState extends State<PromoCarousel> {
       title: 'New to Abu Dhabi\nCycling Club?',
       subtitle: 'Join Your',
       highlight: 'First Community Ride',
-      buttonText: 'Find a ride',
+      buttonText: 'Find a Route',
     ),
     PromoData(
       image: 'assets/images/cycling_1.png',
       title: 'Ride Together\nRide Stronger',
       subtitle: 'Join Your',
       highlight: 'First Community Ride',
-      buttonText: 'Find a ride',
+      buttonText: 'Find a Route',
     ),
     PromoData(
       image: 'assets/images/cycling_1.png',
       title: 'Explore Abu Dhabi\nCycling Routes',
       subtitle: 'Join Your',
       highlight: 'First Community Ride',
-      buttonText: 'Find a ride',
+      buttonText: 'Find a Route',
     ),
   ];
 

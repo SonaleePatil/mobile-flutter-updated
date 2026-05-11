@@ -5,12 +5,10 @@ import 'package:adcc/features/communities/sections/Community%20Details/community
 import 'package:adcc/features/communities/sections/Community%20Details/community_gallery_tab.dart';
 import 'package:adcc/features/communities/sections/Community%20Details/community_tracks_tab.dart';
 import 'package:adcc/features/communities/sections/Community%20Details/community_updates_tab.dart';
-import 'package:adcc/features/communities/sections/community_highlight_track_card.dart';
 import 'package:adcc/features/communities/sections/join_community_screen.dart';
 import 'package:adcc/features/communities/sections/leavecommunity.dart';
 import 'package:adcc/features/communities/services/communities_service.dart';
 import 'package:adcc/shared/widgets/app_button.dart';
-import 'package:adcc/shared/widgets/banner_header.dart';
 import 'package:flutter/material.dart';
 
 class CommunityCityDetails extends StatefulWidget {
@@ -26,6 +24,10 @@ class CommunityCityDetails extends StatefulWidget {
 }
 
 class _CommunityCityDetailsState extends State<CommunityCityDetails> {
+  static const Color _primaryBlue = Color(0xFF02A1CE);
+  static const Color _redAccent = Color(0xFFC12D32);
+  static const Color _goldAccent = Color(0xFFCF9F0C);
+
   int selectedTabIndex = 0;
   bool isLoading = false;
   CommunityModel? _apiCommunity;
@@ -40,65 +42,56 @@ class _CommunityCityDetailsState extends State<CommunityCityDetails> {
     "Gallery",
     "Updates",
   ];
-@override
-void initState() {
-  super.initState();
- _isJoined = false;
+  @override
+  void initState() {
+    super.initState();
+    _isJoined = false;
 
-
-
-  _fetchCommunityById(); 
-  _checkMemberStatus();
-}
-Future<void> _fetchCommunityById() async {
-  setState(() => isLoading = true);
-
-  final communityId = widget.community.id;
-
-
-
-  final result = await _communitiesService.getCommunityById(
-    communityId: communityId,
-  );
-
-  if (!mounted) return;
-
-  setState(() => isLoading = false);
- 
-
-
-  if (result.data != null) {
-    setState(() {
-      _apiCommunity = result.data!;
-    });
-
-    final c = _apiCommunity!;
-
-   
+    _fetchCommunityById();
+    _checkMemberStatus();
   }
-}
-Future<void> _checkMemberStatus() async {
-  setState(() => isLoading = true);
 
-  final result =
-      await _communitiesService.getCommunityMemberStatus(
-    communityId: widget.community.id,
-  );
+  Future<void> _fetchCommunityById() async {
+    setState(() => isLoading = true);
 
-  if (!mounted) return;
+    final communityId = widget.community.id;
 
-  setState(() => isLoading = false);
+    final result = await _communitiesService.getCommunityById(
+      communityId: communityId,
+    );
 
-  if (result.success) {
-    setState(() {
-      _isJoined = result.data ?? false;
-      widget.community.isJoined = _isJoined;
-    });
+    if (!mounted) return;
+
+    setState(() => isLoading = false);
+
+    if (result.data != null) {
+      setState(() {
+        _apiCommunity = result.data!;
+      });
+    }
   }
-}
+
+  Future<void> _checkMemberStatus() async {
+    setState(() => isLoading = true);
+
+    final result = await _communitiesService.getCommunityMemberStatus(
+      communityId: widget.community.id,
+    );
+
+    if (!mounted) return;
+
+    setState(() => isLoading = false);
+
+    if (result.success) {
+      setState(() {
+        _isJoined = result.data ?? false;
+        widget.community.isJoined = _isJoined;
+      });
+    }
+  }
+
   //  Method to refresh community data
   Future<void> _refreshCommunityData() async {
-   
     setState(() {
       _isJoined = widget.community.isJoined;
     });
@@ -106,166 +99,176 @@ Future<void> _checkMemberStatus() async {
 
   @override
   Widget build(BuildContext context) {
-  if (_apiCommunity == null) {
-  return const Scaffold(
-    body: Center(
-      child: CircularProgressIndicator(),
-    ),
-  );
-}
+    if (_apiCommunity == null) {
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
 
-final c = _apiCommunity!;
-final title = c.title;
-final description = c.description;
+    final c = _apiCommunity!;
+    final title = c.title;
+    final description = c.description;
 
-final city = c.city?.isNotEmpty == true
-    ? c.city!
-    : (c.location ?? "N/A");
+    final city = c.city?.isNotEmpty == true ? c.city! : (c.location ?? "N/A");
 
-final category = c.type.isNotEmpty ? c.type : "N/A";
+    final category = c.type.isNotEmpty ? c.type : "N/A";
 
-final track = c.trackName?.isNotEmpty == true
-    ? c.trackName!
-    : "N/A";
+    final track = c.trackName?.isNotEmpty == true ? c.trackName! : "N/A";
 
-final founded = (c.foundedYear ?? 0) > 0
-    ? c.foundedYear.toString()
-    : "N/A";
+    final founded = (c.foundedYear ?? 0) > 0 ? c.foundedYear.toString() : "N/A";
 
-final members = c.membersCount != null
-    ? c.membersCount.toString()
-    : "0";
+    final members = c.membersCount != null ? c.membersCount.toString() : "0";
 
-final events = c.eventsCount != null
-    ? c.eventsCount.toString()
-    : "0";
+    final events = c.eventsCount != null ? c.eventsCount.toString() : "0";
+    final isAwareness = _isAwarenessCommunity(c);
+    final theme = _CommunityDetailTheme.fromCommunity(isAwareness);
 
     return Scaffold(
-      backgroundColor: AppColors.softCream,
+      backgroundColor: theme.pageBackground,
       body: SafeArea(
         child: ListView(
           physics: const BouncingScrollPhysics(),
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 18),
+          padding: const EdgeInsets.fromLTRB(10, 16, 10, 34),
           children: [
             // TOP BANNER IMAGE
-       CommunityDetailsHeader(
-  base64Image: c.imageUrl,
-  title: "",
-  onBackTap: () => Navigator.pop(context),
-),
+            CommunityDetailsHeader(
+              base64Image: c.imageUrl,
+              title: "",
+              onBackTap: () => Navigator.pop(context),
+            ),
 
-            const SizedBox(height: 24),
+            const SizedBox(height: 20),
 
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
                   child: Text(
-  title,
-  style: const TextStyle(
-    fontFamily: "Outfit",
-    fontSize: 22,
-    fontWeight: FontWeight.w600,
-    height: 1, // 100% line height
-    letterSpacing: 0,
-    color: Color(0xFFC12D32),
-  ),
-),
+                    title,
+                    style: const TextStyle(
+                      fontFamily: "Outfit",
+                      fontSize: 22,
+                      fontWeight: FontWeight.w600,
+                      height: 1, // 100% line height
+                      letterSpacing: 0,
+                      color: _redAccent,
+                    ),
+                  ),
                 ),
                 const SizedBox(width: 12),
                 _ShareBadge(onTap: () {}),
               ],
             ),
 
-            const SizedBox(height: 12),
+            const SizedBox(height: 9),
 
-           // Description
-Text(
-  description,
-  style: const TextStyle(
-    fontFamily: "Outfit",
-    fontSize: 16,
-    fontWeight: FontWeight.w400,
-    height: 1, // 100% line height
-    letterSpacing: 0,
-    color: AppColors.textDark,
-  ),
-),
+            // Description
+            Text(
+              description,
+              style: const TextStyle(
+                fontFamily: "Outfit",
+                fontSize: 12,
+                fontWeight: FontWeight.w400,
+                height: 1.25,
+                letterSpacing: 0,
+                color: AppColors.textDark,
+              ),
+            ),
 
-            const SizedBox(height: 25),
+            const SizedBox(height: 32),
 
-         _InfoGrid(
-  city: city,
-  category: category,
-  primaryTrack: track,
-  founded: founded,
-  upcomingEvents: events,
-  members: members,
-),
+            _InfoGrid(
+              city: city,
+              category: category,
+              primaryTrack: track,
+              founded: founded,
+              upcomingEvents: events,
+              members: members,
+              theme: theme,
+            ),
 
-            const SizedBox(height: 31),
+            const SizedBox(height: 33),
 
-       Text(
-  "Community Highlights",
-  style: const TextStyle(
-    fontFamily: "Outfit",
-    fontSize: 20,
-    fontWeight: FontWeight.w600,
-    height: 1, // 100% line height
-    letterSpacing: 0,
-    color:AppColors.charcoal,
-  ),
-),
+            const Text(
+              "Community Highlights",
+              style: TextStyle(
+                fontFamily: "Outfit",
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+                height: 1, // 100% line height
+                letterSpacing: 0,
+                color: AppColors.charcoal,
+              ),
+            ),
 
-            const SizedBox(height: 14),
+            const SizedBox(height: 16),
 
-         
-            const _HighlightsCard(),
-
-            const SizedBox(height: 49),
-
-       
-            _TabsRow(
-              tabs: tabs,
-              selectedIndex: selectedTabIndex,
-              onTap: (i) => setState(() => selectedTabIndex = i),
+            _HighlightsCard(
+              activeMembers: isAwareness
+                  ? '${_formatCount(c.membersCount ?? 3456)}+'
+                  : '${_formatCount(c.membersCount ?? 745)}+',
+              totalDistance: isAwareness ? '4,900 Km' : '6,300 Km',
+              rating: isAwareness ? '4.9' : '4.5',
+              theme: theme,
             ),
 
             const SizedBox(height: 28),
 
-         
-            _TabContent(selectedTabIndex: selectedTabIndex),
+            _TabsRow(
+              tabs: tabs,
+              selectedIndex: selectedTabIndex,
+              theme: theme,
+              onTap: (i) => setState(() => selectedTabIndex = i),
+            ),
 
-            const SizedBox(height: 51),
+            const SizedBox(height: 12),
 
-         
-         AppButton(
-  label: isLoading
-      ? "Checking..."
-      : (_isJoined
-          ? "Leave Community"
-          : "Join Community"),
-  onPressed: isLoading ? null : _handleJoinLeave,
-  type: _isJoined
-      ? AppButtonType.danger
-      : AppButtonType.primary,
-  backgroundColor: const Color(0xFFB11212),
-  textColor: Colors.white,
-  borderRadius: 16,
-  height: 52,
-  textStyle: const TextStyle(
-    fontFamily: "Outfit",
-    fontSize: 17.46, // 17.4634 ≈ 17.46
-    fontWeight: FontWeight.w400,
-    height: 1.50, // 26.1369 / 17.4634
-    letterSpacing: 0,
-  ),
- 
-         ),
+            _TabContent(
+              selectedTabIndex: selectedTabIndex,
+              highlightCardColor: theme.highlightCardBackground,
+            ),
+
+            const SizedBox(height: 31),
+
+            AppButton(
+              label: isLoading
+                  ? "Checking..."
+                  : (_isJoined ? "Leave Community" : "Join Community"),
+              onPressed: isLoading ? null : _handleJoinLeave,
+              type: _isJoined ? AppButtonType.danger : AppButtonType.primary,
+              backgroundColor: theme.actionColor,
+              textColor: Colors.white,
+              borderRadius: 7.48,
+              height: 51,
+              textStyle: const TextStyle(
+                fontFamily: "Outfit",
+                fontSize: 17.46, // 17.4634 ≈ 17.46
+                fontWeight: FontWeight.w400,
+                height: 1.50, // 26.1369 / 17.4634
+                letterSpacing: 0,
+              ),
+            ),
           ],
         ),
       ),
     );
+  }
+
+  bool _isAwarenessCommunity(CommunityModel community) {
+    final values = [
+      community.title,
+      community.description,
+      community.type,
+      ...community.category,
+    ].join(' ').toLowerCase();
+
+    return values.contains('awareness') ||
+        values.contains('charity') ||
+        values.contains('health') ||
+        values.contains('education') ||
+        values.contains('social cause');
   }
 
   //  Separate method to handle join/leave logic
@@ -298,7 +301,6 @@ Text(
           ),
         );
 
-      
         final shouldRefresh = await Navigator.push(
           context,
           MaterialPageRoute(
@@ -361,8 +363,8 @@ class _ShareBadge extends StatelessWidget {
       child: Container(
         width: 35,
         height: 35,
-        decoration: BoxDecoration(
-         color: const Color(0x5C99D3B5),// #99D3B55C
+        decoration: const BoxDecoration(
+          color: Color(0x5C99D3B5), // #99D3B55C
           shape: BoxShape.circle,
         ),
         alignment: Alignment.center,
@@ -376,6 +378,73 @@ class _ShareBadge extends StatelessWidget {
   }
 }
 
+class _CommunityDetailTheme {
+  final Color pageBackground;
+  final Color infoShellStart;
+  final Color infoShellEnd;
+  final Color infoTileBackground;
+  final Color statIconBackground;
+  final Color statIconColor;
+  final Color selectedTabColor;
+  final Color inactiveTabColor;
+  final Color actionColor;
+  final Color highlightCardBackground;
+
+  const _CommunityDetailTheme({
+    required this.pageBackground,
+    required this.infoShellStart,
+    required this.infoShellEnd,
+    required this.infoTileBackground,
+    required this.statIconBackground,
+    required this.statIconColor,
+    required this.selectedTabColor,
+    required this.inactiveTabColor,
+    required this.actionColor,
+    required this.highlightCardBackground,
+  });
+
+  factory _CommunityDetailTheme.fromCommunity(bool isAwareness) {
+    if (isAwareness) {
+      return const _CommunityDetailTheme(
+        pageBackground: Color(0xFFEAF6FB),
+        infoShellStart: Color(0xFF0359E8),
+        infoShellEnd: Color(0xFFFFF9EF),
+        infoTileBackground: Color(0xFFF6E7D1),
+        statIconBackground: Color(0xFFF0DDAF),
+        statIconColor: Color(0xFF484A4D),
+        selectedTabColor: _CommunityCityDetailsState._goldAccent,
+        inactiveTabColor: Color(0x1A1A1C20),
+        actionColor: _CommunityCityDetailsState._redAccent,
+        highlightCardBackground: Color(0xFFFFEFD7),
+      );
+    }
+
+    return const _CommunityDetailTheme(
+      pageBackground: Color(0xFFEAF6FB),
+      infoShellStart: Color(0x00000000),
+      infoShellEnd: Color(0x00000000),
+      infoTileBackground: Color(0xFFFFEFD7),
+      statIconBackground: Color(0xFF06B486),
+      statIconColor: Colors.white,
+      selectedTabColor: _CommunityCityDetailsState._primaryBlue,
+      inactiveTabColor: Color(0x1A02A1CE),
+      actionColor: _CommunityCityDetailsState._primaryBlue,
+      highlightCardBackground: Color(0xFFC9EFEA),
+    );
+  }
+}
+
+String _formatCount(int value) {
+  final text = value.toString();
+  final buffer = StringBuffer();
+  for (var i = 0; i < text.length; i++) {
+    final position = text.length - i;
+    buffer.write(text[i]);
+    if (position > 1 && position % 3 == 1) buffer.write(',');
+  }
+  return buffer.toString();
+}
+
 class _InfoGrid extends StatelessWidget {
   final String city;
   final String category;
@@ -383,6 +452,7 @@ class _InfoGrid extends StatelessWidget {
   final String founded;
   final String upcomingEvents;
   final String members;
+  final _CommunityDetailTheme theme;
 
   const _InfoGrid({
     required this.city,
@@ -391,6 +461,7 @@ class _InfoGrid extends StatelessWidget {
     required this.founded,
     required this.upcomingEvents,
     required this.members,
+    required this.theme,
   });
 
   @override
@@ -399,53 +470,49 @@ class _InfoGrid extends StatelessWidget {
       required String iconPath,
       required String label,
       required String value,
+      required bool tall,
     }) {
       return Container(
-        padding: const EdgeInsets.all(19),
+        padding: const EdgeInsets.all(9),
         decoration: BoxDecoration(
-          color: const Color(0xFFFFEFD7),
-          borderRadius: BorderRadius.circular(10),
+          color: theme.infoTileBackground,
+          borderRadius: BorderRadius.circular(12),
         ),
-        child: Row(
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Image.asset(
               iconPath,
-              height: 15,
-              width: 15,
-              color: AppColors.deepRed,
+              height: 28,
+              width: 28,
+              fit: BoxFit.contain,
             ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-  label,
-  style: const TextStyle(
-    fontFamily: "Outfit",
-    fontSize: 12.44, // 12.437 ≈ 12.44
-    fontWeight: FontWeight.w400,
-    height: 1, // 100% line height
-    letterSpacing: 0,
-    color: AppColors.charcoal,
-  ),
-),
-                  const SizedBox(height: 4),
-                 Text(
-  value,
-  maxLines: 2,
-  overflow: TextOverflow.ellipsis,
-  style: const TextStyle(
-    fontFamily: "Outfit",
-    fontSize: 14,
-    fontWeight: FontWeight.w500,
-    height: 1, // 100% line height
-    letterSpacing: 0,
-    color: AppColors.charcoal,
-  ),
-),
-                ],
+            SizedBox(height: tall ? 14 : 8),
+            Text(
+              label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                fontFamily: "Outfit",
+                fontSize: 12.44,
+                fontWeight: FontWeight.w400,
+                height: 1.25,
+                letterSpacing: 0,
+                color: Colors.black,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              value,
+              maxLines: tall ? 2 : 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                fontFamily: "Outfit",
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                height: 1.25,
+                letterSpacing: 0,
+                color: Colors.black,
               ),
             ),
           ],
@@ -453,55 +520,96 @@ class _InfoGrid extends StatelessWidget {
       );
     }
 
-    return GridView.count(
-      crossAxisCount: 2,
-      crossAxisSpacing: 12,
-      mainAxisSpacing: 12,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      childAspectRatio: 1.55,
-      children: [
-        tile(
-          iconPath: "assets/icons/city.png",
-          label: "City",
-          value: city,
+    final items = [
+      (icon: "assets/icons/city.png", label: "City", value: city, tall: true),
+      (
+        icon: "assets/icons/category.png",
+        label: "Category",
+        value: category,
+        tall: true
+      ),
+      (
+        icon: "assets/icons/primary_tracks.png",
+        label: "Primary Tracks",
+        value: primaryTrack,
+        tall: true
+      ),
+      (
+        icon: "assets/icons/founded.png",
+        label: "Founded",
+        value: founded,
+        tall: false
+      ),
+      (
+        icon: "assets/icons/upcoming_events.png",
+        label: "Upcoming Events",
+        value: upcomingEvents.padLeft(2, '0'),
+        tall: false
+      ),
+      (
+        icon: "assets/icons/members.png",
+        label: "Members",
+        value: _formatCount(int.tryParse(members) ?? 0),
+        tall: false
+      ),
+    ];
+
+    return Container(
+      padding: theme.infoShellStart == Colors.transparent
+          ? EdgeInsets.zero
+          : const EdgeInsets.all(15),
+      decoration: BoxDecoration(
+        gradient: theme.infoShellStart == Colors.transparent
+            ? null
+            : LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  theme.infoShellStart,
+                  theme.infoShellEnd,
+                ],
+              ),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: GridView.builder(
+        itemCount: items.length,
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3,
+          crossAxisSpacing: 6,
+          mainAxisSpacing: 8,
+          mainAxisExtent: 108,
         ),
-        tile(
-          iconPath: "assets/icons/category.png",
-          label: "Category",
-          value: category,
-        ),
-        tile(
-          iconPath: "assets/icons/primary_tracks.png",
-          label: "Primary Track",
-          value: primaryTrack,
-        ),
-        tile(
-          iconPath: "assets/icons/founded.png",
-          label: "Founded",
-          value: founded,
-        ),
-        tile(
-          iconPath: "assets/icons/upcoming_events.png",
-          label: "Upcoming Events",
-          value: upcomingEvents,
-        ),
-        tile(
-          iconPath: "assets/icons/members.png",
-          label: "Members",
-          value: members,
-        ),
-      ],
+        itemBuilder: (context, index) {
+          final item = items[index];
+          return tile(
+            iconPath: item.icon,
+            label: item.label,
+            value: item.value,
+            tall: item.tall,
+          );
+        },
+      ),
     );
   }
 }
 
 class _HighlightsCard extends StatelessWidget {
-  const _HighlightsCard();
+  final String activeMembers;
+  final String totalDistance;
+  final String rating;
+  final _CommunityDetailTheme theme;
+
+  const _HighlightsCard({
+    required this.activeMembers,
+    required this.totalDistance,
+    required this.rating,
+    required this.theme,
+  });
 
   @override
   Widget build(BuildContext context) {
-
     Widget row({
       required String iconPath,
       required String label,
@@ -512,18 +620,17 @@ class _HighlightsCard extends StatelessWidget {
         height: 49,
         padding: const EdgeInsets.symmetric(horizontal: 12),
         decoration: BoxDecoration(
-          color: const Color(0xFFFFF3E2),
+          color: theme.highlightCardBackground,
           borderRadius: BorderRadius.circular(9.95),
         ),
         child: Row(
           children: [
-
             /// ICON CONTAINER
             Container(
               width: 30,
               height: 30,
               decoration: BoxDecoration(
-                color: const Color(0xFFF0DDAF),
+                color: theme.statIconBackground,
                 borderRadius: BorderRadius.circular(54),
               ),
               alignment: Alignment.center,
@@ -532,6 +639,7 @@ class _HighlightsCard extends StatelessWidget {
                 height: 16,
                 width: 16,
                 fit: BoxFit.contain,
+                color: theme.statIconColor,
               ),
             ),
 
@@ -578,32 +686,35 @@ class _HighlightsCard extends StatelessWidget {
         row(
           iconPath: "assets/images/active_member.png",
           label: "Active Members",
-          value: "740+",
+          value: activeMembers,
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 8),
         row(
           iconPath: "assets/images/total_distance.png",
           label: "Total Distance This Month",
-          value: "6,300 Km",
+          value: totalDistance,
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 8),
         row(
           iconPath: "assets/images/avg_ride.png",
           label: "Average Ride Rating",
-          value: "4.5",
+          value: rating,
         ),
       ],
     );
   }
 }
+
 class _TabsRow extends StatelessWidget {
   final List<String> tabs;
   final int selectedIndex;
+  final _CommunityDetailTheme theme;
   final ValueChanged<int> onTap;
 
   const _TabsRow({
     required this.tabs,
     required this.selectedIndex,
+    required this.theme,
     required this.onTap,
   });
 
@@ -623,30 +734,30 @@ class _TabsRow extends StatelessWidget {
             onTap: () => onTap(index),
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 180),
-              width: 82,
+              width: index == 0 ? 72 : (tabs[index].length > 6 ? 87 : 80),
               height: 38,
               padding: const EdgeInsets.fromLTRB(15, 9, 15, 9),
               decoration: BoxDecoration(
                 color: isSelected
-                    ? AppColors.goldenOchre
-                    : const Color(0xFF1A1C201A),
+                    ? theme.selectedTabColor
+                    : theme.inactiveTabColor,
                 borderRadius: BorderRadius.circular(12),
               ),
               alignment: Alignment.center,
-              child:Text(
-  tabs[index],
-  maxLines: 1,
-  overflow: TextOverflow.ellipsis,
-  textAlign: TextAlign.center,
-  style: TextStyle(
-    fontFamily: "Outfit",
-    fontSize: 14,
-    fontWeight: FontWeight.w400,
-    height: 1.43, // 20 / 14 ≈ 1.43
-    letterSpacing: 0,
-    color: isSelected ? Colors.white : AppColors.textDark,
-  ),
-),
+              child: Text(
+                tabs[index],
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontFamily: "Outfit",
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  height: 1.43, // 20 / 14 ≈ 1.43
+                  letterSpacing: 0,
+                  color: isSelected ? Colors.white : AppColors.textDark,
+                ),
+              ),
             ),
           );
         },
@@ -655,20 +766,23 @@ class _TabsRow extends StatelessWidget {
   }
 }
 
-
 class _TabContent extends StatelessWidget {
   final int selectedTabIndex;
+  final Color highlightCardColor;
 
-  const _TabContent({required this.selectedTabIndex});
+  const _TabContent({
+    required this.selectedTabIndex,
+    required this.highlightCardColor,
+  });
 
   @override
   Widget build(BuildContext context) {
     switch (selectedTabIndex) {
       case 0:
-        return const CommunityEventsTab();
+        return CommunityEventsTab(cardColor: highlightCardColor);
 
       case 1:
-        return const CommunityTracksTab();
+        return CommunityTracksTab(cardColor: highlightCardColor);
 
       case 2:
         return const CommunityGalleryTab();

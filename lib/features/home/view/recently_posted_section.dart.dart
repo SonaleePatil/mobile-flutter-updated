@@ -101,6 +101,9 @@ class RecentlyPost extends StatelessWidget {
 }
 
 class RecentlyPostCard extends StatelessWidget {
+  static const Color _shareBlue = Color(0xFF02A1CE);
+  static const Color _primaryBlue = Color(0xFF025AE8);
+
   final HomeStoreItemModel item;
 
   const RecentlyPostCard({
@@ -137,17 +140,17 @@ class RecentlyPostCard extends StatelessWidget {
               ),
               Positioned(
                 top: 8,
-                left: 8,
+                right: 8,
                 child: Container(
-                  height: 32,
-                  width: 32,
+                  height: 25,
+                  width: 25,
                   decoration: const BoxDecoration(
-                    color: Colors.red,
+                    color: _shareBlue,
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(
                     Icons.share,
-                    size: 18,
+                    size: 15,
                     color: Colors.white,
                   ),
                 ),
@@ -217,7 +220,7 @@ class RecentlyPostCard extends StatelessWidget {
                 fontWeight: FontWeight.w700,
                 height: 1.5,
                 letterSpacing: 0,
-                color: AppColors.deepRed,
+                color: _primaryBlue,
               ),
             ),
           ),

@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:adcc/shared/widgets/adaptive_image.dart';
+import 'package:flutter/material.dart';
 
 class PromoData {
   final String image;
@@ -18,133 +18,140 @@ class PromoData {
 }
 
 class PromoCard extends StatelessWidget {
+  static const Color _primaryBlue = Color(0xFF0359E8);
+  static const Color _deepBlue = Color(0xFF023282);
+  static const Color _actionGreen = Color(0xFF06B486);
+
   final PromoData data;
 
   const PromoCard({super.key, required this.data});
 
   @override
   Widget build(BuildContext context) {
-
     return ClipRRect(
-      borderRadius: BorderRadius.circular(20),
+      borderRadius: BorderRadius.circular(12),
       child: Stack(
         children: [
-
           Positioned.fill(
-            child: AdaptiveImage(imagePath: data.image, fit: BoxFit.cover),
+            child: Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    _primaryBlue,
+                    _deepBlue,
+                  ],
+                ),
+              ),
+            ),
           ),
-
+          Positioned(
+            top: 19,
+            right: 13,
+            child: Container(
+              width: 147,
+              height: 147,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  width: 18,
+                  color: Colors.white.withValues(alpha: 0.14),
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            top: -18,
+            right: -30,
+            bottom: -42,
+            width: 205,
+            child: IgnorePointer(
+              child: Opacity(
+                opacity: 0.92,
+                child: AdaptiveImage(
+                  imagePath: data.image,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+          ),
           Positioned.fill(
             child: Container(
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.centerLeft,
                   end: Alignment.centerRight,
+                  stops: [0, 0.58, 1],
                   colors: [
-                    Colors.black87,
-                    Colors.transparent,
+                    _primaryBlue,
+                    _primaryBlue,
+                    Color(0x000359E8),
                   ],
                 ),
               ),
             ),
           ),
-
-          Positioned(
-            top: -25,
-            right: -25,
-            child: Container(
-              width: 100,
-              height: 100,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(
-                  width: 10,
-                  color: Color(0xFFF2B705),
-                ),
-              ),
-            ),
-          ),
-
           Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 14,
-            ),
+            padding: const EdgeInsets.fromLTRB(24, 22, 16, 15),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-
-               Text(
-  data.title,
-  style: const TextStyle(
-    fontFamily: 'Outfit',
-    fontSize: 23.2228,
-    fontWeight: FontWeight.w600,
-    height: 1, // 100% line height
-    letterSpacing: 0,
-    color: Colors.white,
-  ),
-),
-
+                SizedBox(
+                  width: 158,
+                  child: Text(
+                    data.title,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontFamily: 'Outfit',
+                      fontSize: 22,
+                      fontWeight: FontWeight.w600,
+                      height: 1.25,
+                      letterSpacing: 0,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  data.subtitle.isNotEmpty ? data.subtitle : data.highlight,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontFamily: 'Outfit',
+                    fontSize: 12,
+                    fontWeight: FontWeight.w400,
+                    height: 1.25,
+                    letterSpacing: 0,
+                    color: Colors.white,
+                  ),
+                ),
                 const Spacer(),
-
-              Text(
-  data.subtitle,
-  style: const TextStyle(
-    fontFamily: 'Outfit',
-    fontSize: 12.5,
-    fontWeight: FontWeight.w400,
-    height: 1.31,
-    letterSpacing: 0,
-    color: Colors.white70,
-  ),
-),
-                const SizedBox(height: 2),
-
-                Row(
-                  children: [
-
-                  Expanded(
-  child: Text(
-    data.highlight,
-    style: const TextStyle(
-      fontFamily: 'Outfit',
-      fontSize: 16.6667,
-      fontWeight: FontWeight.w700,
-      height: 1.31,
-      letterSpacing: 0,
-      color: Colors.white,
-    ),
-  ),
-),
-
-                    Container(
-                      width: 99,
-                      height: 28.5,
-
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFFFF9EF),
-                        borderRadius: BorderRadius.circular(17),
-                      ),
-                      child: Center(
-                        child: Text(
-                          data.buttonText,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            fontFamily: 'Outfit',
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                            height: 1.25,
-                            letterSpacing: 0,
-                            color: Color(0xFFC12D32),
-                          ),
-                        ),
+                Container(
+                  width: 115,
+                  height: 29,
+                  decoration: BoxDecoration(
+                    color: _actionGreen,
+                    borderRadius: BorderRadius.circular(17.2674),
+                  ),
+                  child: Center(
+                    child: Text(
+                      data.buttonText,
+                      textAlign: TextAlign.center,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontFamily: 'Outfit',
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        height: 1.25,
+                        letterSpacing: 0,
+                        color: Colors.white,
                       ),
                     ),
-
-                  ],
+                  ),
                 ),
-
               ],
             ),
           ),
