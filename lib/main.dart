@@ -94,8 +94,8 @@ class _MyAppState extends State<MyApp> {
 
       supportedLocales: const [Locale('en'), Locale('ar')],
 
-      // home: const SplashScreen(),
-      home: const LeaderboardScreen(),
+      home: const SplashScreen(),
+      // home: const LeaderboardScreen(),
       // home: const LivePostedScreen(
       //   title: 'Trek Domane',
       //   price: '7500 AED',
