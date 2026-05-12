@@ -95,10 +95,10 @@ class _MyAppState extends State<MyApp> {
 
       supportedLocales: const [Locale('en'), Locale('ar')],
 
-      // home: const SplashScreen(),
-      home: const ChallengeDetailsScreen(
-        challengeId: 'challenge_1',
-      ),
+      home: const SplashScreen(),
+      // home: const ChallengeDetailsScreen(
+      //   challengeId: 'challenge_1',
+      // ),
       // home: const LeaderboardScreen(),
       // home: const LivePostedScreen(
       //   title: 'Trek Domane',

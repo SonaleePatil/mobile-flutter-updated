@@ -1,7 +1,4 @@
-import 'package:adcc/core/theme/app_colors.dart';
-import 'package:adcc/shared/widgets/section_header.dart';
 import 'package:flutter/material.dart';
-
 
 class MyBadgesSection extends StatelessWidget {
   final VoidCallback? onViewAll;
@@ -11,100 +8,135 @@ class MyBadgesSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: AppColors.softCream,
-      padding: const EdgeInsets.only(
-        top: 41,
-        bottom: 24,
-      ),
+      color: Colors.white,
+      padding: const EdgeInsets.only(top: 29, bottom: 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
-    
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: SectionHeader(
-              title: "My Badges",
-              onViewAll: onViewAll,
+          _ProfileSectionHeader(
+            title: 'My Badges',
+            onViewAll: onViewAll,
+          ),
+          const SizedBox(height: 25),
+          const SizedBox(
+            height: 89,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              physics: BouncingScrollPhysics(),
+              padding: EdgeInsets.only(left: 24, right: 16),
+              child: Row(
+                children: [
+                  _BadgeItem(title: '500km club'),
+                  SizedBox(width: 34),
+                  _BadgeItem(title: 'Weekend rider'),
+                ],
+              ),
             ),
           ),
-
-          const SizedBox(height: 25),
-
-         
-          SizedBox(
-            height: 95, // circle + label space
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.only(left: 24),
-              children: [
-  const _BadgeItem(
-    title: "500km club",
-    imagePath: "assets/icons/trophy.png",
-  ),
-  const SizedBox(width: 20),
-  const _BadgeItem(
-    title: "Weekend ri...",
-    imagePath: "assets/icons/trophy.png",
-  ),
-]
-            ),
-          )
         ],
       ),
     );
   }
 }
-class _BadgeItem extends StatelessWidget {
-  final String title;
-  final String imagePath;
 
-  const _BadgeItem({
+class _ProfileSectionHeader extends StatelessWidget {
+  final String title;
+  final VoidCallback? onViewAll;
+
+  const _ProfileSectionHeader({
     required this.title,
-    required this.imagePath,
+    this.onViewAll,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-  
-        Container(
-          width: 59.31,
-          height: 59.31,
-          decoration: const BoxDecoration(
-            color: Color(0xFFE6B566),
-            shape: BoxShape.circle,
-          ),
-          child: Center(
-            child: Image.asset(
-              imagePath,
-              width: 29.6483,
-              height: 29.6483,
-              fit: BoxFit.contain,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              title,
+              style: const TextStyle(
+                fontFamily: 'Outfit',
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+                height: 25 / 20,
+                color: Color(0xFF333333),
+              ),
             ),
           ),
-        ),
+          GestureDetector(
+            onTap: onViewAll,
+            child: const Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'View All',
+                  style: TextStyle(
+                    fontFamily: 'Geist',
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                    height: 20 / 14,
+                    color: Color(0xFF333333),
+                  ),
+                ),
+                SizedBox(width: 4),
+                Icon(
+                  Icons.chevron_right_rounded,
+                  size: 18,
+                  color: Color(0xFF333333),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
 
-        const SizedBox(height: 8),
+class _BadgeItem extends StatelessWidget {
+  final String title;
 
-        SizedBox(
-          width: 80,
-          child:Text(
-  title,
-  overflow: TextOverflow.ellipsis,
-  textAlign: TextAlign.center,
-  style: const TextStyle(
-    fontFamily: 'Outfit',
-    fontSize: 14,
-    fontWeight: FontWeight.w400,
-    height: 1, // 100% line height
-    letterSpacing: 0.14,
-    color: AppColors.charcoal,
-  ),
-)
-        )
-      ],
+  const _BadgeItem({required this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 84,
+      child: Column(
+        children: [
+          Container(
+            width: 59.31,
+            height: 59.31,
+            decoration: const BoxDecoration(
+              color: Color(0xFFD8E5FB),
+              shape: BoxShape.circle,
+            ),
+            child: const Icon(
+              Icons.emoji_events_outlined,
+              color: Color(0xFF0359E8),
+              size: 30,
+            ),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            title,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontFamily: 'Outfit',
+              fontSize: 14,
+              fontWeight: FontWeight.w400,
+              height: 18 / 14,
+              letterSpacing: 0.14,
+              color: Color(0xFF333333),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:adcc/features/languageOption/view/languageSelectionScreen.dart';
-import '../../../../../core/theme/app_colors.dart';
 
 class GuestProfileSection extends StatelessWidget {
   final VoidCallback onSignUpLogin;
@@ -18,108 +17,93 @@ class GuestProfileSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: const Color(0xFFFFF9EF),
+    return ColoredBox(
+      color: Colors.white,
       child: ListView(
-        padding: const EdgeInsets.only(bottom: 110),
+        padding: const EdgeInsets.fromLTRB(14, 37, 14, 110),
         physics: const BouncingScrollPhysics(),
         children: [
-          const SizedBox(height: 20),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 14),
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(30),
-              ),
-              child: Column(
-                children: [
-                  /// Profile Icon
-                  Container(
-                    width: 68,
-                    height: 68,
-                    decoration: BoxDecoration(
-                      color: Color(0xFFD4AF37),
-                      shape: BoxShape.circle,
-                    ),
-                    child: ClipOval(
-                      child: Padding(
-                        padding: EdgeInsets.all(18),
-                        child: Image.asset(
-                          'assets/icons/profile.png',
-                          fit: BoxFit.contain,
-                        ),
+          Container(
+            height: 304,
+            padding: const EdgeInsets.fromLTRB(17, 31, 17, 26),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(30),
+            ),
+            child: Column(
+              children: [
+                Container(
+                  width: 68,
+                  height: 68,
+                  decoration: const BoxDecoration(
+                    color: Color(0xFFF2F6FC),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.person_add_alt_1_outlined,
+                    color: Color(0xFF025AE8),
+                    size: 30,
+                  ),
+                ),
+                const SizedBox(height: 24),
+                const Text(
+                  'Welcome to ADCC',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontFamily: 'Outfit',
+                    fontSize: 21.66,
+                    fontWeight: FontWeight.w600,
+                    height: 1.25,
+                    letterSpacing: 0.2,
+                    color: Color(0xFF333333),
+                  ),
+                ),
+                const SizedBox(height: 5),
+                Text(
+                  'Sign up to join events, connect with the community, and track your cycling journey.',
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontFamily: 'Outfit',
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                    height: 1.28,
+                    letterSpacing: 0.14,
+                    color: const Color(0xFF333333).withValues(alpha: 0.95),
+                  ),
+                ),
+                const Spacer(),
+                SizedBox(
+                  width: 328,
+                  height: 51,
+                  child: ElevatedButton(
+                    onPressed: onSignUpLogin,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF0359E8),
+                      foregroundColor: Colors.white,
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                  ),
-
-                  const SizedBox(height: 26),
-
-                  Text(
-                    'Welcome to ADCC',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontFamily: 'Outfit',
-                      fontSize: 21,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.charcoal,
-                    ),
-                  ),
-
-                  const SizedBox(height: 8),
-
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Text(
-                      'Sign up to join events, connect with the community, and track your cycling journey.',
-                      textAlign: TextAlign.center,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
+                    child: const Text(
+                      'Sign Up / Login',
                       style: TextStyle(
                         fontFamily: 'Outfit',
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        height: 1.3, // Proper spacing
-                        letterSpacing: 0.14,
-                        color: AppColors.charcoal.withOpacity(0.95),
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        height: 1.5,
                       ),
                     ),
                   ),
-
-                  const SizedBox(height: 24),
-
-                  /// Button
-                  SizedBox(
-                    width: 328,
-                    height: 51,
-                    child: ElevatedButton(
-                      onPressed: onSignUpLogin,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFC12D32),
-                        foregroundColor: Colors.white,
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      child: const Text(
-                        'Sign Up / Login',
-                        style: TextStyle(
-                          fontFamily: 'Outfit',
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
-          const SizedBox(height: 30),
+          const SizedBox(height: 37),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 2),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -129,7 +113,7 @@ class GuestProfileSection extends StatelessWidget {
                     fontFamily: 'Outfit',
                     fontSize: 20,
                     fontWeight: FontWeight.w600,
-                    height: 1.0,
+                    height: 1.25,
                     color: Color(0xFF1A1C20),
                   ),
                 ),
@@ -187,7 +171,7 @@ class _GuestOptionButton extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 19),
           decoration: BoxDecoration(
-            color: const Color(0xFFE9E4DB),
+            color: const Color(0xFFD8E5FB),
             borderRadius: BorderRadius.circular(13.3),
           ),
           child: Row(
@@ -199,14 +183,14 @@ class _GuestOptionButton extends StatelessWidget {
                     fontFamily: 'Outfit',
                     fontSize: 15,
                     fontWeight: FontWeight.w500,
-                    height: 1.0,
-                    color: AppColors.textDark,
+                    height: 1,
+                    color: Color(0xFF1A1C20),
                   ),
                 ),
               ),
               const Icon(
                 Icons.chevron_right_rounded,
-                color: AppColors.charcoal,
+                color: Colors.black,
                 size: 22,
               ),
             ],

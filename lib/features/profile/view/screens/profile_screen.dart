@@ -65,19 +65,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-
   Future<void> _handleLogout() async {
-    if (_isLoggingOut) return; 
+    if (_isLoggingOut) return;
 
     setState(() {
       _isLoggingOut = true;
     });
 
     try {
-      
       final refreshToken = await TokenStorageService.getRefreshToken();
 
-  
       if (refreshToken != null && refreshToken.isNotEmpty) {
         try {
           final apiClient = ApiClient.instance;
@@ -102,16 +99,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
               response.statusCode! < 300) {
             debugPrint(' [Logout API] Logout successful');
           } else {
-            debugPrint(
-                ' [Logout API] Logout API returned non-success status');
-    
+            debugPrint(' [Logout API] Logout API returned non-success status');
           }
         } on DioException {
-        
-         
+          // Logout can still proceed locally if the remote call fails.
         } catch (e) {
-       
-         
+          // Logout can still proceed locally if an unexpected error occurs.
         }
       } else {
         debugPrint(' [Logout] No refresh token found, skipping API call');
@@ -120,15 +113,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
       await TokenStorageService.clearTokens();
       debugPrint(' [Logout] Local tokens cleared');
 
-
       if (mounted) {
         setState(() {
           _isAuthenticated = false;
         });
       }
     } catch (e) {
-    
-
       await TokenStorageService.clearTokens();
       if (mounted) {
         Navigator.pushAndRemoveUntil(
@@ -155,7 +145,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         builder: (_) => const EmailPasswordLoginScreen(),
       ),
     );
-  
+
     _checkAuthentication();
   }
 
@@ -215,7 +205,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-   
     if (_isCheckingAuth) {
       return Container(
         color: AppColors.softCream,
@@ -230,54 +219,54 @@ class _ProfileScreenState extends State<ProfileScreen> {
     // Show guest profile screen if not authenticated
     if (!_isAuthenticated) {
       return Container(
-        color: AppColors.softCream,
+        color: Colors.white,
         child: SafeArea(
           child: Column(
             children: [
               // Header with Profile title
-             Container(
-  color: const Color(0xFFFFF9EF), // Background color
-  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
-  child: Stack(
-    alignment: Alignment.center,
-    children: [
-
-      Align(
-        alignment: Alignment.centerLeft,
-        child: GestureDetector(
-          onTap: () => Navigator.pop(context),
-          child: Container(
-            width: 44,
-            height: 44,
-            decoration: const BoxDecoration(
-              color: Color(0xFFE8B4B4), // soft red circle
-              shape: BoxShape.circle,
-            ),
-            child: const Icon(
-              Icons.arrow_back_rounded,
-              color: Color(0xFFC12D32),
-              size: 22,
-            ),
-          ),
-        ),
-      ),
-
-    
-      const Text(
-  'Profile',
-  textAlign: TextAlign.center,
-  style: TextStyle(
-    fontFamily: 'Outfit',
-    fontSize: 25,
-    fontWeight: FontWeight.w600,
-    height: 1, // 100% line height
-    letterSpacing: 0,
-    color: AppColors.charcoal,
-  ),
-),
-    ],
-  ),
-),
+              Container(
+                color: Colors.white,
+                padding: const EdgeInsets.fromLTRB(21, 31, 16, 0),
+                child: SizedBox(
+                  height: 40,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: GestureDetector(
+                          onTap: () => Navigator.pop(context),
+                          child: Container(
+                            width: 35,
+                            height: 35,
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFC12D32)
+                                  .withValues(alpha: 0.36),
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              Icons.arrow_back_rounded,
+                              color: Color(0xFFC12D32),
+                              size: 18,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const Text(
+                        'Profile',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontFamily: 'Geist',
+                          fontSize: 25,
+                          fontWeight: FontWeight.w600,
+                          height: 1.28,
+                          color: AppColors.charcoal,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
               // Guest Profile Content
               Expanded(
                 child: GuestProfileSection(
@@ -293,48 +282,43 @@ class _ProfileScreenState extends State<ProfileScreen> {
       );
     }
 
- 
     return Container(
-    color: AppColors.softCream,
+      color: Colors.white,
       child: SafeArea(
         child: ListView(
           physics: const BouncingScrollPhysics(),
-          padding: EdgeInsets.only(
-            bottom: 100, 
+          padding: const EdgeInsets.only(
+            bottom: 100,
           ),
           children: [
-          
             ProfileHeaderSection(
               name: _profileViewModel.profile?.fullName ?? '',
               location: _profileViewModel.profile?.city ?? 'Abu Dhabi City',
-              skillLevel: _profileViewModel.profile?.skillLevel ?? 'Intermediate rider',
-              profileImageUrl: _profileViewModel.profile?.image?.startsWith('http') == true
-                  ? _profileViewModel.profile!.image
-                  : null,
+              skillLevel:
+                  _profileViewModel.profile?.skillLevel ?? 'Intermediate rider',
+              profileImageUrl:
+                  _profileViewModel.profile?.image.startsWith('http') == true
+                      ? _profileViewModel.profile!.image
+                      : null,
               stats: {
                 'km': _profileViewModel.profile?.km ?? '2,340',
                 'rides': _profileViewModel.profile?.rides ?? '126',
                 'events': _profileViewModel.profile?.events ?? '14',
               },
             ),
-        
-MyBadgesSection(
-  onViewAll: _handleViewAllBadges,
-),
-const SizedBox(height: 41),
-
-MyCommunitiesSection(
-  onViewAll: _handleViewAllCommunities,
-),
-const SizedBox(height: 49),
-
-MyJoinedEventsSection(
-  onViewAll: _handleViewAllJoinedEvents,
-),
-
-const SizedBox(height: 50),
-
- ProfileMenuSection(),
+            MyBadgesSection(
+              onViewAll: _handleViewAllBadges,
+            ),
+            const SizedBox(height: 24),
+            MyCommunitiesSection(
+              onViewAll: _handleViewAllCommunities,
+            ),
+            const SizedBox(height: 49),
+            MyJoinedEventsSection(
+              onViewAll: _handleViewAllJoinedEvents,
+            ),
+            const SizedBox(height: 50),
+            const ProfileMenuSection(),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
@@ -346,35 +330,33 @@ const SizedBox(height: 50),
                       ServiceIntegration(
                         name: 'Garmin',
                         onConnect: () {
-                    
                           debugPrint('Connect Garmin tapped');
                         },
                       ),
                       ServiceIntegration(
                         name: 'Wahoo',
                         onConnect: () {
-                     
                           debugPrint('Connect Wahoo tapped');
                         },
                       ),
                     ],
                   ),
-                  
+
                   const SizedBox(height: 50),
-             
+
                   AppButton(
-                   label: _isLoggingOut ? 'Logging out...' : 'Logout',
-textStyle: const TextStyle(
-  fontFamily: 'Outfit',
-  fontSize: 16,
-  fontWeight: FontWeight.w600,
-  height: 1, // 100% line height
-  letterSpacing: 0,
-  color: Colors.white,
-),
+                    label: _isLoggingOut ? 'Logging out...' : 'Logout',
+                    textStyle: const TextStyle(
+                      fontFamily: 'Outfit',
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      height: 1, // 100% line height
+                      letterSpacing: 0,
+                      color: Colors.white,
+                    ),
                     onPressed: _isLoggingOut ? null : _handleLogout,
                     type: AppButtonType.danger,
-                    backgroundColor: AppColors.deepRed,
+                    backgroundColor: const Color(0xFF0359E8),
                   ),
                   const SizedBox(height: 95),
                 ],

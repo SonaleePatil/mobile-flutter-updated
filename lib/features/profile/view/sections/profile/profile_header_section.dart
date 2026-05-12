@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:adcc/core/theme/app_colors.dart';
 
 class ProfileHeaderSection extends StatelessWidget {
   final String? profileImageUrl;
@@ -17,6 +15,10 @@ class ProfileHeaderSection extends StatelessWidget {
     required this.skillLevel,
     required this.stats,
   });
+
+  static const _blue = Color(0xFF0359E8);
+  static const _blueTint = Color(0xFFD8E5FB);
+  static const _charcoal = Color(0xFF333333);
 
   Widget _buildAvatar() {
     final hasNetworkImage =
@@ -41,15 +43,14 @@ class ProfileHeaderSection extends StatelessWidget {
       width: 107,
       height: 107,
       color: Colors.white24,
-      child: Center(
-        child: Text(
-          initial,
-          style: const TextStyle(
-            fontFamily: 'Outfit',
-            fontSize: 44,
-            fontWeight: FontWeight.w600,
-            color: Colors.white,
-          ),
+      alignment: Alignment.center,
+      child: Text(
+        initial,
+        style: const TextStyle(
+          fontFamily: 'Outfit',
+          fontSize: 44,
+          fontWeight: FontWeight.w600,
+          color: Colors.white,
         ),
       ),
     );
@@ -58,171 +59,223 @@ class ProfileHeaderSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 390,
-      height: 412,
-      child: Container(
-        color: AppColors.deepRed,
-        child: Column(
-          children: [
-            const SizedBox(height: 16),
-
-       
-SizedBox(
-  height: 60,
-  child: Stack(
-    alignment: Alignment.center,
-    children: [
-      /// ---- Center Title ----
-      const Center(
-        child: Text(
-  'Profile',
-  textAlign: TextAlign.center,
-  style: const TextStyle(
-    fontFamily: 'Geist',
-    fontSize: 25,
-    fontWeight: FontWeight.w600,
-    height: 1, // 100% line height
-    letterSpacing: 0,
-    color: Colors.white,
-  ),
-)
-      ),
-    ],
-  ),
-),
-            const SizedBox(height: 16),
-
-     
-            Container(
-              width: 107,
-              height: 107,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(color: Colors.white, width: 2),
-              ),
-              child: ClipOval(
-                child: _buildAvatar(),
+      height: 428,
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Container(
+            height: 376,
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [_blue, _blue, Colors.white],
+                stops: [0, 0.84, 1],
               ),
             ),
-
-            const SizedBox(height: 16),
-
-           Text(
-  name,
-  textAlign: TextAlign.center,
-  style: const TextStyle(
-    fontFamily: 'Outfit',
-    fontSize: 21.6613,
-    fontWeight: FontWeight.w600,
-    height: 1, // 100% line height
-    letterSpacing: 0.22,
-    color: Colors.white,
-  ),
-),
-
-            const SizedBox(height: 8),
-
-     
-           Text(
-  '$location - $skillLevel',
-  textAlign: TextAlign.center,
-  style: const TextStyle(
-    fontFamily: 'Outfit',
-    fontSize: 14,
-    fontWeight: FontWeight.w400,
-    height: 1, // 100% line height
-    letterSpacing: 0.14,
-    color: Colors.white,
-  ),
-),
-
-            const SizedBox(height: 32),
-
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 48),
+          ),
+          Positioned(
+            top: 18,
+            left: 0,
+            right: 0,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                Positioned(
+                  left: 16,
+                  child: GestureDetector(
+                    onTap: () {
+                      if (Navigator.of(context).canPop()) {
+                        Navigator.of(context).pop();
+                      }
+                    },
+                    child: const SizedBox(
+                      width: 35,
+                      height: 35,
+                      child: Icon(
+                        Icons.arrow_back_rounded,
+                        color: Colors.white,
+                        size: 24,
+                      ),
+                    ),
+                  ),
+                ),
+                const Text(
+                  'Profile',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontFamily: 'Outfit',
+                    fontSize: 28,
+                    fontWeight: FontWeight.w600,
+                    height: 35 / 28,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Positioned(
+            top: 89,
+            left: 0,
+            right: 0,
+            child: Column(
+              children: [
+                Container(
+                  width: 107,
+                  height: 107,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.white, width: 2),
+                  ),
+                  child: ClipOval(child: _buildAvatar()),
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  name.trim().isEmpty ? 'Sara' : name,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontFamily: 'Outfit',
+                    fontSize: 21.6613,
+                    fontWeight: FontWeight.w600,
+                    height: 27 / 21.6613,
+                    letterSpacing: 0.22,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                SizedBox(
+                  width: 225,
+                  child: Text(
+                    '$location - $skillLevel',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontFamily: 'Outfit',
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                      height: 18 / 14,
+                      letterSpacing: 0.14,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Positioned(
+            left: 16,
+            right: 16,
+            bottom: 0,
+            child: Container(
+              height: 109,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: const Color(0xFFE5E7EB), width: 1.16),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.10),
+                    offset: const Offset(0, 1),
+                    blurRadius: 3,
+                  ),
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.10),
+                    offset: const Offset(0, 1),
+                    blurRadius: 2,
+                    spreadRadius: -1,
+                  ),
+                ],
+              ),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  _buildStatItem(
-                    imagePath: 'assets/svg/meter_colored.svg',
-                    value: stats['km'] ?? '0',
+                  _StatItem(
+                    icon: Icons.speed_rounded,
+                    value: stats['km'] ?? '2,340',
                     label: 'KM',
                   ),
-                  _buildStatItem(
-                    imagePath: 'assets/svg/colored_cycle.svg',
-                    value: stats['rides'] ?? '0',
+                  _StatItem(
+                    icon: Icons.pedal_bike_rounded,
+                    value: stats['rides'] ?? '126',
                     label: 'Rides',
                   ),
-                  _buildStatItem(
-                    imagePath: 'assets/svg/events_colored.svg',
-                    value: stats['events'] ?? '0',
+                  _StatItem(
+                    icon: Icons.celebration_rounded,
+                    value: stats['events'] ?? '14',
                     label: 'Events',
                   ),
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
+}
 
-  Widget _buildStatItem({
-    required String imagePath,
-    required String value,
-    required String label,
-  }) {
-    return Column(
-      children: [
+class _StatItem extends StatelessWidget {
+  final IconData icon;
+  final String value;
+  final String label;
 
-        Container(
-          width: 40,
-          height: 40,
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            shape: BoxShape.circle,
-          ),
-          child: Center(
-            child: SvgPicture.asset(
-              imagePath,
-              width: 24,
-              height: 24,
+  const _StatItem({
+    required this.icon,
+    required this.value,
+    required this.label,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 70,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 40,
+            height: 40,
+            decoration: const BoxDecoration(
+              color: ProfileHeaderSection._blueTint,
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              icon,
+              color: ProfileHeaderSection._blue,
+              size: 23,
             ),
           ),
-        ),
-
-        const SizedBox(height: 8),
-
-
-      Text(
-  value,
-  textAlign: TextAlign.center,
-  style: const TextStyle(
-    fontFamily: 'Outfit',
-    fontSize: 17,
-    fontWeight: FontWeight.w600,
-    height: 1, // 100% line height
-    letterSpacing: 0.17,
-    color: Colors.white,
-  ),
-),
-
-        const SizedBox(height: 4),
-
- 
-      Text(
-  label,
-  textAlign: TextAlign.center,
-  style: const TextStyle(
-    fontFamily: 'Outfit',
-    fontSize: 11,
-    fontWeight: FontWeight.w400,
-    height: 1, // 100% line height
-    letterSpacing: 0.11,
-    color: Colors.white,
-  ),
-)
-      ],
+          const SizedBox(height: 5),
+          Text(
+            value,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontFamily: 'Outfit',
+              fontSize: 17,
+              fontWeight: FontWeight.w600,
+              height: 21 / 17,
+              letterSpacing: 0.17,
+              color: ProfileHeaderSection._charcoal,
+            ),
+          ),
+          const SizedBox(height: 1),
+          Text(
+            label,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontFamily: 'Outfit',
+              fontSize: 11,
+              fontWeight: FontWeight.w400,
+              height: 14 / 11,
+              letterSpacing: 0.11,
+              color: ProfileHeaderSection._charcoal.withValues(alpha: 0.7),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

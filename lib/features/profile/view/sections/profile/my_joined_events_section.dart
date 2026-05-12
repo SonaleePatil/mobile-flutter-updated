@@ -1,44 +1,53 @@
-import 'package:adcc/core/theme/app_colors.dart';
-import 'package:adcc/shared/widgets/section_header.dart';
 import 'package:flutter/material.dart';
-
 
 class MyJoinedEventsSection extends StatelessWidget {
   final VoidCallback? onViewAll;
 
   const MyJoinedEventsSection({super.key, this.onViewAll});
 
+  static const _events = [
+    _EventData(
+      title: 'Bike Abu Dhabi Gran Fondo 2025',
+      date: '18 July 2026',
+      distance: '42 km',
+      imagePath: 'assets/images/cycling_1.png',
+    ),
+    _EventData(
+      title: 'Corniche Sunrise Social',
+      date: '21 July 2026',
+      distance: '12 km',
+      imagePath: 'assets/images/community_ride1.png',
+    ),
+    _EventData(
+      title: 'Hudayriyat Trail X morning',
+      date: '23 July 2026',
+      distance: '60 km',
+      imagePath: 'assets/images/route_preview.png',
+    ),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: AppColors.softCream,
-      padding: const EdgeInsets.only(top: 8, bottom: 24),
+      color: Colors.white,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
- 
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: SectionHeader(
-              title: "Joined Events",
-              onViewAll: onViewAll,
-            ),
+          _ProfileSectionHeader(
+            title: 'Joined Events',
+            onViewAll: onViewAll,
           ),
-
-          const SizedBox(height: 16),
-
-          /// -------- CARD LIST --------
+          const SizedBox(height: 17),
           SizedBox(
-            height: 230,
+            height: 309,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.only(left: 16, right: 16),
               physics: const BouncingScrollPhysics(),
-              itemCount: 3,
-              separatorBuilder: (_, __) => const SizedBox(width: 14),
+              itemCount: _events.length,
+              separatorBuilder: (_, __) => const SizedBox(width: 10),
               itemBuilder: (context, index) {
-                return const _EventCard();
+                return _EventCard(data: _events[index]);
               },
             ),
           ),
@@ -48,165 +57,180 @@ class MyJoinedEventsSection extends StatelessWidget {
   }
 }
 
-class _EventCard extends StatelessWidget {
-  const _EventCard();
+class _EventData {
+  final String title;
+  final String date;
+  final String distance;
+  final String imagePath;
+
+  const _EventData({
+    required this.title,
+    required this.date,
+    required this.distance,
+    required this.imagePath,
+  });
+}
+
+class _ProfileSectionHeader extends StatelessWidget {
+  final String title;
+  final VoidCallback? onViewAll;
+
+  const _ProfileSectionHeader({
+    required this.title,
+    this.onViewAll,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 310,
-      height: 230,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(16),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              title,
+              style: const TextStyle(
+                fontFamily: 'Outfit',
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+                height: 25 / 20,
+                color: Color(0xFF333333),
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: onViewAll,
+            child: const Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'View All',
+                  style: TextStyle(
+                    fontFamily: 'Geist',
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                    height: 20 / 14,
+                    color: Color(0xFF333333),
+                  ),
+                ),
+                SizedBox(width: 4),
+                Icon(
+                  Icons.chevron_right_rounded,
+                  size: 18,
+                  color: Color(0xFF333333),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _EventCard extends StatelessWidget {
+  final _EventData data;
+
+  const _EventCard({required this.data});
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(8),
+      child: SizedBox(
+        width: 358,
+        height: 309,
         child: Stack(
           children: [
-
-            /// -------- IMAGE --------
             Positioned.fill(
               child: Image.asset(
-                "assets/images/cycling_1.png",
+                data.imagePath,
                 fit: BoxFit.cover,
+                errorBuilder: (_, __, ___) => Container(
+                  color: const Color(0xFFFFC9C9),
+                ),
               ),
             ),
-
-     
-            Positioned.fill(
-              child: Container(
-                color: Colors.black.withOpacity(0.12),
-              ),
-            ),
-
-            /// Featured chip
             Positioned(
-              top: 12,
-              left: 12,
+              top: 9,
+              left: 16,
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                width: 77,
+                height: 24,
+                alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: AppColors.deepRed,
-                  borderRadius: BorderRadius.circular(8),
+                  color: const Color(0xFF435974),
+                  borderRadius: BorderRadius.circular(6),
                 ),
                 child: const Text(
-  "Featured",
-  textAlign: TextAlign.center,
-  style: TextStyle(
-    fontFamily: 'Geist',
-    fontSize: 12,
-    fontWeight: FontWeight.w400,
-    height: 16 / 12, // ≈1.33
-    letterSpacing: 0,
-    color: Color(0xFFFFF4E3),
-  ),
-)
+                  'Registered',
+                  style: TextStyle(
+                    fontFamily: 'Geist',
+                    fontSize: 12,
+                    fontWeight: FontWeight.w400,
+                    height: 16 / 12,
+                    color: Colors.white,
+                  ),
+                ),
               ),
             ),
-
-           /// Share button
-Positioned(
-  top: 17,
-  right: 17,
-  child: Container(
-    width: 25,
-    height: 25,
-    decoration: const BoxDecoration(
-      color: Color(0xFFC12D32),
-      shape: BoxShape.circle,
-    ),
-    child: const Center(
-      child: Icon(
-        Icons.share,
-        size: 16,
-        color: Colors.white,
-      ),
-    ),
-  ),
-),
-
-            /// Bottom Info Card
             Positioned(
-              left: 12,
-              right: 12,
-              bottom: 12,
+              top: 17,
+              right: 15,
               child: Container(
-                padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
-                decoration: BoxDecoration(
+                width: 25,
+                height: 25,
+                decoration: const BoxDecoration(
+                  color: Color(0xFF0359E8),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.share_rounded,
+                  size: 16,
                   color: Colors.white,
+                ),
+              ),
+            ),
+            Positioned(
+              left: 15,
+              right: 15,
+              bottom: 11,
+              child: Container(
+                height: 100,
+                padding: const EdgeInsets.fromLTRB(15, 39, 15, 10),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFD8E5FB),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
                   children: [
-
-                    /// Registered chip
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF3EE606).withOpacity(0.30),
-                        borderRadius: BorderRadius.circular(5),
+                    Text(
+                      data.title,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontFamily: 'Outfit',
+                        fontSize: 17,
+                        fontWeight: FontWeight.w500,
+                        height: 20 / 17,
+                        color: Colors.black,
                       ),
-                      child: const Text(
-  "Registered",
-  textAlign: TextAlign.center,
-  style: TextStyle(
-    fontFamily: 'Outfit',
-    fontSize: 9.9381,
-    fontWeight: FontWeight.w400,
-    height: 1, // 100% line height
-    letterSpacing: 0,
-    color: Color(0xFF328700),
-  ),
-)
                     ),
-
-                    const SizedBox(height: 6),
-
-                    const Text(
-  "Bike Abu Dhabi Gran Fondo 2025",
-  maxLines: 1,
-  overflow: TextOverflow.ellipsis,
-  style: const TextStyle(
-    fontFamily: 'Outfit',
-    fontSize: 17,
-    fontWeight: FontWeight.w500,
-    height: 1.15,
-    letterSpacing: 0,
-    color: AppColors.charcoal,
-  ),
-),
-
                     const SizedBox(height: 8),
-
-                  Row(
-  children: const [
-    _MetaItem(
-      icon: ImageIcon(
-        AssetImage("assets/icons/calender.png"),
-        size: 14,
-        color: Color(0XFF595959),
-      ),
-      text: "Every Sunday",
-    ),
-    SizedBox(width: 12),
-    _MetaItem(
-      icon: ImageIcon(
-        AssetImage("assets/icons/water_statoins.png"),
-        size: 14,
-       color: Color(0XFF595959),
-      ),
-      text: "Abu Dhabi",
-    ),
-    SizedBox(width: 12),
-    _MetaItem(
-      icon: ImageIcon(
-        AssetImage("assets/icons/km_fill.png"),
-        size: 14,
-        color: Color(0XFF595959),
-      ),
-      text: "150 km",
-    ),
-  ],
-)
+                    Row(
+                      children: [
+                        _MetaItem(
+                          icon: Icons.calendar_month_rounded,
+                          text: data.date,
+                        ),
+                        const SizedBox(width: 10),
+                        _MetaItem(
+                          icon: Icons.speed_rounded,
+                          text: data.distance,
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
@@ -217,8 +241,9 @@ Positioned(
     );
   }
 }
+
 class _MetaItem extends StatelessWidget {
-  final Widget icon;
+  final IconData icon;
   final String text;
 
   const _MetaItem({
@@ -228,28 +253,22 @@ class _MetaItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Row(
-        children: [
-          icon,
-          const SizedBox(width: 6),
-          Expanded(
-            child:Text(
-  text,
-  maxLines: 1,
-  overflow: TextOverflow.ellipsis,
-  style: const TextStyle(
-    fontFamily: 'Outfit',
-    fontSize: 12.8226,
-    fontWeight: FontWeight.w400,
-    height: 17.0968 / 12.8226, // ≈1.33
-    letterSpacing: 0,
-    color: Color(0xFF484A4D),
-  ),
-)
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(icon, size: 14, color: Colors.black),
+        const SizedBox(width: 5),
+        Text(
+          text,
+          style: const TextStyle(
+            fontFamily: 'Outfit',
+            fontSize: 12.8226,
+            fontWeight: FontWeight.w400,
+            height: 15 / 12.8226,
+            color: Colors.black,
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
