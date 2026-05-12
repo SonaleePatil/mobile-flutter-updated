@@ -8,129 +8,131 @@ class ListingsScreen extends StatelessWidget {
   const ListingsScreen({super.key, this.imagePath});
 
   Widget _listingCard(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: 357,
       height: 268,
-      decoration: BoxDecoration(
-        color: AppColors.softCream,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.charcoal.withValues(alpha: 0.04),
-            blurRadius: 8,
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Stack(
         children: [
-          /// IMAGE
-          Stack(
-            children: [
-              ClipRRect(
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(12),
-                  topRight: Radius.circular(12),
-                ),
-                child: AdaptiveImage(
-                  imagePath: imagePath ?? 'assets/images/cycling_1.png',
-                  width: double.infinity,
-                  height: 180,
-                  fit: BoxFit.cover,
-                  placeholderColor:
-                      AppColors.charcoal.withValues(alpha: 0.06),
-                ),
+          Positioned(
+            left: 0,
+            top: 0,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(5.44764),
+              child: AdaptiveImage(
+                imagePath: imagePath ?? 'assets/images/cycling_1.png',
+                width: 357,
+                height: 220,
+                fit: BoxFit.cover,
+                placeholderColor: AppColors.charcoal.withOpacity(0.06),
               ),
-
-              /// LOCATION BADGE
-              Positioned(
-                top: 12,
-                left: 7,
-                child: Container(
-                  width: 62,
-                  height: 21,
-                  padding: const EdgeInsets.symmetric(horizontal: 6),
-                  decoration: BoxDecoration(
-                    color: const Color(0x33FFFFFF),
-                    borderRadius: BorderRadius.circular(22.5),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Icon(
-                        Icons.location_on,
-                        size: 12,
-                        color: Colors.white,
-                      ),
-                      SizedBox(width: 3),
-                     Text(
-  "Sharjah",
-  textAlign: TextAlign.center,
-  style: const TextStyle(
-    fontFamily: "Satoshi",
-    fontSize: 9.75,
-    fontWeight: FontWeight.w500,
-    height: 1.0, // 100% line height
-    letterSpacing: 0,
-    color: Colors.white,
-  ),
-)
-                    ],
-                  ),
-                ),
-              )
-            ],
+            ),
           ),
 
-          /// DETAILS
-          Padding(
-            padding: const EdgeInsets.fromLTRB(12, 12, 8, 16),
+          Positioned(
+            top: 12,
+            left: 7,
+            child: Container(
+              width: 62,
+              height: 21,
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.2),
+                borderRadius: BorderRadius.circular(22.5),
+              ),
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.location_on_outlined,
+                    size: 12,
+                    color: Colors.white,
+                  ),
+                  SizedBox(width: 3),
+                  Text(
+                    'Sharjah',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontFamily: 'Satoshi',
+                      fontSize: 9.75,
+                      fontWeight: FontWeight.w500,
+                      height: 13 / 9.75,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          const Positioned(
+            left: 0,
+            top: 230,
+            child: Text(
+              'Trek Domane',
+              style: TextStyle(
+                fontFamily: 'Outfit',
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                height: 21 / 14,
+                color: Color(0xFF1A1C20),
+              ),
+            ),
+          ),
+
+          Positioned(
+            left: 0,
+            top: 254,
+            child: Text(
+              'Posted by Mahmoud shaalan',
+              style: TextStyle(
+                fontFamily: 'Outfit',
+                fontSize: 11,
+                fontWeight: FontWeight.w400,
+                height: 14 / 11,
+                color: const Color(0xFF1A1C20).withOpacity(0.5),
+              ),
+            ),
+          ),
+
+          Positioned(
+            left: 157,
+            top: 255,
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children:  [
-                     Text(
-  "Trek Domane",
-  style: const TextStyle(
-    fontFamily: "Outfit",
-    fontSize: 14,
-    fontWeight: FontWeight.w500,
-    height: 1.5, // 150% line height
-    letterSpacing: 0,
-    color: AppColors.textDark,
-  ),
-),
-                      SizedBox(height: 3),
-                     Text(
-  "Posted by Mahmoud shaalan • 2 days ago",
-  style: TextStyle(
-    fontFamily: "Outfit",
-    fontSize: 11,
-    fontWeight: FontWeight.w400,
-    height: 1.0, // 100% line height
-    letterSpacing: 0,
-    color: AppColors.textDark.withValues(alpha: 0.5),
-  ),
-),
-                    ],
+                Container(
+                  width: 3,
+                  height: 3,
+                  decoration: const BoxDecoration(
+                    color: Color(0xFF6B7280),
+                    shape: BoxShape.circle,
                   ),
                 ),
                 const SizedBox(width: 8),
-              Text(
-  "7500 AED",
-  style: const TextStyle(
-    fontFamily: "Outfit",
-    fontSize: 16,
-    fontWeight: FontWeight.w700,
-    height: 1.5, 
-    letterSpacing: 0,
-    color: AppColors.deepRed,
-  ),
-),
+                Text(
+                  '2 days ago',
+                  style: TextStyle(
+                    fontFamily: 'Outfit',
+                    fontSize: 10,
+                    fontWeight: FontWeight.w400,
+                    height: 11 / 10,
+                    color: const Color(0xFF1A1C20).withOpacity(0.5),
+                  ),
+                ),
               ],
+            ),
+          ),
+
+          const Positioned(
+            right: 0,
+            top: 239,
+            child: Text(
+              '7500 AED',
+              style: TextStyle(
+                fontFamily: 'Outfit',
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                height: 24 / 16,
+                color: Color(0xFFF9660E),
+              ),
             ),
           ),
         ],
@@ -138,7 +140,6 @@ class ListingsScreen extends StatelessWidget {
     );
   }
 
-  /// BACK BUTTON
   Widget _backButton(BuildContext context) {
     return GestureDetector(
       onTap: () => Navigator.pop(context),
@@ -152,13 +153,13 @@ class ListingsScreen extends StatelessWidget {
           left: 10,
         ),
         decoration: BoxDecoration(
-          color: const Color(0x5CC12D32),
+          color: const Color.fromRGBO(249, 102, 14, 0.36),
           borderRadius: BorderRadius.circular(53.8462),
         ),
         child: const Icon(
           Icons.arrow_back,
           size: 13,
-          color: Color(0xFFC12D32),
+          color: Color(0xFFF9660E),
         ),
       ),
     );
@@ -169,89 +170,70 @@ class ListingsScreen extends StatelessWidget {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        backgroundColor: AppColors.softCream,
+        backgroundColor: Colors.white,
         body: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.only(top: 30),
+            padding: const EdgeInsets.only(top: 36),
             child: Column(
               children: [
-                /// HEADER
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  padding: const EdgeInsets.symmetric(horizontal: 21),
                   child: Row(
                     children: [
                       _backButton(context),
                       const Spacer(),
                       const Text(
-                        "My Listings",
+                        'My Listings',
+                        textAlign: TextAlign.center,
                         style: TextStyle(
+                          fontFamily: 'Outfit',
                           fontSize: 22,
                           fontWeight: FontWeight.w600,
+                          height: 28 / 22,
                           color: Colors.black,
                         ),
                       ),
                       const Spacer(),
-                      const SizedBox(width: 35)
+                      const SizedBox(width: 35),
                     ],
                   ),
                 ),
-          
-                const SizedBox(height: 20),
-          
-                /// TABS
-                const TabBar(
-  indicatorColor: const Color(0xFFC12D32),
-  indicatorWeight: 2,
-  indicatorSize: TabBarIndicatorSize.tab, // full tab width
-  labelColor: const Color(0xFFC12D32),
-  unselectedLabelColor: Colors.black54,
-  labelStyle: const TextStyle(
-    fontSize: 16,
-    fontWeight: FontWeight.w500,
-    fontFamily: "Outfit",
-  ),
-  tabs: const [
-    Tab(
-      child: Align(
-        alignment: Alignment.center,
-        child: const Text(
-  "Active listings",
-  style: TextStyle(
-    fontFamily: "Outfit",
-    fontSize: 16,
-    fontWeight: FontWeight.w500,
-    height: 1.0,
-    letterSpacing: 0,
-  ),
-),
-      ),
-    ),
-    Tab(
-      child: Align(
-        alignment: Alignment.center,
-      child: const Text(
-  "Sold items",
-  style: TextStyle(
-    fontFamily: "Outfit",
-    fontSize: 16,
-    fontWeight: FontWeight.w500,
-    height: 1.0, // 100% line height
-    letterSpacing: 0,
-  ),
-),
-      ),
-    ),
-  ],
-),
-          
-                /// TAB VIEW
+
+                const SizedBox(height: 35),
+
+                TabBar(
+                  indicatorColor: const Color(0xFFF9660E),
+                  indicatorWeight: 3,
+                  indicatorSize: TabBarIndicatorSize.tab,
+                  dividerColor: Colors.black.withOpacity(0.5),
+                  dividerHeight: 3,
+                  labelColor: const Color(0xFFF9660E),
+                  unselectedLabelColor: Colors.black.withOpacity(0.5),
+                  labelStyle: const TextStyle(
+                    fontFamily: 'Outfit',
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    height: 20 / 16,
+                  ),
+                  unselectedLabelStyle: const TextStyle(
+                    fontFamily: 'Outfit',
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    height: 20 / 16,
+                  ),
+                  tabs: const [
+                    Tab(text: 'Active listings'),
+                    Tab(text: 'Sold items'),
+                  ],
+                ),
+
                 Expanded(
                   child: TabBarView(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 16),
+                        padding: const EdgeInsets.fromLTRB(16, 36, 16, 0),
                         child: ListView.separated(
+                          padding: const EdgeInsets.only(bottom: 80),
                           itemCount: 1,
                           separatorBuilder: (_, __) =>
                               const SizedBox(height: 16),
@@ -259,20 +241,20 @@ class ListingsScreen extends StatelessWidget {
                               _listingCard(context),
                         ),
                       ),
-          
-                      /// SOLD ITEMS
+
                       Center(
                         child: Text(
-                          "No sold items yet",
+                          'No sold items yet',
                           style: TextStyle(
-                            color:
-                                AppColors.textDark.withValues(alpha: 0.6),
+                            fontFamily: 'Outfit',
+                            fontSize: 14,
+                            color: AppColors.textDark.withOpacity(0.6),
                           ),
                         ),
                       ),
                     ],
                   ),
-                )
+                ),
               ],
             ),
           ),

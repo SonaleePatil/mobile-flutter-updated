@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_colors.dart';
-import '../../../shared/widgets/app_button.dart';
+import 'package:flutter/services.dart';
+
 import '../../../shared/widgets/adaptive_image.dart';
 import 'listings_screen.dart';
 
@@ -18,252 +18,242 @@ class LivePostedScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.softCream,
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle.dark,
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: SafeArea(
+          child: Stack(
+            children: [
+              Positioned(
+                left: -36,
+                top: 273,
+                child: Container(
+                  width: 196,
+                  height: 196,
+                  decoration: const BoxDecoration(
+                    color: Color(0xFFF9660E),
+                    shape: BoxShape.circle,
+                  ),
+                ),
+              ),
 
-      /// APPBAR
-      appBar: AppBar(
-        backgroundColor: AppColors.softCream,
-        elevation: 0,
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 16),
-          child: InkWell(
-            borderRadius: BorderRadius.circular(50),
-            onTap: () {
-              if (Navigator.of(context).canPop()) {
-                Navigator.pop(context);
-              }
-            },
-            child: Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                color: AppColors.deepRed.withValues(alpha: 0.3),
-                shape: BoxShape.circle,
+              Positioned(
+                left: 21,
+                top: 36,
+                child: GestureDetector(
+                  onTap: () => Navigator.pop(context),
+                  child: Container(
+                    width: 35,
+                    height: 35,
+                    padding: const EdgeInsets.fromLTRB(10, 10, 7.54, 9.46),
+                    decoration: BoxDecoration(
+                      color: const Color.fromRGBO(249, 102, 14, 0.36),
+                      borderRadius: BorderRadius.circular(53.8462),
+                    ),
+                    child: const Icon(
+                      Icons.arrow_back,
+                      size: 13,
+                      color: Color(0xFFF9660E),
+                    ),
+                  ),
+                ),
               ),
-              child: const Icon(
-                Icons.arrow_back_rounded,
-                color: AppColors.deepRed,
-                size: 20,
+
+              Positioned(
+                top: 20,
+                left: 70,
+                child: Image.asset(
+                  'assets/icons/checkmark.gif',
+                  width: 250,
+                  height: 250,
+                  fit: BoxFit.cover,
+                ),
               ),
-            ),
+
+              const Positioned(
+                top: 238,
+                left: 0,
+                right: 0,
+                child: Text(
+                  'Your item is live',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontFamily: 'Outfit',
+                    fontSize: 30,
+                    fontWeight: FontWeight.w600,
+                    height: 38 / 30,
+                    color: Color(0xFF333333),
+                  ),
+                ),
+              ),
+
+              const Positioned(
+                top: 286,
+                left: 0,
+                right: 0,
+                child: Text(
+                  'You have successfully\nposted listing',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontFamily: 'Outfit',
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                    height: 18 / 14,
+                    color: Color(0xFF333333),
+                  ),
+                ),
+              ),
+
+              Positioned(
+                top: 342,
+                left: 16,
+                right: 17,
+                child: _listingCard(),
+              ),
+
+              Positioned(
+                left: 16,
+                right: 16,
+                bottom: 116,
+                child: SizedBox(
+                  height: 51,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => ListingsScreen(imagePath: imagePath),
+                        ),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      elevation: 0,
+                      backgroundColor: const Color(0xFFF9660E),
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: const Text(
+                      'View Listing',
+                      style: TextStyle(
+                        fontFamily: 'Outfit',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        height: 24 / 16,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+
+              Positioned(
+                left: 16,
+                right: 16,
+                bottom: 53,
+                child: SizedBox(
+                  height: 51,
+                  child: OutlinedButton(
+                    onPressed: () => Navigator.pop(context),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: const Color(0xFFF9660E),
+                      side: const BorderSide(color: Color(0xFFF9660E)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: const Text(
+                      'Post Another Item',
+                      style: TextStyle(
+                        fontFamily: 'Outfit',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        height: 24 / 16,
+                        color: Color(0xFFF9660E),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
+    );
+  }
 
-      body: SafeArea(
-        child: Stack(
-          children: [
-
-            /// FRAME IMAGE (NO PADDING)
-            Positioned(
-               left: -32,
-              top: 172,
-              child: Image.asset(
-                "assets/images/frame_1.png",
-                width: 135,
-                fit: BoxFit.contain,
-              ),
+  Widget _listingCard() {
+    return Container(
+      width: 357,
+      height: 135,
+      decoration: BoxDecoration(
+        color: const Color(0xFFFEBFA2),
+        borderRadius: BorderRadius.circular(20.6999),
+      ),
+      child: Row(
+        children: [
+          const SizedBox(width: 16),
+          Container(
+            width: 95,
+            height: 87,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(5),
             ),
-
-            /// MAIN CONTENT
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-
-                  const SizedBox(height: 12),
-
-                  /// TOP DECORATIVE CIRCLE
-                 Center(
-  child: ClipRRect(
-    borderRadius: BorderRadius.circular(55),
-    child: Image.asset(
-      "assets/icons/checkmark.gif",
-      width: 110,
-      height: 110,
-      fit: BoxFit.cover,
-    ),
-  ),
-),
-
-                  const SizedBox(height: 16),
-
-                  /// TITLE
-                  const Text(
-  "Your item is live",
-  textAlign: TextAlign.center,
-  style: const TextStyle(
-    fontFamily: "Outfit",
-    fontSize: 30,
-    fontWeight: FontWeight.w600,
-    height: 1.0, // 100% line height
-    letterSpacing: 0,
-    color: AppColors.charcoal,
-  ),
-),
-
-                  const SizedBox(height: 8),
-
+            clipBehavior: Clip.antiAlias,
+            child: AdaptiveImage(
+              imagePath: imagePath ?? 'assets/images/cycling_1.png',
+              width: 100.5,
+              height: 134,
+              fit: BoxFit.cover,
+            ),
+          ),
+          const SizedBox(width: 15),
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
                 Text(
-  "You have successfully\nposted listing",
-  textAlign: TextAlign.center,
-  style: TextStyle(
-    fontFamily: "Outfit",
-    fontSize: 14,
-    fontWeight: FontWeight.w400,
-    height: 1.0, // 100% line height
-    letterSpacing: 0,
-    color: AppColors.charcoal,
-  ),
-),
-
-                  const SizedBox(height: 24),
-
-                  /// LISTING CARD
-                  Container(
-                    width: 357,
-                    height: 135,
-                    padding: const EdgeInsets.all(14),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFFFDDA8),
-                      borderRadius: BorderRadius.circular(20.7),
-                      border: Border.all(
-                        color: const Color(0xFFFFDDA8),
-                        width: 1.5,
-                      ),
-                    ),
-                    child: Row(
-                      children: [
-
-                        /// IMAGE
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(12),
-                          child: AdaptiveImage(
-                            imagePath: imagePath ?? "assets/images/cycling_1.png",
-                            width: 100.5,
-                            height: 110,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-
-                        const SizedBox(width: 16),
-
-               
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-
-                            Text(
-  title ?? "Untitled",
-  style: const TextStyle(
-    fontFamily: "Outfit",
-    fontSize: 18,
-    fontWeight: FontWeight.w500,
-    height: 1.0, // 100% line height
-    letterSpacing: 0,
-    color: AppColors.charcoal,
-  ),
-),
-
-                              const SizedBox(height: 6),
-
-                           Text(
-  price ?? "",
-  style: const TextStyle(
-    fontFamily: "Outfit",
-    fontSize: 15,
-    fontWeight: FontWeight.w600,
-    height: 1.0, // 100% line height
-    letterSpacing: 0,
-    color: AppColors.charcoal,
-  ),
-),
-
-                              const SizedBox(height: 6),
-
-                            Text(
-  "Posted by 2mins ago",
-  style: TextStyle(
-    fontFamily: "Outfit",
-    fontSize: 11,
-    fontWeight: FontWeight.w400,
-    height: 1.0, // 100% line height
-    letterSpacing: 0,
-    color: AppColors.textDark.withValues(alpha: 0.6),
-  ),
-),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+                  title ?? 'Trek Domane',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontFamily: 'Outfit',
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    height: 23 / 18,
+                    color: Color(0xFF333333),
                   ),
-
-                  const Spacer(),
-
-                
-                  SizedBox(
-                    width: double.infinity,
-                    child: AppButton(
-                     label: "View Listing",
-textStyle: const TextStyle(
-  fontFamily: "Outfit",
-  fontSize: 16,
-  fontWeight: FontWeight.w500,
-  height: 1.5, // 24px line height
-  letterSpacing: 0,
-),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => ListingsScreen(
-                              imagePath: imagePath,
-                            ),
-                          ),
-                        );
-                      },
-                      type: AppButtonType.primary,
-                      backgroundColor: AppColors.deepRed,
-                      textColor: Colors.white,
-                      height: 50,
-                      borderRadius: 10,
-                    ),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  price ?? '7500 AED',
+                  style: const TextStyle(
+                    fontFamily: 'Outfit',
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                    height: 19 / 15,
+                    color: Color(0xFF333333),
                   ),
-
-                  const SizedBox(height: 12),
-
-             
-                  AppButton(
-                   label: "Post Another Item",
-textStyle:  TextStyle(
-  fontFamily: "Outfit",
-  fontSize: 16,
-  fontWeight: FontWeight.w500,
-  height: 1.5, // 24px line height
-  letterSpacing: 0,
-color: AppColors.deepRed,
-),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    backgroundColor: Colors.white,
-                    borderColor: AppColors.deepRed,
-                    textColor: AppColors.deepRed,
-                    height: 50,
-                    borderRadius: 10,
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  'Posted by 2mins ago',
+                  style: TextStyle(
+                    fontFamily: 'Outfit',
+                    fontSize: 11,
+                    fontWeight: FontWeight.w400,
+                    height: 14 / 11,
+                    color: const Color(0xFF1A1C20).withOpacity(0.5),
                   ),
-
-                  const SizedBox(height: 24),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+          const SizedBox(width: 17),
+        ],
       ),
     );
   }

@@ -11,6 +11,10 @@ import 'features/onboarding/view/onboarding_screen.dart';
 import 'features/challenges/view/my_challenges_screen.dart';
 import 'features/languageOption/view/languageSelectionScreen.dart';
 import 'package:adcc/features/auth/view/setupProfile/setup_profile_screen.dart';
+import 'package:adcc/features/store/view/Screen/store_screen.dart';
+import 'package:adcc/features/store/view/listings_screen.dart';
+import 'package:adcc/features/store/view/live_posted_screen.dart';
+import 'package:adcc/features/challenges/view/leaderboard_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -90,7 +94,14 @@ class _MyAppState extends State<MyApp> {
 
       supportedLocales: const [Locale('en'), Locale('ar')],
 
-      home: const SplashScreen(),
+      // home: const SplashScreen(),
+      home: const LeaderboardScreen(),
+      // home: const LivePostedScreen(
+      //   title: 'Trek Domane',
+      //   price: '7500 AED',
+      // ),
+      // home: const StoreScreen(),
+      // home: const ListingsScreen(),
       // home: const SetupProfileScreen(),
       // home: const LanguageSelectionScreen(),
       // home: const OnboardingScreen(),

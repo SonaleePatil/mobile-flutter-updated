@@ -1,11 +1,10 @@
-import 'package:adcc/features/store/view/sections/Store%20Screen/marketplace_search_box.dart';
-import 'package:adcc/features/store/view/sections/Store%20Screen/store_header.dart';
-import 'package:adcc/features/store/view/sections/Store%20Screen/store_product_grid.dart';
+import 'dart:ui';
+
 import 'package:adcc/features/store/viewmodels/store_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
 import '../../../../core/theme/app_colors.dart';
-import '../../../../shared/widgets/app_button.dart';
-import '../../../../shared/widgets/category_selector.dart';
 import 'store_details_screen.dart';
 import '../sell_product_screen.dart';
 
@@ -17,7 +16,7 @@ class StoreScreen extends StatefulWidget {
 }
 
 class _StoreScreenState extends State<StoreScreen> {
-  int _selectedCategoryIndex = 0;
+  final int _selectedCategoryIndex = 0;
   String _searchQuery = '';
   final TextEditingController _searchController = TextEditingController();
   final StoreViewModel _viewModel = StoreViewModel();
@@ -29,96 +28,45 @@ class _StoreScreenState extends State<StoreScreen> {
     'Accessories',
   ];
 
-
   final List<Map<String, dynamic>> _products = [
     {
       'id': 'product_1',
       'image': 'assets/images/cycling_1.png',
-      'title': 'Trek Domane',
-      'postedBy': 'Mahmoud shaalan',
-      'price': '7500 AED',
-      'timePosted': '2 days ago',
-      'location': 'Sharjah',
-      'category': 'Cycles',
+      'title': 'DMT KR0 Road Shoes',
+      'postedBy': 'Mark McEvoy',
+      'price': '1300 AED',
+      'timePosted': '1 year ago',
+      'location': 'IRELAND',
+      'category': 'Apparel',
     },
     {
       'id': 'product_2',
       'image': 'assets/images/cycling_1.png',
-      'title': 'DMT KR0 Road Shoes',
-      'postedBy': 'Mark McEvoy',
-      'price': '1300 AED',
-      'timePosted': '5 days ago',
-      'location': 'Khusab',
-      'category': 'Apparel',
+      'title': 'Colnago be',
+      'postedBy': 'Al Khaili',
+      'price': '14500 AED',
+      'timePosted': '1 year ago',
+      'location': 'UAE',
+      'category': 'Cycles',
     },
     {
       'id': 'product_3',
       'image': 'assets/images/cycling_1.png',
-      'title': 'Garmin Edge 1030 Plus',
-      'postedBy': 'Khalid Al Nahyan',
-      'price': '1800 AED',
-      'timePosted': '1 day ago',
-      'location': 'Al Ain',
-      'category': 'Accessories',
+      'title': 'Colnago concept',
+      'postedBy': 'Achraf khoudiri',
+      'price': '2000 AED',
+      'timePosted': '1 year ago',
+      'location': 'UAE',
+      'category': 'Cycles',
     },
     {
       'id': 'product_4',
       'image': 'assets/images/cycling_1.png',
-      'title': 'DMT KR0 Road Shoes',
-      'postedBy': 'Mark McEvoy',
-      'price': '1300 AED',
-      'timePosted': '5 days ago',
-      'location': 'Khusab',
-      'category': 'Apparel',
-    },
-    {
-      'id': 'product_5',
-      'image': 'assets/images/cycling_1.png',
-      'title': 'Shimano Pedals & Shoes',
-      'postedBy': 'Mark McEvoy',
-      'price': '850 AED',
-      'timePosted': '2 days ago',
-      'location': 'Sharjah',
-      'category': 'Accessories',
-    },
-    {
-      'id': 'product_6',
-      'image': 'assets/images/cycling_1.png',
-      'title': 'Trek Domane',
-      'postedBy': 'Mahmoud shaalan',
-      'price': '7500 AED',
-      'timePosted': '2 days ago',
-      'location': 'Sharjah',
-      'category': 'Cycles',
-    },
-    {
-      'id': 'product_7',
-      'image': 'assets/images/cycling_1.png',
-      'title': 'DMT KR0 Road Shoes',
-      'postedBy': 'Mark McEvoy',
-      'price': '1300 AED',
-      'timePosted': '5 days ago',
-      'location': 'Khusab',
-      'category': 'Apparel',
-    },
-    {
-      'id': 'product_8',
-      'image': 'assets/images/cycling_1.png',
       'title': 'Garmin Edge 1030 Plus',
       'postedBy': 'Khalid Al Nahyan',
       'price': '1800 AED',
-      'timePosted': '1 day ago',
-      'location': 'Al Ain',
-      'category': 'Accessories',
-    },
-    {
-      'id': 'product_9',
-      'image': 'assets/images/cycling_1.png',
-      'title': 'Shimano Pedals & Shoes',
-      'postedBy': 'Mark McEvoy',
-      'price': '850 AED',
-      'timePosted': '2 days ago',
-      'location': 'Sharjah',
+      'timePosted': '1 year ago',
+      'location': 'Al Ain, UAE',
       'category': 'Accessories',
     },
   ];
@@ -144,193 +92,310 @@ class _StoreScreenState extends State<StoreScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.softCream,
-      body: SafeArea(
-        child: ListView(
+    final products = _getFilteredProducts();
+
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle.light,
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: ListView(
           physics: const BouncingScrollPhysics(),
-           padding: const EdgeInsets.symmetric(vertical: 24),
+          padding: EdgeInsets.zero,
           children: [
-       
-           StoreHeader(
-    imagePath: 'assets/images/store_header_banner.png',
-    showBackButton: true,
-    showNotificationIcon: true,
-    onBackTap: () => Navigator.pop(context),
-  ),
-
-            // Main Content
+            _buildHeroSection(),
+            const SizedBox(height: 36),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 28),
-
-        
-                  _buildTitleSection(),
-
-                  const SizedBox(height: 21),
-
-                MarketplaceSearchBox(
-  controller: _searchController,
-  onChanged: (value) {
-    setState(() {
-      _searchQuery = value;
-    });
-  },
-),
-                  const SizedBox(height: 29),
-
-                 
-                  CategorySelector(
-                    categories: _categories,
-                    selectedIndex: _selectedCategoryIndex,
-                    onSelected: (index) {
-                      setState(() {
-                        _selectedCategoryIndex = index;
-                      });
-                    },
-                  ),
-
-                  const SizedBox(height: 40),
-
-                  _buildResultsHeader(),
-
-                  const SizedBox(height: 20),
-                  if (_viewModel.isLoading)
-                    const Center(
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(vertical: 24),
-                        child: CircularProgressIndicator(),
-                      ),
-                    )
-                  else
-                    StoreProductGrid(
-                      products: _getFilteredProducts(),
-                      onTap: (product) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => StoreDetailsScreen(
-                              productId: product['id'],
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-
-                  const SizedBox(height: 24),
-                ],
-              ),
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+              child: _buildResultsHeader(products.length),
             ),
+            const SizedBox(height: 20),
+            if (_viewModel.isLoading)
+              const SizedBox(
+                height: 120,
+                child: Center(child: CircularProgressIndicator()),
+              )
+            else
+              _buildProductCarousel(products),
+            const SizedBox(height: 80),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildTitleSection() {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Expanded(
-          // prevents overflow
-          child: Text(
-  'Cycling Marketplace',
-  maxLines: 2,
-  overflow: TextOverflow.ellipsis,
-  style: const TextStyle(
-    fontFamily: 'Outfit',
-    fontSize: 30,
-    fontWeight: FontWeight.w600,
-    height: 1.0,
-    letterSpacing: 0,
-    color: AppColors.textDark,
-  ),
-),
-        ),
-        const SizedBox(width: 12),
-       AppButton(
-  label: '+ Sell',
-  onPressed: () {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) => const SellProductScreen(),
+  Widget _buildHeroSection() {
+    return SizedBox(
+      height: 305,
+      child: Stack(
+        children: [
+          Container(
+            height: 261,
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                stops: [0.8362, 1],
+                colors: [
+                  Color(0xFFF9660E),
+                  Colors.white,
+                ],
+              ),
+            ),
+          ),
+          Positioned(
+            left: 16,
+            top: 59,
+            child: IconButton(
+              onPressed: () => Navigator.pop(context),
+              icon: const Icon(Icons.arrow_back, color: Colors.white),
+              iconSize: 24,
+              padding: EdgeInsets.zero,
+              constraints: const BoxConstraints.tightFor(
+                width: 40,
+                height: 40,
+              ),
+              style: IconButton.styleFrom(
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              ),
+            ),
+          ),
+          const Positioned(
+            left: 16,
+            right: 16,
+            top: 111,
+            child: Text(
+              'Cycling Marketplace',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontFamily: 'Outfit',
+                fontSize: 28,
+                fontWeight: FontWeight.w600,
+                height: 35 / 28,
+                color: Colors.white,
+              ),
+            ),
+          ),
+          Positioned(
+            left: 16,
+            right: 16,
+            top: 163,
+            child: _buildSearchBox(),
+          ),
+          Positioned(
+            left: 16,
+            right: 16,
+            top: 221,
+            child: _buildSellCard(),
+          ),
+        ],
       ),
-    );
-  },
-  type: AppButtonType.primary,
-  backgroundColor: AppColors.deepRed,
-  textColor: Colors.white,
-  width: 80,
-  height: 36,
-  borderRadius: 10,
-  textStyle: const TextStyle(
-    fontFamily: 'Outfit',
-    fontSize: 16,
-    fontWeight: FontWeight.w500,
-    height: 1.23,
-    letterSpacing: 0,
-    color: Colors.white,
-  ),
-),
-      ],
     );
   }
 
-  Widget _buildResultsHeader() {
-    final filteredProducts = _getFilteredProducts();
-    final resultCount = filteredProducts.length;
+  Widget _buildSearchBox() {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(12),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+        child: Container(
+          height: 38,
+          decoration: BoxDecoration(
+            color: Colors.white.withValues(alpha: 0.21),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Row(
+            children: [
+              const SizedBox(width: 11),
+              Container(
+                height: 23.5,
+                width: 23.5,
+                padding: const EdgeInsets.fromLTRB(
+                  5.42,
+                  5.06,
+                  5.06,
+                  4.21,
+                ),
+                decoration: BoxDecoration(
+                  // color: const Color(0xFF333333),
+                  color: const Color.fromRGBO(140, 140, 140, 0.25),
+                  borderRadius: BorderRadius.circular(36.1539),
+                ),
+                child: const Icon(
+                  Icons.search,
+                  color: Colors.white,
+                  size: 12.05,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: TextField(
+                  controller: _searchController,
+                  onChanged: (value) {
+                    setState(() {
+                      _searchQuery = value;
+                    });
+                  },
+                  cursorColor: Colors.white,
+                  style: const TextStyle(
+                    fontFamily: 'Outfit',
+                    fontSize: 12,
+                    fontWeight: FontWeight.w400,
+                    height: 15 / 12,
+                    color: Colors.white,
+                  ),
+                  decoration: const InputDecoration(
+                    hintText: 'Search marketplace...',
+                    hintStyle: TextStyle(
+                      fontFamily: 'Outfit',
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                      height: 15 / 12,
+                      color: Colors.white,
+                    ),
+                    border: InputBorder.none,
+                    isDense: true,
+                    contentPadding: EdgeInsets.zero,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 14),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
+  Widget _buildSellCard() {
+    return Container(
+      height: 84,
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: const Color(0xFFE5E7EB),
+          width: 1.16585,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.1),
+            blurRadius: 3,
+            offset: const Offset(0, 1),
+          ),
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.1),
+            blurRadius: 2,
+            offset: const Offset(0, 1),
+            spreadRadius: -1,
+          ),
+        ],
+      ),
+      child: SizedBox.expand(
+        child: ElevatedButton.icon(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const SellProductScreen(),
+              ),
+            );
+          },
+          icon: const Icon(Icons.add, size: 20),
+          label: const Text('Sell your product'),
+          style: ElevatedButton.styleFrom(
+            elevation: 0,
+            backgroundColor: const Color(0xFFFDE2D7),
+            foregroundColor: const Color(0xFFF9660E),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            textStyle: const TextStyle(
+              fontFamily: 'Outfit',
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+              height: 24 / 16,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildProductCarousel(List<Map<String, dynamic>> products) {
+    return SizedBox(
+      height: 456,
+      child: ListView.separated(
+        padding: const EdgeInsets.only(left: 15, right: 15),
+        scrollDirection: Axis.horizontal,
+        physics: const BouncingScrollPhysics(),
+        itemCount: products.length,
+        separatorBuilder: (_, __) => const SizedBox(width: 12),
+        itemBuilder: (context, index) {
+          final product = products[index];
+
+          return _FigmaStoreProductCard(
+            product: product,
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => StoreDetailsScreen(
+                    productId: product['id'],
+                  ),
+                ),
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildResultsHeader(int resultCount) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-       Text(
-  'Showing $resultCount Result${resultCount != 1 ? 's' : ''}',
-  style: const TextStyle(
-    fontFamily: 'Outfit',
-    fontSize: 20,
-    fontWeight: FontWeight.w600,
-    height: 1.0,
-    letterSpacing: 0,
-    color: AppColors.textDark,
-  ),
-),
+        Text(
+          'Showing $resultCount Result${resultCount != 1 ? 's' : ''}',
+          style: const TextStyle(
+            fontFamily: 'Outfit',
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+            height: 25 / 20,
+            letterSpacing: 0,
+            color: AppColors.textDark,
+          ),
+        ),
         GestureDetector(
-          onTap: () {
-           
-          },
-          child: Row(
+          onTap: () {},
+          child: const Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-             Image.asset(
-  "assets/icons/filter.png",
-  height: 16,
-  width: 16,
-  color: AppColors.textDark, 
-),
-              const SizedBox(width: 6),
-              const Text(
-  'Filter',
-  textAlign: TextAlign.center,
-  style: const TextStyle(
-    fontFamily: 'Satoshi',
-    fontSize: 14,
-    fontWeight: FontWeight.w500,
-    height: 1.0,
-    letterSpacing: 0,
-    color: AppColors.textDark,
-  ),
-),
+              Icon(
+                Icons.tune,
+                color: AppColors.textDark,
+                size: 18,
+              ),
+              SizedBox(width: 7),
+              Text(
+                'Filter',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontFamily: 'Satoshi',
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  height: 19 / 14,
+                  letterSpacing: 0,
+                  color: AppColors.textDark,
+                ),
+              ),
             ],
           ),
         ),
       ],
     );
   }
-
 
   List<Map<String, dynamic>> _getFilteredProducts() {
     final selectedCategory = _categories[_selectedCategoryIndex];
@@ -345,7 +410,6 @@ class _StoreScreenState extends State<StoreScreen> {
 
     // Filter by category
     if (_selectedCategoryIndex > 0) {
-
       filtered = filtered.where((product) {
         final productCategory = product['category'] ?? '';
         return productCategory == selectedCategory;
@@ -363,5 +427,196 @@ class _StoreScreenState extends State<StoreScreen> {
     }
 
     return filtered;
+  }
+}
+
+class _FigmaStoreProductCard extends StatelessWidget {
+  const _FigmaStoreProductCard({
+    required this.product,
+    required this.onTap,
+  });
+
+  final Map<String, dynamic> product;
+  final VoidCallback onTap;
+
+  static const Color _brandOrange = Color(0xFFF9660E);
+  static const Color _cardPeach = Color(0xFFFDE2D7);
+
+  @override
+  Widget build(BuildContext context) {
+    final postedBy = (product['postedBy'] ?? '').toString();
+    final location = (product['location'] ?? '').toString();
+    final sellerLocation = [
+      if (postedBy.isNotEmpty) postedBy,
+      if (location.isNotEmpty) location,
+    ].join(', ');
+
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 314,
+        height: 456,
+        decoration: BoxDecoration(
+          color: _cardPeach,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Stack(
+          children: [
+            Positioned(
+              left: 12,
+              top: 12,
+              child: Container(
+                width: 290,
+                height: 351,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                clipBehavior: Clip.antiAlias,
+                child: _buildProductImage(product['image']?.toString() ?? ''),
+              ),
+            ),
+            Positioned(
+              left: 12,
+              right: 112,
+              top: 373,
+              child: Text(
+                product['title']?.toString() ?? '',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontFamily: 'Outfit',
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  height: 21 / 14,
+                  color: AppColors.textDark,
+                ),
+              ),
+            ),
+            Positioned(
+              left: 12,
+              top: 394,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    product['price']?.toString() ?? '',
+                    style: const TextStyle(
+                      fontFamily: 'Outfit',
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      height: 24 / 16,
+                      color: _brandOrange,
+                    ),
+                  ),
+                  const SizedBox(width: 9),
+                  Container(
+                    width: 3,
+                    height: 3,
+                    decoration: const BoxDecoration(
+                      color: Color(0xFF6B7280),
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                  const SizedBox(width: 9),
+                  Text(
+                    product['timePosted']?.toString() ?? '',
+                    style: TextStyle(
+                      fontFamily: 'Outfit',
+                      fontSize: 10,
+                      fontWeight: FontWeight.w400,
+                      height: 11 / 10,
+                      color: AppColors.textDark.withValues(alpha: 0.5),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Positioned(
+              left: 209,
+              top: 390,
+              child: SizedBox(
+                width: 93,
+                height: 30,
+                child: ElevatedButton(
+                  onPressed: onTap,
+                  style: ElevatedButton.styleFrom(
+                    elevation: 0,
+                    padding: EdgeInsets.zero,
+                    backgroundColor: _brandOrange,
+                    foregroundColor: const Color(0xFFFFF4E3),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(9.11628),
+                    ),
+                    textStyle: const TextStyle(
+                      fontFamily: 'Outfit',
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                      height: 16 / 13,
+                    ),
+                  ),
+                  child: const Text('View Details'),
+                ),
+              ),
+            ),
+            Positioned(
+              left: 12,
+              top: 423,
+              child: Icon(
+                Icons.location_on,
+                size: 13,
+                color: AppColors.textDark.withValues(alpha: 0.5),
+              ),
+            ),
+            Positioned(
+              left: 30,
+              right: 12,
+              top: 422,
+              child: Text(
+                sellerLocation,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontFamily: 'Outfit',
+                  fontSize: 11,
+                  fontWeight: FontWeight.w400,
+                  height: 14 / 11,
+                  color: AppColors.textDark.withValues(alpha: 0.5),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildProductImage(String image) {
+    if (image.startsWith('http')) {
+      return Image.network(
+        image,
+        width: 290,
+        height: 351,
+        fit: BoxFit.cover,
+        errorBuilder: (_, __, ___) => _fallbackImage(),
+      );
+    }
+
+    return Image.asset(
+      image.isEmpty ? 'assets/images/cycling_1.png' : image,
+      width: 290,
+      height: 351,
+      fit: BoxFit.cover,
+      errorBuilder: (_, __, ___) => _fallbackImage(),
+    );
+  }
+
+  Widget _fallbackImage() {
+    return Image.asset(
+      'assets/images/cycling_1.png',
+      width: 290,
+      height: 351,
+      fit: BoxFit.cover,
+    );
   }
 }

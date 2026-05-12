@@ -1,14 +1,8 @@
-import 'package:adcc/features/store/view/sections/Store%20Details/store_safety_secction.dart';
-import 'package:adcc/shared/widgets/banner_header.dart';
 import 'package:flutter/material.dart';
-import '../../../../core/theme/app_colors.dart';
+import 'package:flutter/services.dart';
+
 import '../../models/store_item_model.dart';
 import '../../repositories/store_repository.dart';
-import '../sections/Store Details/store_product_info_section.dart';
-import '../sections/Store Details/store_seller_section.dart';
-import '../sections/Store Details/store_description_section.dart';
-import '../sections/Store Details/store_product_details_section.dart';
-import '../sections/Store Details/store_action_buttons_section.dart';
 
 class StoreDetailsScreen extends StatefulWidget {
   final String productId;
@@ -48,22 +42,24 @@ class _StoreDetailsScreenState extends State<StoreDetailsScreen> {
       _productData = {
         'id': widget.productId,
         'image': 'assets/images/store_header_banner.png',
-        'title': 'Trek Domane',
-        'location': 'Sharjah',
+        'title': 'Carbon Road Bike - Specialized',
+        'location': 'Abu Dhabi City',
         'timePosted': '2 days ago',
-        'currentPrice': 'AED 7,500',
-        'originalPrice': 'AED 9,000',
+        'currentPrice': 'AED 12,999',
+        'originalPrice': 'AED 15,999',
         'isNegotiable': true,
-        'sellerName': 'Mahmoud shaalan',
+        'sellerName': 'Ahmed Al Mansouri',
         'sellerImage': 'assets/images/profile.png',
         'listingCount': 3,
         'rating': 4.9,
         'description':
-            'Professional carbon fiber road bike, barely used. Shimano Ultegra groupset, excellent condition.',
+            'Professional carbon fiber road bike, barely used. Shimano Ultegra groupset, excellent condition. Only 500km ridden. Selling because upgrading to a new model.',
         'productDetails': [
           'Size: 54cm',
-          'Disc Brakes',
-          'Carbon Fiber Frame',
+          'Disc brakes',
+          'Carbon fiber frame',
+          'Condition: Used',
+          'Shimano Ultegra R8000',
         ],
       };
       _isLoading = false;
@@ -92,107 +88,533 @@ class _StoreDetailsScreenState extends State<StoreDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
-      return Scaffold(
-        backgroundColor: AppColors.softCream,
-        body: const Center(
-          child: CircularProgressIndicator(),
-        ),
+      return const Scaffold(
+        backgroundColor: Colors.white,
+        body: Center(child: CircularProgressIndicator()),
       );
     }
 
     if (_productData == null) {
       return Scaffold(
-        backgroundColor: AppColors.softCream,
+        backgroundColor: Colors.white,
         body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text('Failed to load product details'),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text('Go Back'),
-              ),
-            ],
+          child: ElevatedButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Go Back'),
           ),
         ),
       );
     }
 
-    return Scaffold(
-      backgroundColor: AppColors.softCream,
-      body: SafeArea(
-        child: ListView(
-          physics: const BouncingScrollPhysics(),
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-              child: BannerHeadder(
-                imagePath: _productData!['image'] as String,
-                title: '',
-                subtitle: '',
-                onBackTap: () => Navigator.pop(context),
-                height: 350,
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle.dark,
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: SafeArea(
+          child: ListView(
+            physics: const BouncingScrollPhysics(),
+            padding: EdgeInsets.zero,
+            children: [
+              Stack(
+                children: [
+                  Container(
+                    margin: const EdgeInsets.fromLTRB(16, 31, 16, 0),
+                    height: 414,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    clipBehavior: Clip.antiAlias,
+                    child: _productImage(_productData!['image'] as String),
+                  ),
+                  Positioned(
+                    left: 31,
+                    top: 49,
+                    child: GestureDetector(
+                      onTap: () => Navigator.pop(context),
+                      child: Container(
+                        width: 35,
+                        height: 35,
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          Icons.arrow_back,
+                          size: 18,
+                          color: Color(0xFF1A1C20),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ),
 
-            const SizedBox(height: 16),
+              const SizedBox(height: 35),
 
-            // Product Info Section (title, location, time, price)
-            StoreProductInfoSection(
-              title: _productData!['title'] as String,
-              location: _productData!['location'] as String,
-              timePosted: _productData!['timePosted'] as String,
-              currentPrice: _productData!['currentPrice'] as String,
-              originalPrice: _productData!['originalPrice'] as String?,
-              isNegotiable: _productData!['isNegotiable'] as bool? ?? false,
-            ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Text(
+                  _productData!['title'] as String,
+                  style: const TextStyle(
+                    fontFamily: 'Outfit',
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                    height: 25 / 20,
+                    color: Color(0xFF1A1C20),
+                  ),
+                ),
+              ),
 
-            const SizedBox(height: 16),
+              const SizedBox(height: 5),
 
-            // Seller Information Section
-            StoreSellerSection(
-              sellerName: _productData!['sellerName'] as String,
-              sellerImage: _productData!['sellerImage'] as String,
-              sellerLocation: _productData!['location'] as String,
-              listingCount: _productData!['listingCount'] as int,
-              rating: _productData!['rating'] as double,
-            ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.location_on_outlined,
+                      size: 14,
+                      color: Color(0xFF6B7280),
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      _productData!['location'] as String,
+                      style: const TextStyle(
+                        fontFamily: 'Outfit',
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        height: 20 / 14,
+                        color: Color(0xFF6B7280),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    const Text(
+                      '•',
+                      style: TextStyle(color: Color(0xFF6B7280)),
+                    ),
+                    const SizedBox(width: 8),
+                    const Icon(
+                      Icons.access_time,
+                      size: 14,
+                      color: Color(0xFF6B7280),
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      _productData!['timePosted'] as String,
+                      style: const TextStyle(
+                        fontFamily: 'Outfit',
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        height: 20 / 14,
+                        color: Color(0xFF6B7280),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
 
-            const SizedBox(height: 24),
+              const SizedBox(height: 15),
 
-            // Description Section
-            StoreDescriptionSection(
-              description: _productData!['description'] as String,
-            ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          _productData!['currentPrice'] as String,
+                          style: const TextStyle(
+                            fontFamily: 'Outfit',
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                            height: 25 / 18,
+                            color: Color(0xFFF9660E),
+                          ),
+                        ),
+                        if (_productData!['originalPrice'] != null)
+                          Text(
+                            _productData!['originalPrice'] as String,
+                            style: TextStyle(
+                              fontFamily: 'Outfit',
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                              height: 18 / 14,
+                              decoration: TextDecoration.lineThrough,
+                              color: const Color(0xFF1A1C20).withOpacity(0.8),
+                            ),
+                          ),
+                      ],
+                    ),
+                    const Spacer(),
+                    _chip('New', width: 58),
+                    const SizedBox(width: 8),
+                    if (_productData!['isNegotiable'] == true)
+                      _chip('Negotiable', width: 91),
+                  ],
+                ),
+              ),
 
-            const SizedBox(height: 40),
+              const SizedBox(height: 25),
 
-            // Product Details Section (tags/pills)
-            StoreProductDetailsSection(
-              details: _productData!['productDetails'] as List<String>,
-            ),
+              _sellerCard(),
 
-            const SizedBox(height: 30),
-            const StoreSafetySection(),
-const SizedBox(height: 40),
-            // Action Buttons Section
-            StoreActionButtonsSection(
-              onWhatsApp: () {
-              
-              },
-              onCall: () {
-              
-              },
-            ),
+              const SizedBox(height: 30),
 
-            const SizedBox(height: 24),
-          ],
+              _sectionTitle('Description', fontSize: 18),
+              const SizedBox(height: 12),
+
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Text(
+                  _productData!['description'] as String,
+                  style: TextStyle(
+                    fontFamily: 'Outfit',
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                    height: 18 / 14,
+                    color: const Color(0xFF1A1C20).withOpacity(0.7),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 40),
+
+              _sectionTitle('Product Details', fontSize: 20),
+              const SizedBox(height: 20),
+
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Wrap(
+                  spacing: 12,
+                  runSpacing: 12,
+                  children: (_productData!['productDetails'] as List<String>)
+                      .map((e) => _detailChip(e))
+                      .toList(),
+                ),
+              ),
+
+              const SizedBox(height: 30),
+
+              _safetyCard(),
+
+              const SizedBox(height: 30),
+
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Column(
+                  children: [
+                    SizedBox(
+                      width: double.infinity,
+                      height: 51,
+                      child: ElevatedButton(
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                          elevation: 0,
+                          backgroundColor: const Color(0xFFF9660E),
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        child: const Text(
+                          'WhatsApp Seller',
+                          style: TextStyle(
+                            fontFamily: 'Outfit',
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            height: 24 / 16,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 51,
+                      child: OutlinedButton(
+                        onPressed: () {},
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: const Color(0xFFF9660E),
+                          side: const BorderSide(color: Color(0xFFF9660E)),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        child: const Text(
+                          'Call',
+                          style: TextStyle(
+                            fontFamily: 'Outfit',
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            height: 24 / 16,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 80),
+            ],
+          ),
         ),
       ),
     );
   }
-}
 
+  Widget _productImage(String image) {
+    if (image.startsWith('http')) {
+      return Image.network(
+        image,
+        width: double.infinity,
+        height: 414,
+        fit: BoxFit.cover,
+        errorBuilder: (_, __, ___) => _fallbackImage(),
+      );
+    }
+
+    return Image.asset(
+      image,
+      width: double.infinity,
+      height: 414,
+      fit: BoxFit.cover,
+      errorBuilder: (_, __, ___) => _fallbackImage(),
+    );
+  }
+
+  Widget _fallbackImage() {
+    return Image.asset(
+      'assets/images/store_header_banner.png',
+      width: double.infinity,
+      height: 414,
+      fit: BoxFit.cover,
+    );
+  }
+
+  Widget _chip(String text, {required double width}) {
+    return Container(
+      width: width,
+      height: 29,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        border: Border.all(color: const Color(0xFF1A1C20)),
+        borderRadius: BorderRadius.circular(17.2674),
+      ),
+      child: Text(
+        text,
+        style: const TextStyle(
+          fontFamily: 'Outfit',
+          fontSize: 12,
+          fontWeight: FontWeight.w500,
+          height: 15 / 12,
+          color: Color(0xFF1A1C20),
+        ),
+      ),
+    );
+  }
+
+  Widget _sectionTitle(String title, {required double fontSize}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Text(
+        title,
+        style: TextStyle(
+          fontFamily: 'Outfit',
+          fontSize: fontSize,
+          fontWeight: FontWeight.w600,
+          height: 1.25,
+          color: const Color(0xFF1A1C20),
+        ),
+      ),
+    );
+  }
+
+  Widget _sellerCard() {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16),
+      height: 85,
+      decoration: BoxDecoration(
+        color: const Color(0xFFFEBFA2),
+        borderRadius: BorderRadius.circular(16.4),
+      ),
+      child: Row(
+        children: [
+          const SizedBox(width: 21),
+          CircleAvatar(
+            radius: 25,
+            backgroundImage: AssetImage(_productData!['sellerImage'] as String),
+          ),
+          const SizedBox(width: 9),
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  _productData!['sellerName'] as String,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontFamily: 'Outfit',
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    height: 23 / 18,
+                    color: Colors.black,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Row(
+                  children: [
+                    const Icon(
+                      Icons.location_on_outlined,
+                      size: 14,
+                      color: Colors.black54,
+                    ),
+                    const SizedBox(width: 4),
+                    Flexible(
+                      child: Text(
+                        _productData!['location'] as String,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontFamily: 'Outfit',
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.black54,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Container(
+                      width: 4,
+                      height: 4,
+                      decoration: const BoxDecoration(
+                        color: Colors.black54,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      '${_productData!['listingCount']} listings',
+                      style: const TextStyle(
+                        fontFamily: 'Outfit',
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.black54,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          Container(
+            width: 50,
+            height: 24,
+            margin: const EdgeInsets.only(right: 13),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(5),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  Icons.star,
+                  size: 13,
+                  color: Color(0xFFFFC300),
+                ),
+                const SizedBox(width: 4),
+                Text(
+                  '${_productData!['rating']}',
+                  style: const TextStyle(
+                    fontFamily: 'Outfit',
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _detailChip(String text) {
+    return Container(
+      height: 40,
+      padding: const EdgeInsets.symmetric(horizontal: 22),
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: const Color(0xFFFDE2D7),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Text(
+        text,
+        style: const TextStyle(
+          fontFamily: 'Outfit',
+          fontSize: 12,
+          fontWeight: FontWeight.w500,
+          height: 15 / 12,
+          color: Color(0xFF1A1C20),
+        ),
+      ),
+    );
+  }
+
+  Widget _safetyCard() {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16),
+      height: 81,
+      padding: const EdgeInsets.fromLTRB(18, 12, 18, 12),
+      decoration: BoxDecoration(
+        color: const Color(0xFFFEBFA2),
+        borderRadius: BorderRadius.circular(16.4),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Icon(
+            Icons.verified_user,
+            size: 24,
+            color: Colors.black,
+          ),
+          const SizedBox(width: 5),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Safety Tips',
+                  style: TextStyle(
+                    fontFamily: 'Outfit',
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    height: 18 / 14,
+                    color: Color(0xFF1A1C20),
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  'Meet in a public place, Inspect the item before paying. ADCC does not handle transactions',
+                  style: TextStyle(
+                    fontFamily: 'Outfit',
+                    fontSize: 12,
+                    fontWeight: FontWeight.w400,
+                    height: 15 / 12,
+                    color: const Color(0xFF1A1C20).withOpacity(0.7),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
