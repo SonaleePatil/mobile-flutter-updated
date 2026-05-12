@@ -154,19 +154,27 @@ class _ProfileHeaderState extends State<ProfileHeader>
               ],
             ),
           ),
-          GestureDetector(
-            onTap: widget.onNotificationTap,
-            child: Container(
-              width: 40,
-              height: 40,
-              alignment: Alignment.center,
-              child: Image.asset(
-                'assets/icons/notification.gif',
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Image.asset(
+                'assets/images/weather_cloud.png',
                 width: 40,
                 height: 40,
                 fit: BoxFit.contain,
               ),
-            ),
+              const SizedBox(height: 2),
+              const Text(
+                '20℃',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontFamily: 'Outfit',
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  color: Color(0xFF000000),
+                ),
+              ),
+            ],
           ),
         ],
       ),

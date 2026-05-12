@@ -305,26 +305,17 @@ class _CommunitiesScreenState extends State<CommunitiesScreen> {
   }
 
   List<String> get _displayTypes {
-    if (_backendTypes.isNotEmpty) {
-      final types = _backendTypes.toList();
-      final hasElite = types.any((type) {
-        final lower = type.toLowerCase();
-        return lower.contains('elite') || lower.contains('awareness');
-      });
-      if (!hasElite) types.insert(0, 'Elite Community');
-      return types;
+    final types = <String>[..._communityTypeStripDefaults];
+    final seen = types.map(_normalizeTypeLabel).toSet();
+
+    for (final backendType in _backendTypes) {
+      final normalized = _normalizeTypeLabel(backendType);
+      if (normalized.isNotEmpty && seen.add(normalized)) {
+        types.add(backendType);
+      }
     }
-    return const [
-      'Elite Community',
-      'Family Rides',
-      'Women (SheRides)',
-      'Youth Cycling',
-      'Racing & Performance',
-      'Weekend Social',
-      'Night Riders',
-      'MTB / Trail',
-      'Training & Clinics',
-    ];
+
+    return types;
   }
 
   Future<void> _openTypeCommunities(String type) async {
@@ -390,13 +381,14 @@ class _CommunitiesScreenState extends State<CommunitiesScreen> {
     final selected = type.toLowerCase();
     final keys = <String>{
       selected,
-      if (selected.contains('elite')) ...[
+      if (selected.contains('elite') || selected.contains('awareness')) ...[
         'elite',
         'awareness',
         'charity',
         'national',
         'performance',
       ],
+      if (selected.contains('community')) ...['community', 'group', 'ride'],
       if (selected.contains('family')) ...['family', 'leisure'],
       if (selected.contains('women') || selected.contains('she')) ...[
         'women',
@@ -421,6 +413,7 @@ class _CommunitiesScreenState extends State<CommunitiesScreen> {
         'training',
         'clinic',
       ],
+      if (selected.contains('corporate')) ...['corporate', 'partner'],
     };
 
     bool containsKey(String value) {
@@ -689,8 +682,9 @@ class _CommunityTypeStrip extends StatelessWidget {
     final t = type.toLowerCase();
     if (t.contains('family')) return 'assets/images/family-rides.png';
     if (t.contains('elite') || t.contains('awareness')) {
-      return 'assets/images/community_ride.png';
+      return 'assets/icons/awareness.png';
     }
+    if (t.contains('community')) return 'assets/images/community_ride.png';
     if (t.contains('women') || t.contains('she')) {
       return 'assets/images/she-rides.png';
     }
@@ -702,6 +696,10 @@ class _CommunityTypeStrip extends StatelessWidget {
     if (t.contains('mtb') || t.contains('trail')) {
       return 'assets/images/mtb-ride.png';
     }
+    if (t.contains('training') || t.contains('clinic')) {
+      return 'assets/icons/tc.png';
+    }
+    if (t.contains('corporate')) return 'assets/icons/cf.png';
     return 'assets/images/community_ride.png';
   }
 }
@@ -768,8 +766,44 @@ class _CommunityTypeChip extends StatelessWidget {
     if (t.toLowerCase().contains('women')) return 'Women\n(SheRides)';
     if (t.toLowerCase().contains('racing')) return 'Racing &\nPerformance';
     if (t.toLowerCase().contains('training')) return 'Training &\nClinics';
+    if (t.toLowerCase().contains('community rides')) return 'Community\nRides';
+    if (t.toLowerCase().contains('awareness')) return 'Awareness\nRides';
     return t;
   }
+}
+
+const List<String> _communityTypeStripDefaults = [
+  'Family Rides',
+  'Women (SheRides)',
+  'Youth Cycling',
+  'Racing & Performance',
+  'Community Rides',
+  'Awareness Rides',
+  'Training & Clinics',
+  'Corporate',
+];
+
+String _normalizeTypeLabel(String value) {
+  final lower = value.trim().toLowerCase();
+  if (lower.isEmpty) return '';
+  if (lower.contains('family')) return 'family';
+  if (lower.contains('women') || lower.contains('she')) return 'women';
+  if (lower.contains('youth') || lower.contains('kids')) return 'youth';
+  if (lower.contains('racing') || lower.contains('performance')) {
+    return 'racing-performance';
+  }
+  if (lower.contains('elite') ||
+      lower.contains('awareness') ||
+      lower.contains('charity') ||
+      lower.contains('national')) {
+    return 'awareness-rides';
+  }
+  if (lower.contains('community')) return 'community-rides';
+  if (lower.contains('training') || lower.contains('clinic')) {
+    return 'training-clinics';
+  }
+  if (lower.contains('corporate')) return 'corporate';
+  return lower;
 }
 
 class _SectionTitleRow extends StatelessWidget {

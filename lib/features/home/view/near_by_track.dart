@@ -90,7 +90,7 @@ class NearbyTrackCard extends StatelessWidget {
       width: 286,
       height: 303,
       decoration: BoxDecoration(
-        color: const Color(0xffE5D2A3),
+        color: const Color(0xFFD8E5FB),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Column(

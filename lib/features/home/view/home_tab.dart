@@ -111,187 +111,196 @@ class _HomeTabState extends State<HomeTab> {
         )
         .toList();
 
-    return SafeArea(
-      child: Column(
-        children: [
-          ProfileHeader(
-            name: widget.fromGuest
-                ? 'Welcome, Guest'
-                : (_userName.isNotEmpty ? _userName : ''),
-            onNotificationTap: () {},
-          ),
-          Expanded(
-            child: Stack(
-              children: [
-                ListView(
-                  physics: const BouncingScrollPhysics(),
-                  padding: const EdgeInsets.only(bottom: 34),
-                  children: [
-                    const SizedBox(height: 12),
-                    const _SearchWeatherBar(),
-                    const SizedBox(height: 24),
-                    PromoCarousel(
-                      items: promoItems,
-                      showFallback: true,
-                    ),
-                    const SizedBox(height: 26),
-                    const WeatherScreen(),
-                    const SizedBox(height: 32),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: QuickActionsSection(
-                        onTabChange: widget.onTabChange,
-                        fromGuest: widget.fromGuest,
-                        onGuestRestrictedTap: _redirectGuestToLogin,
-                      ),
-                    ),
-                    const SizedBox(height: 40),
-                    HorizontalRideList(
-                      communities: communities,
-                      showFallback: true,
-                      onCommunityTap: (id) {
-                        if (widget.fromGuest) {
-                          _redirectGuestToLogin();
-                          return;
-                        }
-                        debugPrint('Community tapped: $id');
-                      },
-                    ),
-                    const SizedBox(height: 40),
-                    if (featured != null) ...[
-                      const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16),
-                        child: Text(
-                          'Featured Events',
-                          style: TextStyle(
-                            fontFamily: 'Outfit',
-                            fontSize: 20,
-                            fontWeight: FontWeight.w600,
-                            height: 1,
-                            letterSpacing: 0,
-                            color: AppColors.textDark,
-                          ),
-                        ),
+    return ColoredBox(
+      color: Colors.white,
+      child: SafeArea(
+        child: Column(
+          children: [
+            ProfileHeader(
+              name: widget.fromGuest
+                  ? 'Welcome, Guest'
+                  : (_userName.isNotEmpty ? _userName : ''),
+              onNotificationTap: () {},
+            ),
+            Expanded(
+              child: Stack(
+                children: [
+                  ListView(
+                    physics: const BouncingScrollPhysics(),
+                    padding: const EdgeInsets.only(bottom: 34),
+                    children: [
+                      const SizedBox(height: 12),
+                      _SearchWeatherBar(
+                        onNotificationTap: () {},
                       ),
                       const SizedBox(height: 24),
-                      FeaturedEventCard(
-                        image: featured.image,
-                        title: featured.title,
-                        date: featured.date,
-                        distance: featured.distance,
-                        onTap: () => _goToEvent(featured.id),
+                      PromoCarousel(
+                        items: promoItems,
+                        showFallback: true,
                       ),
-                    ] else ...[
-                      const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16),
-                        child: Text(
-                          'Featured Events',
-                          style: TextStyle(
-                            fontFamily: 'Outfit',
-                            fontSize: 20,
-                            fontWeight: FontWeight.w600,
-                            height: 1,
-                            letterSpacing: 0,
-                            color: AppColors.textDark,
-                          ),
+                      const SizedBox(height: 26),
+                      const WeatherScreen(),
+                      const SizedBox(height: 32),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: QuickActionsSection(
+                          onTabChange: widget.onTabChange,
+                          fromGuest: widget.fromGuest,
+                          onGuestRestrictedTap: _redirectGuestToLogin,
                         ),
                       ),
+                      const SizedBox(height: 40),
+                      HorizontalRideList(
+                        communities: communities,
+                        showFallback: true,
+                        onCommunityTap: (id) {
+                          if (widget.fromGuest) {
+                            _redirectGuestToLogin();
+                            return;
+                          }
+                          debugPrint('Community tapped: $id');
+                        },
+                      ),
+                      const SizedBox(height: 40),
+                      if (featured != null) ...[
+                        const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 16),
+                          child: Text(
+                            'Featured Events',
+                            style: TextStyle(
+                              fontFamily: 'Outfit',
+                              fontSize: 20,
+                              fontWeight: FontWeight.w600,
+                              height: 1,
+                              letterSpacing: 0,
+                              color: AppColors.textDark,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 24),
+                        FeaturedEventCard(
+                          image: featured.image,
+                          title: featured.title,
+                          date: featured.date,
+                          distance: featured.distance,
+                          onTap: () => _goToEvent(featured.id),
+                        ),
+                      ] else ...[
+                        const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 16),
+                          child: Text(
+                            'Featured Events',
+                            style: TextStyle(
+                              fontFamily: 'Outfit',
+                              fontSize: 20,
+                              fontWeight: FontWeight.w600,
+                              height: 1,
+                              letterSpacing: 0,
+                              color: AppColors.textDark,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 24),
+                        FeaturedEventCard(
+                          image: 'assets/images/night-ride.png',
+                          title: 'Abu Dhabi Night Race Series',
+                          date: '18 July 2026',
+                          distance: '42 km',
+                          onTap: () {},
+                        ),
+                      ],
+                      const SizedBox(height: 40),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16),
+                        child: SectionHeader(title: 'Upcoming Events'),
+                      ),
+                      const SizedBox(height: 22),
+                      UpcomingTracksList(
+                        events: upcomingEvents,
+                        onEventTap: _goToEvent,
+                        showFallback: true,
+                      ),
+                      const SizedBox(height: 40),
+                      NearbyTracksSection(
+                        tracks: feed?.nearbyTracks ?? const [],
+                        showFallback: true,
+                      ),
+                      const SizedBox(height: 40),
+                      RecentlyPost(
+                        items: feed?.recentItems ?? const [],
+                        showFallback: true,
+                      ),
+                      const SizedBox(height: 40),
+                      // Community updates hidden as per latest home design.
+                      // CommunityUpdatesSection(
+                      //   updates: feed?.communityUpdates ?? const [],
+                      //   showFallback: true,
+                      // ),
+                      // const SizedBox(height: 40),
+                      RideInfoSection(
+                        rideInfos: feed?.rideInfos ?? const [],
+                        sectionTitle:
+                            feed?.rideInfoSectionTitle ?? 'Ride in Abu Dhabi',
+                        showFallback: true,
+                      ),
                       const SizedBox(height: 24),
-                      FeaturedEventCard(
-                        image: 'assets/images/night-ride.png',
-                        title: 'Abu Dhabi Night Race Series',
-                        date: '18 July 2026',
-                        distance: '42 km',
-                        onTap: () {},
+                      JoinCommunityCard(
+                        onJoinTap: () {
+                          if (widget.fromGuest) {
+                            _redirectGuestToLogin();
+                          }
+                        },
                       ),
                     ],
-                    const SizedBox(height: 40),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16),
-                      child: SectionHeader(title: 'Upcoming Events'),
-                    ),
-                    const SizedBox(height: 22),
-                    UpcomingTracksList(
-                      events: upcomingEvents,
-                      onEventTap: _goToEvent,
-                      showFallback: true,
-                    ),
-                    const SizedBox(height: 40),
-                    NearbyTracksSection(
-                      tracks: feed?.nearbyTracks ?? const [],
-                      showFallback: true,
-                    ),
-                    const SizedBox(height: 40),
-                    RecentlyPost(
-                      items: feed?.recentItems ?? const [],
-                      showFallback: true,
-                    ),
-                    const SizedBox(height: 40),
-                    // Community updates hidden as per latest home design.
-                    // CommunityUpdatesSection(
-                    //   updates: feed?.communityUpdates ?? const [],
-                    //   showFallback: true,
-                    // ),
-                    // const SizedBox(height: 40),
-                    RideInfoSection(
-                      rideInfos: feed?.rideInfos ?? const [],
-                      sectionTitle:
-                          feed?.rideInfoSectionTitle ?? 'Ride in Abu Dhabi',
-                      showFallback: true,
-                    ),
-                    const SizedBox(height: 24),
-                    JoinCommunityCard(
-                      onJoinTap: () {
-                        if (widget.fromGuest) {
-                          _redirectGuestToLogin();
-                        }
-                      },
-                    ),
-                  ],
-                ),
+                  ),
 
-                // Loading overlay on first load
-                if (isLoading && feed == null)
-                  const Center(child: CircularProgressIndicator()),
+                  // Loading overlay on first load
+                  if (isLoading && feed == null)
+                    const Center(child: CircularProgressIndicator()),
 
-                // Error banner with retry (only when no cached data)
-                if (error != null && feed == null)
-                  Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(24),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(Icons.wifi_off_rounded,
-                              size: 48, color: Colors.grey),
-                          const SizedBox(height: 12),
-                          const Text(
-                            'Could not load feed',
-                            style: TextStyle(
-                                fontFamily: 'Outfit',
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600),
-                          ),
-                          const SizedBox(height: 8),
-                          TextButton(
-                            onPressed: _viewModel.loadHome,
-                            child: const Text('Retry'),
-                          ),
-                        ],
+                  // Error banner with retry (only when no cached data)
+                  if (error != null && feed == null)
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(24),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(Icons.wifi_off_rounded,
+                                size: 48, color: Colors.grey),
+                            const SizedBox(height: 12),
+                            const Text(
+                              'Could not load feed',
+                              style: TextStyle(
+                                  fontFamily: 'Outfit',
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                            const SizedBox(height: 8),
+                            TextButton(
+                              onPressed: _viewModel.loadHome,
+                              child: const Text('Retry'),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 }
 
 class _SearchWeatherBar extends StatelessWidget {
-  const _SearchWeatherBar();
+  const _SearchWeatherBar({
+    this.onNotificationTap,
+  });
+
+  final VoidCallback? onNotificationTap;
 
   @override
   Widget build(BuildContext context) {
@@ -309,7 +318,7 @@ class _SearchWeatherBar extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: const Color(0xFFD8E5FB),
                   border: Border.all(
-                    color: const Color(0xFFF0F0F0),
+                    color: const Color(0xFFB7D2FF),
                   ),
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -344,20 +353,17 @@ class _SearchWeatherBar extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 14),
-          Image.asset(
-            'assets/images/weather_cloud.png',
-            width: 40,
-            height: 40,
-            fit: BoxFit.contain,
-          ),
-          const SizedBox(width: 2),
-          const Text(
-            '20℃',
-            style: TextStyle(
-              fontFamily: 'Outfit',
-              fontSize: 14,
-              fontWeight: FontWeight.w700,
-              color: Color(0xFF000000),
+          GestureDetector(
+            onTap: onNotificationTap,
+            child: SizedBox(
+              width: 50,
+              height: 50,
+              child: Image.asset(
+                'assets/icons/notification.gif',
+                width: 50,
+                height: 50,
+                fit: BoxFit.contain,
+              ),
             ),
           ),
         ],
