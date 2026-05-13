@@ -2,6 +2,7 @@ import 'package:adcc/core/services/language_storage_service.dart';
 import 'package:adcc/features/onboarding/view/onboarding_screen.dart';
 import 'package:adcc/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:video_player/video_player.dart';
 
 import '../../../main.dart';
 
@@ -9,16 +10,45 @@ class LanguageSelectionScreen extends StatefulWidget {
   const LanguageSelectionScreen({super.key});
 
   @override
-  State<LanguageSelectionScreen> createState() => _LanguageSelectionScreenState();
+  State<LanguageSelectionScreen> createState() =>
+      _LanguageSelectionScreenState();
 }
 
 class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
+  static final Uri _backgroundVideoUrl = Uri.parse(
+    'https://adcc-frontend.s3.amazonaws.com/event+-+F1.mp4',
+  );
+
   String _selected = 'en';
+  late final VideoPlayerController _videoController;
+  bool _videoFailed = false;
 
   @override
   void initState() {
     super.initState();
+    _initVideo();
     _loadSaved();
+  }
+
+  Future<void> _initVideo() async {
+    _videoController = VideoPlayerController.networkUrl(_backgroundVideoUrl);
+    try {
+      await _videoController.initialize();
+      if (!mounted) return;
+      await _videoController.setLooping(true);
+      await _videoController.setVolume(0);
+      await _videoController.play();
+      setState(() {});
+    } catch (_) {
+      if (!mounted) return;
+      setState(() => _videoFailed = true);
+    }
+  }
+
+  @override
+  void dispose() {
+    _videoController.dispose();
+    super.dispose();
   }
 
   Future<void> _loadSaved() async {
@@ -51,7 +81,7 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
     final isShortScreen = size.height < 700;
 
     // The title should start at ~60% of screen height
-    final titleTopFraction = 0.601;
+    const titleTopFraction = 0.601;
     final titleTopPx = size.height * titleTopFraction;
 
     // Gap from title bottom (title height = 60px) to language row
@@ -67,11 +97,21 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          // Background image
-          Image.asset(
-            'assets/images/onboarding33.png',
-            fit: BoxFit.cover,
-          ),
+          // Background video, with image fallback while loading or if remote video fails.
+          if (!_videoController.value.isInitialized || _videoFailed)
+            Image.asset(
+              'assets/images/onboarding33.png',
+              fit: BoxFit.cover,
+            )
+          else
+            FittedBox(
+              fit: BoxFit.cover,
+              child: SizedBox(
+                width: _videoController.value.size.width,
+                height: _videoController.value.size.height,
+                child: VideoPlayer(_videoController),
+              ),
+            ),
           // Gradient overlay
           const DecoratedBox(
             decoration: BoxDecoration(

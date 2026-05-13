@@ -5,7 +5,9 @@ import 'package:adcc/features/store/view/Screen/store_screen.dart';
 import 'package:adcc/features/challenges/view/challenges_screen.dart';
 import 'package:adcc/features/routes/view/routes_screen_wrapper.dart';
 import 'package:adcc/features/events/view/events_screen.dart';
+import 'package:adcc/features/ride_feed/view/ride_feed_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:adcc/features/challenges/view/leaderboard_screen.dart';
 
 class QuickActionsSection extends StatelessWidget {
   final ValueChanged<int>? onTabChange;
@@ -83,7 +85,8 @@ class QuickActionsSection extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => const ChallengesScreen(),
+                    // builder: (_) => const ChallengesScreen(),
+                    builder: (_) => const LeaderboardScreen(),
                   ),
                 );
               },
@@ -140,7 +143,14 @@ class QuickActionsSection extends StatelessWidget {
               onTap: () {
                 if (fromGuest) {
                   onGuestRestrictedTap?.call();
+                  return;
                 }
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const RideFeedScreen(),
+                  ),
+                );
               },
             ),
             QuickActionItem(

@@ -7,7 +7,6 @@ import 'package:adcc/features/communities/view/community_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../core/services/permission_service.dart';
-
 import '../../../shared/widgets/custom_bottom_nav.dart';
 
 class HomeScreen extends StatefulWidget {

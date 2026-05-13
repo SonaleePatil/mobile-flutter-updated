@@ -172,8 +172,7 @@ class _CommunitiesScreenState extends State<CommunitiesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.softCream,
-      body: SafeArea(
-        child: _isLoading
+      body: _isLoading
             ? const _CommunitiesLoadingUI()
             : (_errorMessage != null
                 ? _CommunitiesErrorUI(
@@ -181,7 +180,6 @@ class _CommunitiesScreenState extends State<CommunitiesScreen> {
                     onRetry: _loadAllSections,
                   )
                 : _buildMainUI(context)),
-      ),
     );
   }
 
@@ -501,7 +499,7 @@ class _CommunitiesHero extends StatelessWidget {
       child: Stack(
         children: [
           Positioned(
-            top: 28,
+            top: 54,
             left: 16,
             child: IconButton(
               padding: EdgeInsets.zero,
@@ -516,7 +514,7 @@ class _CommunitiesHero extends StatelessWidget {
             ),
           ),
           const Positioned(
-            top: 69,
+            top: 58,
             left: 0,
             right: 0,
             child: Text(

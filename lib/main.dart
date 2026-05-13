@@ -16,7 +16,8 @@ import 'package:adcc/features/store/view/listings_screen.dart';
 import 'package:adcc/features/store/view/live_posted_screen.dart';
 import 'package:adcc/features/challenges/view/leaderboard_screen.dart';
 import 'package:adcc/features/challenges/view/challenge_details_screen.dart';
-
+import 'package:adcc/features/home/view/quick_actions_section.dart';
+import 'package:adcc/features/auth/view/login_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -96,6 +97,7 @@ class _MyAppState extends State<MyApp> {
       supportedLocales: const [Locale('en'), Locale('ar')],
 
       home: const SplashScreen(),
+      // home: const QuickActionsSection(),
       // home: const ChallengeDetailsScreen(
       //   challengeId: 'challenge_1',
       // ),

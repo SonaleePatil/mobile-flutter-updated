@@ -19,14 +19,29 @@ class RecentlyPost extends StatelessWidget {
       HomeStoreItemModel(
         id: '',
         image: 'assets/images/bike.png',
-        title: 'Trek Domane',
-        postedBy: 'Mahmoud shaalan',
-        price: '7500 AED',
+        title: 'DMT KR0 Road Shoes',
+        postedBy: 'Mark McEvoy',
+        price: '1300 AED',
+      ),
+      HomeStoreItemModel(
+        id: '',
+        image: 'assets/images/store.png',
+        title: 'Colnago Bike',
+        postedBy: 'Al Khaili',
+        price: '14500 AED',
+      ),
+      HomeStoreItemModel(
+        id: '',
+        image: 'assets/images/ride.png',
+        title: 'Colnago Concept',
+        postedBy: 'Achraf Khoudiri',
+        price: '2000 AED',
       ),
     ];
-    final data = items.isEmpty
-        ? (showFallback ? fallbackItems : const <HomeStoreItemModel>[])
-        : items;
+    final data = <HomeStoreItemModel>[
+      ...items,
+      if (showFallback && items.length < 3) ...fallbackItems.skip(items.length),
+    ].take(3).toList();
     if (data.isEmpty) return const SizedBox.shrink();
 
     return Padding(

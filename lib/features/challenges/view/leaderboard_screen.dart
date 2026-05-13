@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:adcc/features/challenges/view/challenge_details_screen.dart';
 
 class LeaderboardScreen extends StatefulWidget {
   const LeaderboardScreen({super.key});
@@ -614,7 +615,19 @@ class _ActiveChallengesCarousel extends StatelessWidget {
         itemBuilder: (context, index) {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4),
-            child: _ActiveChallengeCard(data: challenges[index]),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const ChallengeDetailsScreen(
+                      challengeId: 'challenge_1',
+                    ),
+                  ),
+                );
+              },
+              child: _ActiveChallengeCard(data: challenges[index]),
+            ),
           );
         },
       ),

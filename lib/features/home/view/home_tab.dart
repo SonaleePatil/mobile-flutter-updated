@@ -1,5 +1,4 @@
 import 'package:adcc/core/services/token_storage_service.dart';
-import 'package:adcc/core/theme/app_colors.dart';
 import 'package:adcc/features/auth/view/login_screen.dart';
 import 'package:adcc/features/event_details/view/event_details_screen.dart';
 import 'package:adcc/features/home/view/horizontal_rideList.dart';
@@ -95,9 +94,11 @@ class _HomeTabState extends State<HomeTab> {
     final isLoading = _viewModel.isLoading;
     final error = _viewModel.error;
 
-    final featured = feed?.featuredEvent;
-
     final upcomingEvents = feed?.upcomingEvents ?? const [];
+    final featuredEvents = [
+      if (feed?.featuredEvent != null) feed!.featuredEvent!,
+      ...upcomingEvents,
+    ];
     final communities = feed?.popularCommunities ?? const [];
     final promoItems = (feed?.promoBanners ?? const [])
         .map(
@@ -162,53 +163,11 @@ class _HomeTabState extends State<HomeTab> {
                         },
                       ),
                       const SizedBox(height: 40),
-                      if (featured != null) ...[
-                        const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 16),
-                          child: Text(
-                            'Featured Events',
-                            style: TextStyle(
-                              fontFamily: 'Outfit',
-                              fontSize: 20,
-                              fontWeight: FontWeight.w600,
-                              height: 1,
-                              letterSpacing: 0,
-                              color: AppColors.textDark,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 24),
-                        FeaturedEventCard(
-                          image: featured.image,
-                          title: featured.title,
-                          date: featured.date,
-                          distance: featured.distance,
-                          onTap: () => _goToEvent(featured.id),
-                        ),
-                      ] else ...[
-                        const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 16),
-                          child: Text(
-                            'Featured Events',
-                            style: TextStyle(
-                              fontFamily: 'Outfit',
-                              fontSize: 20,
-                              fontWeight: FontWeight.w600,
-                              height: 1,
-                              letterSpacing: 0,
-                              color: AppColors.textDark,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 24),
-                        FeaturedEventCard(
-                          image: 'assets/images/night-ride.png',
-                          title: 'Abu Dhabi Night Race Series',
-                          date: '18 July 2026',
-                          distance: '42 km',
-                          onTap: () {},
-                        ),
-                      ],
+                      FeaturedEventsList(
+                        events: featuredEvents,
+                        showFallback: true,
+                        onEventTap: _goToEvent,
+                      ),
                       const SizedBox(height: 40),
                       const Padding(
                         padding: EdgeInsets.symmetric(horizontal: 16),

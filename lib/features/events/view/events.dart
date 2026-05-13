@@ -157,8 +157,7 @@ class _EventsTabState extends State<EventsTab> {
     final eventsToShow = _filteredEvents;
     final purposeEvents = _purposeBasedEventsDynamic;
 
-    return SafeArea(
-      child: Column(
+    return Column(
         children: [
           Expanded(
             child: _isLoading
@@ -168,8 +167,7 @@ class _EventsTabState extends State<EventsTab> {
                     : _buildContent(eventsToShow, purposeEvents),
           ),
         ],
-      ),
-    );
+      );
   }
 
   Widget _buildErrorState() {
@@ -406,7 +404,7 @@ class _EventsTopSectionState extends State<_EventsTopSection> {
           Positioned(
             left: 16,
             right: 16,
-            top: 36,
+            top: 52,
             child: SizedBox(
               height: 48,
               child: Stack(
