@@ -53,6 +53,12 @@ class _OtpScreenState extends State<OtpScreen> {
     super.dispose();
   }
 
+  void _clearOtp() {
+    for (final controller in _otpControllers) {
+      controller.clear();
+    }
+  }
+
   void _onOtpChanged(int index, String value) {
     if (value.isNotEmpty && index < _focusNodes.length - 1) {
       _focusNodes[index + 1].requestFocus();
@@ -196,195 +202,217 @@ class _OtpScreenState extends State<OtpScreen> {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () => FocusScope.of(context).unfocus(),
-      child: Scaffold(
-        backgroundColor: screenBg,
-        body: ColoredBox(
-          color: screenBg,
-          child: SafeArea(
-            child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 12, top: 8),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: GestureDetector(
-                    onTap: () {
-                      if (Navigator.canPop(context)) {
-                        Navigator.pop(context);
-                      }
-                    },
-                    child: Container(
-                      width: 35,
-                      height: 35,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFF0F0F0),
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: const Color(0x1A000000),
+      child: PopScope(
+        canPop: true,
+        onPopInvokedWithResult: (didPop, result) {
+          _clearOtp();
+        },
+        child: Scaffold(
+          backgroundColor: screenBg,
+          body: ColoredBox(
+            color: screenBg,
+            child: SafeArea(
+              child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 12, top: 8),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: GestureDetector(
+                      // onTap: () {
+                      //   if (Navigator.canPop(context)) {
+                      //     Navigator.pop(context);
+                      //   }
+                      // },
+                      onTap: () {
+                        _clearOtp();
+                        Navigator.of(context).maybePop();
+                      },
+                      child: Container(
+                        width: 35,
+                        height: 35,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFF0F0F0),
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: const Color(0x1A000000),
+                          ),
+                        ),
+                        child: const Icon(
+                          Icons.arrow_back,
+                          size: 22,
+                          color: Color(0xFF2B2B2B),
                         ),
                       ),
-                      child: const Icon(
-                        Icons.arrow_back,
-                        size: 22,
-                        color: Color(0xFF2B2B2B),
-                      ),
                     ),
                   ),
                 ),
-              ),
-              Expanded(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Center(
-                    child: ConstrainedBox(
-                      constraints:
-                          const BoxConstraints(maxWidth: contentMaxWidth),
-                      child: Column(
-                        children: [
-                          const SizedBox(height: topGapAfterBack),
-                          Image.asset(
-                            'assets/icons/adcc_logo.png',
-                            width: 85,
-                            height: 69,
-                          ),
-                          const SizedBox(height: logoToTitleGap),
-                          const Text(
-                            'Verify Your Number',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontFamily: 'Outfit',
-                              fontWeight: FontWeight.w600,
-                              fontSize: 24,
-                              height: 1.25,
-                              color: Color(0xFF333333),
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Center(
+                      child: ConstrainedBox(
+                        constraints:
+                            const BoxConstraints(maxWidth: contentMaxWidth),
+                        child: Column(
+                          children: [
+                            const SizedBox(height: topGapAfterBack),
+                            Image.asset(
+                              'assets/icons/adcc_logo.png',
+                              width: 85,
+                              height: 69,
                             ),
-                          ),
-                          const SizedBox(height: titleToSubtitleGap),
-                          const Text(
-                            'Enter the 6-digit code sent to your phone',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontFamily: 'Outfit',
-                              fontSize: 16,
-                              fontWeight: FontWeight.w400,
-                              height: 1.25,
-                              color: Color(0xFF333333),
-                            ),
-                          ),
-                          const SizedBox(height: subtitleToOtpGap),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: List.generate(6, (index) {
-                              return Padding(
-                                padding:
-                                    EdgeInsets.only(right: index == 5 ? 0 : 8),
-                                child: Container(
-                                  width: 44,
-                                  height: 44,
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                      color: _focusNodes[index].hasFocus
-                                          ? const Color(0xFF0359E8)
-                                          : const Color(0xFFCACACA),
-                                    ),
-                                  ),
-                                  child: TextField(
-                                    controller: _otpControllers[index],
-                                    focusNode: _focusNodes[index],
-                                    textAlign: TextAlign.center,
-                                    keyboardType: TextInputType.number,
-                                    inputFormatters: [
-                                      FilteringTextInputFormatter.digitsOnly,
-                                      LengthLimitingTextInputFormatter(1),
-                                    ],
-                                    style: const TextStyle(
-                                      fontFamily: 'Outfit',
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w500,
-                                      color: Color(0xFF333333),
-                                    ),
-                                    decoration: const InputDecoration(
-                                      border: InputBorder.none,
-                                      isDense: true,
-                                      contentPadding: EdgeInsets.zero,
-                                    ),
-                                    onTap: () => setState(() {}),
-                                    onChanged: (value) {
-                                      _onOtpChanged(index, value);
-                                      setState(() {});
-                                    },
-                                  ),
-                                ),
-                              );
-                            }),
-                          ),
-                          const SizedBox(height: otpToResendGap),
-                          RichText(
-                            textAlign: TextAlign.center,
-                            text: TextSpan(
-                              style: const TextStyle(
+                            const SizedBox(height: logoToTitleGap),
+                            const Text(
+                              'Verify Your Number',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
                                 fontFamily: 'Outfit',
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                                color: Color(0xB3333333),
+                                fontWeight: FontWeight.w600,
+                                fontSize: 24,
+                                height: 1.25,
+                                color: Color(0xFF333333),
                               ),
-                              children: [
-                                const TextSpan(text: "Didn't receive it? "),
-                                TextSpan(
-                                  text: canResend
-                                      ? "Resend"
-                                      : "Resend in ${seconds}s",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    color: canResend
-                                        ? const Color(0xFF333333)
-                                        : const Color(0xB3333333),
+                            ),
+                            const SizedBox(height: titleToSubtitleGap),
+                            const Text(
+                              'Enter the 6-digit code sent to your phone',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontFamily: 'Outfit',
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
+                                height: 1.25,
+                                color: Color(0xFF333333),
+                              ),
+                            ),
+                            const SizedBox(height: subtitleToOtpGap),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: List.generate(6, (index) {
+                                return Padding(
+                                  padding:
+                                      EdgeInsets.only(right: index == 5 ? 0 : 8),
+                                  child: Container(
+                                    width: 44,
+                                    height: 44,
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      border: Border.all(
+                                        color: _focusNodes[index].hasFocus
+                                            ? const Color(0xFF0359E8)
+                                            : const Color(0xFFCACACA),
+                                      ),
+                                    ),
+                                    child: KeyboardListener(
+                                      focusNode: FocusNode(),
+                                      onKeyEvent: (event) {
+                                        if (event is KeyDownEvent &&
+                                            event.logicalKey == LogicalKeyboardKey.backspace &&
+                                            _otpControllers[index].text.isEmpty &&
+                                            index > 0) {
+                                          _otpControllers[index - 1].clear();
+                                          _focusNodes[index - 1].requestFocus();
+                                        }
+                                      },
+                                      child: TextField(
+                                        controller: _otpControllers[index],
+                                        focusNode: _focusNodes[index],
+                                        textAlign: TextAlign.center,
+                                        keyboardType: TextInputType.number,
+                                        inputFormatters: [
+                                          FilteringTextInputFormatter.digitsOnly,
+                                          LengthLimitingTextInputFormatter(1),
+                                        ],
+                                        style: const TextStyle(
+                                          fontFamily: 'Outfit',
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w500,
+                                          color: Color(0xFF333333),
+                                        ),
+                                        decoration: const InputDecoration(
+                                          border: InputBorder.none,
+                                          isDense: true,
+                                          contentPadding: EdgeInsets.zero,
+                                        ),
+                                        onTap: () => setState(() {}),
+                                        onChanged: (value) {
+                                          _onOtpChanged(index, value);
+                                          setState(() {});
+                                        },
+                                      ),
+                                    ),
                                   ),
-                                  recognizer: TapGestureRecognizer()
-                                    ..onTap =
-                                        canResend ? () => resendOtp() : null,
+                                );
+                              }),
+                            ),
+                            const SizedBox(height: otpToResendGap),
+                            RichText(
+                              textAlign: TextAlign.center,
+                              text: TextSpan(
+                                style: const TextStyle(
+                                  fontFamily: 'Outfit',
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                  color: Color(0xB3333333),
                                 ),
-                              ],
+                                children: [
+                                  const TextSpan(text: "Didn't receive it? "),
+                                  TextSpan(
+                                    text: canResend
+                                        ? "Resend"
+                                        : "Resend in ${seconds}s",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      color: canResend
+                                          ? const Color(0xFF333333)
+                                          : const Color(0xB3333333),
+                                    ),
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap =
+                                          canResend ? () => resendOtp() : null,
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: resendToBottomGap),
-                        ],
+                            const SizedBox(height: resendToBottomGap),
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 8, 16, 64),
-                child: SizedBox(
-                  width: double.infinity,
-                  height: 51,
-                  child: ElevatedButton(
-                    onPressed: _isLoading ? null : _verifyOtp,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF0359E8),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 64),
+                  child: SizedBox(
+                    width: double.infinity,
+                    height: 51,
+                    child: ElevatedButton(
+                      onPressed: _isLoading ? null : _verifyOtp,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF0359E8),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                       ),
-                    ),
-                    child: _isLoading
-                        ? const CircularProgressIndicator(color: Colors.white)
-                        : const Text(
-                            'Verify',
-                            style: TextStyle(
-                              fontFamily: 'Outfit',
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              height: 1.5,
+                      child: _isLoading
+                          ? const CircularProgressIndicator(color: Colors.white)
+                          : const Text(
+                              'Verify',
+                              style: TextStyle(
+                                fontFamily: 'Outfit',
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                height: 1.5,
+                              ),
                             ),
-                          ),
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
+              ],
+            ),
+            ),
           ),
         ),
       ),

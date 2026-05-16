@@ -30,6 +30,7 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   bool _isLoggingOut = false;
+  bool _isDeletingAccount = false;
   bool _isAuthenticated = false;
   bool _isCheckingAuth = true;
   final ProfileViewModel _profileViewModel = ProfileViewModel();
@@ -133,6 +134,77 @@ class _ProfileScreenState extends State<ProfileScreen> {
       if (mounted) {
         setState(() {
           _isLoggingOut = false;
+        });
+      }
+    }
+  }
+  
+  Future<void> _handleDeleteAccount() async {
+    if (_isDeletingAccount) return;
+
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Delete Account'),
+          content: const Text('Are you sure? This action cannot be undone.'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: const Text(
+                'Delete',
+                style: TextStyle(color: Colors.red),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (confirmed != true) return;
+
+    setState(() {
+      _isDeletingAccount = true;
+    });
+
+    try {
+      final apiClient = ApiClient.instance;
+
+      await apiClient.delete<dynamic>(
+        ApiEndpoints.deleteAccount,
+      );
+
+      await TokenStorageService.clearTokens();
+
+      if (!mounted) return;
+
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (_) => const EmailPasswordLoginScreen(),
+        ),
+        (route) => false,
+      );
+    } on DioException catch (e) {
+      debugPrint('Delete account failed: ${e.response?.data ?? e.message}');
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Failed to delete account. Please try again.'),
+          ),
+        );
+      }
+    } catch (e) {
+      debugPrint('Delete account unexpected error: $e');
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isDeletingAccount = false;
         });
       }
     }
@@ -344,6 +416,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                   const SizedBox(height: 50),
 
+                  AppButton(
+                    label: _isDeletingAccount ? 'Deleting account...' : 'Delete Account',
+                    textStyle: const TextStyle(
+                      fontFamily: 'Outfit',
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      height: 1,
+                      letterSpacing: 0,
+                      color: Colors.white,
+                    ),
+                    onPressed: _isDeletingAccount ? null : _handleDeleteAccount,
+                    type: AppButtonType.danger,
+                    backgroundColor: Colors.red,
+                  ),
+
+                  const SizedBox(height: 16),
+                  
                   AppButton(
                     label: _isLoggingOut ? 'Logging out...' : 'Logout',
                     textStyle: const TextStyle(

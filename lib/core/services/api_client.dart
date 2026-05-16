@@ -1,8 +1,10 @@
 import 'package:dio/dio.dart';
 import 'api_interceptor.dart';
+import 'package:flutter/foundation.dart';
 
 class ApiConfig {
   static const String baseUrl = 'http://13.126.184.69:4000/';
+  // static const String baseUrl = 'http://10.163.41.79:4000/';
   static const Duration connectTimeout = Duration(seconds: 30);
   static const Duration receiveTimeout = Duration(seconds: 30);
   static const Duration sendTimeout = Duration(seconds: 30);
@@ -13,6 +15,9 @@ class ApiClient {
   late final Dio _dio;
 
   ApiClient._internal() {
+
+    // debugPrint('BASE URL: ${ApiConfig.baseUrl}');
+
     _dio = Dio(
       BaseOptions(
         baseUrl: ApiConfig.baseUrl,

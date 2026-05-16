@@ -17,6 +17,7 @@ class _SetupProfileScreenState extends State<SetupProfileScreen> {
 
   final TextEditingController _nameController = TextEditingController();
   bool _isLoading = false;
+  bool _acceptedTerms = false;
 
   @override
   void dispose() {
@@ -197,7 +198,8 @@ class _SetupProfileScreenState extends State<SetupProfileScreen> {
                         child: Padding(
                           padding: EdgeInsets.only(right: 12),
                           child: Text(
-                            '1/2',
+                            // '1/2',
+                            '',
                             style: TextStyle(
                               fontFamily: 'Outfit',
                               fontSize: 14,
@@ -266,26 +268,35 @@ class _SetupProfileScreenState extends State<SetupProfileScreen> {
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Container(
-                            width: 39,
-                            height: 39,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(60),
-                              border: Border.all(
-                                color: Colors.black.withValues(alpha: 0.08),
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _acceptedTerms = !_acceptedTerms;
+                              });
+                            },
+                            child: Container(
+                              width: 25,
+                              height: 25,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(60),
+                                border: Border.all(
+                                  color: Colors.black.withValues(alpha: 0.08),
+                                ),
                               ),
-                            ),
-                            child: const Icon(
-                              Icons.check,
-                              size: 17,
-                              color: Color(0xFF000000),
+                              child: _acceptedTerms
+                                  ? const Icon(
+                                      Icons.check,
+                                      size: 17,
+                                      color: Color(0xFF000000),
+                                    )
+                                  : null,
                             ),
                           ),
                           const SizedBox(width: 12),
                           Expanded(
                             child: Padding(
-                              padding: const EdgeInsets.only(top: 4),
+                              padding: const EdgeInsets.only(top: 2),
                               child: RichText(
                                 text: const TextSpan(
                                   style: TextStyle(
@@ -338,6 +349,17 @@ class _SetupProfileScreenState extends State<SetupProfileScreen> {
                                     ).showSnackBar(
                                       const SnackBar(
                                         content: Text('Please fill all fields'),
+                                      ),
+                                    );
+                                    return;
+                                  }
+
+                                  if (!_acceptedTerms) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text(
+                                          'Please accept the Terms & Conditions to continue.',
+                                        ),
                                       ),
                                     );
                                     return;
